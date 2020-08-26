@@ -8,6 +8,7 @@ export function sys_control_xr(game: Game, delta: number) {
         return;
     }
 
+    let headset = game.XrFrame.getViewerPose(game.XrSpace);
     let hand_left: XRPose | undefined;
     let hand_right: XRPose | undefined;
 
@@ -27,22 +28,34 @@ export function sys_control_xr(game: Game, delta: number) {
 
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, hand_left, hand_right);
+            update(game, i, headset, hand_left, hand_right);
         }
     }
 }
 
-function update(game: Game, entity: Entity, hand_left?: XRPose, hand_right?: XRPose) {
+function update(
+    game: Game,
+    entity: Entity,
+    headset: XRViewerPose,
+    hand_left?: XRPose,
+    hand_right?: XRPose
+) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlXr[entity];
 
-    if (control.Hand === "left" && hand_left) {
+    if (control.Controller === "head") {
+        transform.World = headset.transform.matrix;
+        transform.Dirty = true;
+        return;
+    }
+
+    if (control.Controller === "left" && hand_left) {
         transform.World = hand_left.transform.matrix;
         transform.Dirty = true;
         return;
     }
 
-    if (control.Hand === "right" && hand_right) {
+    if (control.Controller === "right" && hand_right) {
         transform.World = hand_right.transform.matrix;
         transform.Dirty = true;
         return;

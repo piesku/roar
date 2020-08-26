@@ -19,7 +19,7 @@ function update(game: Game, entity: Entity) {
         transform.Dirty = false;
         set_children_as_dirty(game.World, transform);
 
-        if (game.World.Signature[entity] & Has.Pose) {
+        if (game.World.Signature[entity] & Has.ControlXr) {
             // Pose transforms have their World matrix set from XRPose by other
             // systems. Their translation, rotation and scale are ignored.
         } else {

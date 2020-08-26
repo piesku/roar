@@ -86,7 +86,7 @@ function update_vr(game: Game, entity: Entity, camera: CameraXr) {
         //     PV = P * view.transform.inverse.matrix * Sc
 
         // Or, using multiply()'s two-operand multiplication:
-        //     PV = PV * view.transform.inverse.matrix
+        //     PV = P * view.transform.inverse.matrix
         //     PV = PV * Sc
         multiply(pv, view.projectionMatrix, view.transform.inverse.matrix);
         multiply(pv, pv, transform.Self);

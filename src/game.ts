@@ -5,9 +5,11 @@ import {mesh_hand} from "../meshes/hand.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
 import {sys_camera} from "./systems/sys_camera.js";
+import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_light} from "./systems/sys_light.js";
+import {sys_physics} from "./systems/sys_physics.js";
 import {sys_render} from "./systems/sys_render.js";
 import {sys_transform} from "./systems/sys_transform.js";
 import {sys_ui} from "./systems/sys_ui.js";
@@ -60,12 +62,24 @@ export class Game {
 
     FrameUpdate(delta: number) {
         let now = performance.now();
+
         sys_control_xr(this, delta);
+
         sys_transform(this, delta);
+
+        sys_collide(this, delta);
+        sys_physics(this, delta);
+        sys_transform(this, delta);
+
         sys_camera(this, delta);
         sys_light(this, delta);
         sys_render(this, delta);
         sys_ui(this, delta);
         sys_framerate(this, delta, performance.now() - now);
     }
+}
+export const enum Layer {
+    None = 0,
+    Player = 1,
+    Terrain = 2,
 }

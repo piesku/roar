@@ -3,10 +3,12 @@ import {integer, set_seed} from "../../common/random.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
+import {collide} from "../components/com_collide.js";
 import {light_directional} from "../components/com_light.js";
 import {render_diffuse} from "../components/com_render_diffuse.js";
+import {rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
-import {Game} from "../game.js";
+import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
 export function scene_stage(game: Game) {
@@ -26,8 +28,9 @@ export function scene_stage(game: Game) {
 
     // VR Camera.
     instantiate(game, {
-        Translation: [1, 2, 5],
         ...blueprint_viewer(game),
+        Translation: [0, 4, 0],
+        Scale: [4, 4, 4],
     });
 
     // Light.
@@ -36,22 +39,28 @@ export function scene_stage(game: Game) {
         Using: [light_directional([1, 1, 1], 1)],
     });
 
+    let grid_size = 10;
+
     // Ground.
     instantiate(game, {
-        Translation: [0, 0, 0],
-        Scale: [7, 1, 7],
-        Using: [render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [1, 1, 0.3, 1])],
+        Scale: [grid_size, 1, grid_size],
+        Using: [
+            collide(false, Layer.Terrain, Layer.None),
+            rigid_body(false),
+            render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [0, 0, 0, 1]),
+        ],
     });
-
-    let grid_size = 10;
 
     for (let z = -grid_size / 2; z <= grid_size / 2; z++) {
         for (let x = -grid_size / 2; x <= grid_size / 2; x++) {
+            if (x % 2 === 0 || z % 2 === 0) {
+                continue;
+            }
             let count = integer(1, 4);
             for (let y = 0; y < count; y++) {
                 instantiate(game, {
                     ...blueprint_block(game),
-                    Translation: [x, y, z],
+                    Translation: [x, y + 1, z],
                 });
             }
         }
