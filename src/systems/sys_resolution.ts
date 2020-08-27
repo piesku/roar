@@ -7,12 +7,12 @@ const QUERY = Has.Transform | Has.Collide | Has.RigidBody;
 export function sys_resolution(game: Game, delta: number) {
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, delta);
+            update(game, i);
         }
     }
 }
 
-function update(game: Game, entity: Entity, delta: number) {
+function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     let collide = game.World.Collide[entity];
     let rigid_body = game.World.RigidBody[entity];
@@ -37,12 +37,8 @@ function update(game: Game, entity: Entity, delta: number) {
                     copy(other_body.Velocity, this_velocity);
                 }
 
-                if (
+                if (collision.Hit[1] > 0 && rigid_body.Velocity[1] < 0) {
                     // The rigid body was falling and hit something below it.
-                    (collision.Hit[1] > 0 && rigid_body.Velocity[1] < 0) ||
-                    // The rigid body was going up and hit something above it.
-                    (collision.Hit[1] < 0 && rigid_body.Velocity[1] > 0)
-                ) {
                     rigid_body.Velocity[1] = 0;
                 }
             }
