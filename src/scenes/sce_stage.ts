@@ -6,7 +6,7 @@ import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {light_directional} from "../components/com_light.js";
 import {render_diffuse} from "../components/com_render_diffuse.js";
-import {rigid_body} from "../components/com_rigid_body.js";
+import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -46,7 +46,7 @@ export function scene_stage(game: Game) {
         Scale: [grid_size, 1, grid_size],
         Using: [
             collide(false, Layer.Terrain, Layer.None),
-            rigid_body(false),
+            rigid_body(RigidKind.Static),
             render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [0, 0, 0, 1]),
         ],
     });

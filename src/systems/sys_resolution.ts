@@ -1,4 +1,5 @@
 import {add, copy, negate, scale} from "../../common/vec3.js";
+import {RigidKind} from "../components/com_rigid_body.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -17,7 +18,7 @@ function update(game: Game, entity: Entity) {
     let collide = game.World.Collide[entity];
     let rigid_body = game.World.RigidBody[entity];
 
-    if (rigid_body.Dynamic) {
+    if (rigid_body.Kind === RigidKind.Dynamic) {
         let has_collision = false;
 
         for (let i = 0; i < collide.Collisions.length; i++) {
@@ -35,10 +36,14 @@ function update(game: Game, entity: Entity) {
                 // velocities are swapped, unless the other body is a static
                 // one (and behaves as if it had infinite mass).
                 let other_body = game.World.RigidBody[collision.Other];
-                if (other_body.Dynamic) {
-                    copy(rigid_body.VelocityResolved, other_body.VelocityIntegrated);
-                } else {
-                    negate(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                switch (other_body.Kind) {
+                    case RigidKind.Static:
+                        negate(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                        break;
+                    case RigidKind.Dynamic:
+                    case RigidKind.Kinematic:
+                        copy(rigid_body.VelocityResolved, other_body.VelocityIntegrated);
+                        break;
                 }
 
                 // Collisions aren't 100% elastic.

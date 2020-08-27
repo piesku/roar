@@ -3,7 +3,7 @@ import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {render_diffuse} from "../components/com_render_diffuse.js";
-import {rigid_body} from "../components/com_rigid_body.js";
+import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 
@@ -37,7 +37,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Using: [
                     control_xr("left"),
                     collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
-                    rigid_body(false),
+                    rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
                     {
@@ -58,7 +58,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Using: [
                     control_xr("right"),
                     collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
-                    rigid_body(false),
+                    rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
                     {
