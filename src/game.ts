@@ -11,6 +11,7 @@ import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_light} from "./systems/sys_light.js";
 import {sys_physics} from "./systems/sys_physics.js";
 import {sys_render} from "./systems/sys_render.js";
+import {sys_resolution} from "./systems/sys_resolution.js";
 import {sys_transform} from "./systems/sys_transform.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
@@ -65,10 +66,10 @@ export class Game {
 
         sys_control_xr(this, delta);
 
-        sys_transform(this, delta);
-
-        sys_collide(this, delta);
         sys_physics(this, delta);
+        sys_transform(this, delta);
+        sys_collide(this, delta);
+        sys_resolution(this, delta);
         sys_transform(this, delta);
 
         sys_camera(this, delta);
