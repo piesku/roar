@@ -7,7 +7,8 @@ import {Has} from "../world.js";
 export interface RigidBody {
     readonly Dynamic: boolean;
     Acceleration: Vec3;
-    Velocity: Vec3;
+    VelocityIntegrated: Vec3;
+    VelocityResolved: Vec3;
 }
 
 export function rigid_body(Dynamic: boolean = true) {
@@ -16,7 +17,8 @@ export function rigid_body(Dynamic: boolean = true) {
         game.World.RigidBody[entity] = {
             Dynamic,
             Acceleration: [0, 0, 0],
-            Velocity: [0, 0, 0],
+            VelocityIntegrated: [0, 0, 0],
+            VelocityResolved: [0, 0, 0],
         };
     };
 }

@@ -1,4 +1,4 @@
-import {add, copy} from "../../common/vec3.js";
+import {add, copy, negate, scale} from "../../common/vec3.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -18,9 +18,13 @@ function update(game: Game, entity: Entity) {
     let rigid_body = game.World.RigidBody[entity];
 
     if (rigid_body.Dynamic) {
+        let has_collision = false;
+
         for (let i = 0; i < collide.Collisions.length; i++) {
             let collision = collide.Collisions[i];
             if (game.World.Signature[collision.Other] & Has.RigidBody) {
+                has_collision = true;
+
                 // Dynamic rigid bodies are only supported for top-level
                 // entities. Thus, no need to apply the world → self → local
                 // conversion to the collision response. Local space is world space.
@@ -31,17 +35,24 @@ function update(game: Game, entity: Entity) {
                 // velocities are swapped, unless the other body is a static
                 // one (and behaves as if it had infinite mass).
                 let other_body = game.World.RigidBody[collision.Other];
-                let this_velocity = rigid_body.Velocity;
-                copy(rigid_body.Velocity, other_body.Velocity);
                 if (other_body.Dynamic) {
-                    copy(other_body.Velocity, this_velocity);
+                    copy(rigid_body.VelocityResolved, other_body.VelocityIntegrated);
+                } else {
+                    negate(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
                 }
 
-                if (collision.Hit[1] > 0 && rigid_body.Velocity[1] < 0) {
-                    // The rigid body was falling and hit something below it.
-                    rigid_body.Velocity[1] = 0;
+                // Collisions aren't 100% elastic.
+                scale(rigid_body.VelocityResolved, rigid_body.VelocityResolved, 0.8);
+
+                if (collision.Hit[1] > 0 && rigid_body.VelocityResolved[1] < 1) {
+                    // Collision from the bottom stops the downward movement.
+                    rigid_body.VelocityResolved[1] = 0;
                 }
             }
+        }
+
+        if (!has_collision) {
+            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
         }
     }
 }

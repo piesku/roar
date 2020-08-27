@@ -1,5 +1,5 @@
 import {Vec3} from "../../common/math.js";
-import {add, scale} from "../../common/vec3.js";
+import {add, copy, scale} from "../../common/vec3.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -19,14 +19,16 @@ function update(game: Game, entity: Entity, delta: number) {
     let rigid_body = game.World.RigidBody[entity];
 
     if (rigid_body.Dynamic) {
+        copy(rigid_body.VelocityIntegrated, rigid_body.VelocityResolved);
+
         // Compute change to velocity, including the gravity.
         scale(rigid_body.Acceleration, rigid_body.Acceleration, delta);
-        add(rigid_body.Velocity, rigid_body.Velocity, rigid_body.Acceleration);
-        rigid_body.Velocity[1] += GRAVITY * delta;
+        add(rigid_body.VelocityIntegrated, rigid_body.VelocityIntegrated, rigid_body.Acceleration);
+        rigid_body.VelocityIntegrated[1] += GRAVITY * delta;
 
         // Apply velocity to position.
         let vel_delta: Vec3 = [0, 0, 0];
-        scale(vel_delta, rigid_body.Velocity, delta);
+        scale(vel_delta, rigid_body.VelocityIntegrated, delta);
         add(transform.Translation, transform.Translation, vel_delta);
         transform.Dirty = true;
 
