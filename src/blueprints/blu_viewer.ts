@@ -19,13 +19,14 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Using: [control_xr("head")],
                 Children: [
                     {
+                        // Flame.
                         Translation: [0, -0.3, 10],
                         Scale: [1, 0.1, 10],
                         Using: [
                             render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [
                                 1,
-                                1,
-                                0.3,
+                                0,
+                                0,
                                 1,
                             ]),
                         ],
