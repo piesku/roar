@@ -20,7 +20,7 @@ let vertex = `#version 300 es\n
     }
 `;
 
-let fragment = `#version 300 es\n
+let fragment = `#version 300 es
     precision mediump float;
 
     // See Game.LightPositions and Game.LightDetails.
@@ -33,6 +33,20 @@ let fragment = `#version 300 es\n
     in vec4 vert_pos;
     in vec3 vert_normal;
     out vec4 frag_color;
+
+    const float bands = 4.0;
+
+    float posterize(float factor) {
+        return floor(factor * bands) / bands;
+    }
+
+    vec3 posterize(vec3 color) {
+        return vec3(
+            floor(color.r * bands) / bands,
+            floor(color.g * bands) / bands,
+            floor(color.b * bands) / bands
+        );
+    }
 
     void main() {
         vec3 frag_normal = normalize(vert_normal);
@@ -63,7 +77,7 @@ let fragment = `#version 300 es\n
             float diffuse_factor = dot(frag_normal, light_normal);
             if (diffuse_factor > 0.0) {
                 // Diffuse color.
-                rgb += color.rgb * diffuse_factor * light_color * light_intensity;
+                rgb += color.rgb * light_color * posterize(diffuse_factor * light_intensity);
             }
         }
 
@@ -71,7 +85,7 @@ let fragment = `#version 300 es\n
     }
 `;
 
-export function mat2_diffuse_phong(gl: WebGL2RenderingContext): Material<DiffuseLayout> {
+export function mat2_diffuse_toon(gl: WebGL2RenderingContext): Material<DiffuseLayout> {
     let program = link(gl, vertex, fragment);
     return {
         Mode: GL_TRIANGLES,

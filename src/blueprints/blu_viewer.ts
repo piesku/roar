@@ -23,12 +23,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                         Translation: [0, -0.3, 10],
                         Scale: [1, 0.1, 10],
                         Using: [
-                            render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [
-                                1,
-                                0,
-                                0,
-                                1,
-                            ]),
+                            render_diffuse(game.MaterialDiffuseToon, game.MeshCube, [1, 0, 0, 1]),
                         ],
                     },
                 ],
@@ -45,7 +40,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                         Scale: [-1, 1, 1],
                         Using: [
                             render_diffuse(
-                                game.MaterialDiffuseGouraud,
+                                game.MaterialDiffuseToon,
                                 game.MeshHand,
                                 [1, 1, 0.3, 1],
                                 GL_CCW
@@ -64,12 +59,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Children: [
                     {
                         Using: [
-                            render_diffuse(game.MaterialDiffuseGouraud, game.MeshHand, [
-                                1,
-                                1,
-                                0.3,
-                                1,
-                            ]),
+                            render_diffuse(game.MaterialDiffuseToon, game.MeshHand, [1, 1, 0.3, 1]),
                         ],
                     },
                 ],

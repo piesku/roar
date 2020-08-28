@@ -1,10 +1,11 @@
 import {from_euler} from "../../common/quat.js";
-import {integer, set_seed} from "../../common/random.js";
+import {float, integer, set_seed} from "../../common/random.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
+import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
-import {light_directional} from "../components/com_light.js";
+import {light_directional, light_point} from "../components/com_light.js";
 import {render_diffuse} from "../components/com_render_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
@@ -29,14 +30,20 @@ export function scene_stage(game: Game) {
     // VR Camera.
     instantiate(game, {
         ...blueprint_viewer(game),
-        Translation: [0, 4, 0],
+        Translation: [0, 6, 0],
         Scale: [4, 4, 4],
     });
 
-    // Light.
+    // Main Light.
     instantiate(game, {
         Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 1)],
+        Using: [light_directional([1, 1, 1], 0.3)],
+    });
+
+    // Spot light.
+    instantiate(game, {
+        Translation: [0, 10, 0],
+        Using: [light_point([1, 1, 1], 8)],
     });
 
     let grid_size = 10;
@@ -47,7 +54,7 @@ export function scene_stage(game: Game) {
         Using: [
             collide(false, Layer.Terrain, Layer.None),
             rigid_body(RigidKind.Static),
-            render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [0, 0, 0, 1]),
+            render_diffuse(game.MaterialDiffuseToon, game.MeshCube, [1, 1, 1, 1]),
         ],
     });
 
@@ -57,9 +64,11 @@ export function scene_stage(game: Game) {
                 continue;
             }
             let count = integer(1, 4);
+            let c = float(0.2, 0.8);
+            let b = Math.random() > 0.2 ? blueprint_block(game, c) : blueprint_star(game, c);
             for (let y = 0; y < count; y++) {
                 instantiate(game, {
-                    ...blueprint_block(game),
+                    ...b,
                     Translation: [x, y + 1, z],
                 });
             }

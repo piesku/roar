@@ -1,5 +1,6 @@
 import {GL_CULL_FACE, GL_DEPTH_TEST} from "../common/webgl.js";
 import {mat2_diffuse_gouraud} from "../materials/mat2_diffuse_gouraud.js";
+import {mat2_diffuse_toon} from "../materials/mat2_diffuse_toon.js";
 import {mesh_claws} from "../meshes/claws.js";
 import {mesh_cube} from "../meshes/cube.js";
 import {Camera} from "./components/com_camera.js";
@@ -37,6 +38,7 @@ export class Game {
     XrFrame?: XRFrame;
 
     MaterialDiffuseGouraud = mat2_diffuse_gouraud(this.Gl);
+    MaterialDiffuseToon = mat2_diffuse_toon(this.Gl);
     MeshCube = mesh_cube(this.Gl);
     MeshHand = mesh_claws(this.Gl);
 
