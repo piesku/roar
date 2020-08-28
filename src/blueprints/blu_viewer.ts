@@ -19,8 +19,8 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Using: [control_xr("head")],
                 Children: [
                     {
-                        Translation: [0, -0.2, 0],
-                        Scale: [0.4, 0.2, 5],
+                        Translation: [0, -0.3, 10],
+                        Scale: [1, 0.1, 10],
                         Using: [
                             render_diffuse(game.MaterialDiffuseGouraud, game.MeshCube, [
                                 1,
