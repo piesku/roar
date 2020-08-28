@@ -1,3 +1,5 @@
+import {map_range} from "../../common/number.js";
+import {from_euler} from "../../common/quat.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -8,56 +10,72 @@ export function sys_control_xr(game: Game, delta: number) {
         return;
     }
 
-    let headset = game.XrFrame.getViewerPose(game.XrSpace);
-    let hand_left: XRPose | undefined;
-    let hand_right: XRPose | undefined;
-
+    let inputs: Record<string, XRInputSource> = {};
     for (let input of game.XrFrame.session.inputSources) {
-        if (!input.gripSpace) {
-            continue;
-        }
-        if (input.handedness === "left") {
-            hand_left = game.XrFrame.getPose(input.gripSpace, game.XrSpace!);
-            continue;
-        }
-        if (input.handedness === "right") {
-            hand_right = game.XrFrame.getPose(input.gripSpace, game.XrSpace!);
-            continue;
+        if (input.gripSpace) {
+            inputs[input.handedness] = input;
         }
     }
 
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, headset, hand_left, hand_right);
+            update(game, i, inputs);
         }
     }
 }
 
-function update(
-    game: Game,
-    entity: Entity,
-    headset: XRViewerPose,
-    hand_left?: XRPose,
-    hand_right?: XRPose
-) {
+function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource>) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlXr[entity];
 
     if (control.Controller === "head") {
+        let headset = game.XrFrame!.getViewerPose(game.XrSpace);
         transform.World = headset.transform.matrix;
         transform.Dirty = true;
         return;
     }
 
-    if (control.Controller === "left" && hand_left) {
-        transform.World = hand_left.transform.matrix;
-        transform.Dirty = true;
+    if (control.Controller === "left") {
+        let input = inputs["left"];
+        if (input) {
+            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
+            if (pose) {
+                transform.World = pose.transform.matrix;
+                transform.Dirty = true;
+            }
+
+            if (input.gamepad) {
+                let hand = game.World.Transform[transform.Children[0]];
+                let squeeze = input.gamepad.buttons[1];
+                if (squeeze?.touched) {
+                    hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                    from_euler(hand.Rotation, 0, -45 * squeeze.value, 0);
+                    hand.Dirty = true;
+                }
+            }
+        }
         return;
     }
 
-    if (control.Controller === "right" && hand_right) {
-        transform.World = hand_right.transform.matrix;
-        transform.Dirty = true;
+    if (control.Controller === "right") {
+        let input = inputs["right"];
+        if (input) {
+            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
+            if (pose) {
+                transform.World = pose.transform.matrix;
+                transform.Dirty = true;
+            }
+
+            if (input.gamepad) {
+                let hand = game.World.Transform[transform.Children[0]];
+                let squeeze = input.gamepad.buttons[1];
+                if (squeeze?.touched) {
+                    hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                    from_euler(hand.Rotation, 0, 45 * squeeze.value, 0);
+                    hand.Dirty = true;
+                }
+            }
+        }
         return;
     }
 }
