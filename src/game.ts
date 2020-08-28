@@ -1,7 +1,7 @@
 import {GL_CULL_FACE, GL_DEPTH_TEST} from "../common/webgl.js";
 import {mat2_diffuse_gouraud} from "../materials/mat2_diffuse_gouraud.js";
+import {mesh_claws} from "../meshes/claws.js";
 import {mesh_cube} from "../meshes/cube.js";
-import {mesh_hand} from "../meshes/hand.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
 import {sys_camera} from "./systems/sys_camera.js";
@@ -38,7 +38,7 @@ export class Game {
 
     MaterialDiffuseGouraud = mat2_diffuse_gouraud(this.Gl);
     MeshCube = mesh_cube(this.Gl);
-    MeshHand = mesh_hand(this.Gl);
+    MeshHand = mesh_claws(this.Gl);
 
     Camera?: Camera;
     // The rendering pipeline supports 8 lights.

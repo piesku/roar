@@ -36,7 +36,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                 // Left hand.
                 Using: [
                     control_xr("left"),
-                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.2]),
                     rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
@@ -57,7 +57,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                 // Right hand.
                 Using: [
                     control_xr("right"),
-                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.2]),
                     rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
