@@ -16,7 +16,7 @@ export function scene_stage(game: Game) {
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
-    game.Gl.clearColor(0.9, 0.9, 0.9, 1);
+    game.Gl.clearColor(0.0, 0.1, 0.2, 1);
 
     set_seed(Date.now());
 
