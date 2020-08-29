@@ -58,7 +58,7 @@ export function scene_stage(game: Game) {
             render_textured_diffuse(
                 game.MaterialTexturedDiffuse,
                 game.MeshCube,
-                game.Textures["ground"],
+                game.Textures["noise"],
                 GL_CW,
                 [0.1, 0.5, 0.4, 1],
                 grid_size * 2
