@@ -3,10 +3,11 @@ import {float, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
+import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
-import {light_directional, light_point} from "../components/com_light.js";
+import {light_directional} from "../components/com_light.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
@@ -41,11 +42,8 @@ export function scene_stage(game: Game) {
         Using: [light_directional([1, 1, 1], 0.3)],
     });
 
-    // Spot light.
-    instantiate(game, {
-        Translation: [0, 10, 0],
-        Using: [light_point([1, 1, 1], 8)],
-    });
+    // Moon.
+    instantiate(game, blueprint_moon());
 
     let grid_size = 10;
 
