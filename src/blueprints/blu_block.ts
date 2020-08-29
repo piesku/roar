@@ -4,7 +4,7 @@ import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 
-export function blueprint_block(game: Game): Blueprint {
+export function blueprint_block(game: Game, texture_name: string): Blueprint {
     return {
         Using: [
             collide(true, Layer.Terrain, Layer.Player | Layer.Terrain),
@@ -12,7 +12,7 @@ export function blueprint_block(game: Game): Blueprint {
             render_textured_diffuse(
                 game.MaterialTexturedDiffuse,
                 game.MeshCube,
-                game.Textures["building2"]
+                game.Textures[texture_name]
             ),
         ],
     };

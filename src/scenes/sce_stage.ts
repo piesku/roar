@@ -1,5 +1,5 @@
 import {from_euler} from "../../common/quat.js";
-import {float, integer, set_seed} from "../../common/random.js";
+import {element, float, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -70,13 +70,24 @@ export function scene_stage(game: Game) {
                 continue;
             }
             let count = integer(1, 4);
-            let c = float(0.2, 0.8);
-            let b = Math.random() > 0.2 ? blueprint_block(game) : blueprint_star(game, c);
-            for (let y = 0; y < count; y++) {
-                instantiate(game, {
-                    ...b,
-                    Translation: [x, y + 1, z],
-                });
+            if (float() > 0.2) {
+                // Square tower.
+                let texture_name = element(["building1", "building2", "building3", "building4"]);
+                for (let y = 0; y < count; y++) {
+                    instantiate(game, {
+                        ...blueprint_block(game, texture_name),
+                        Translation: [x, y + 1, z],
+                    });
+                }
+            } else {
+                // Star tower.
+                for (let y = 0; y < count; y++) {
+                    let c = float(0.2, 0.8);
+                    instantiate(game, {
+                        ...blueprint_star(game, c),
+                        Translation: [x, y + 1, z],
+                    });
+                }
             }
         }
     }
