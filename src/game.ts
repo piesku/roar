@@ -1,4 +1,4 @@
-import {GL_CULL_FACE, GL_DEPTH_TEST} from "../common/webgl.js";
+import {GL_CULL_FACE, GL_DEPTH_TEST, GL_ONE, GL_ONE_MINUS_SRC_ALPHA} from "../common/webgl.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_textured_unlit} from "../materials/mat2_textured_unlit.js";
 import {mesh_claws} from "../meshes/claws.js";
@@ -58,6 +58,7 @@ export class Game {
 
         this.Gl.enable(GL_DEPTH_TEST);
         this.Gl.enable(GL_CULL_FACE);
+        this.Gl.blendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         if (navigator.xr) {
             xr_init(this);

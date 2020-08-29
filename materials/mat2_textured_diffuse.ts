@@ -79,7 +79,7 @@ let fragment = `#version 300 es\n
             }
         }
 
-        frag_color = vec4(rgb, 1.0) * texture(sampler, vert_texcoord * texscale);
+        frag_color = vec4(rgb, color.a) * texture(sampler, vert_texcoord * texscale);
     }
 `;
 

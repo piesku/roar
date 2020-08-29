@@ -1,6 +1,7 @@
 import {Material} from "../../common/material.js";
 import {Mat4} from "../../common/math.js";
 import {
+    GL_BLEND,
     GL_COLOR_BUFFER_BIT,
     GL_DEPTH_BUFFER_BIT,
     GL_FRAMEBUFFER,
@@ -19,6 +20,10 @@ import {Game} from "../game.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.Render;
+const enum RenderingPhase {
+    Opaque,
+    Translucent,
+}
 
 export function sys_render(game: Game, delta: number) {
     let camera = game.Camera!;
@@ -36,7 +41,11 @@ function render_screen(game: Game, camera: CameraPerspective) {
         game.Gl.viewport(0, 0, game.ViewportWidth, game.ViewportHeight);
     }
 
-    render(game, camera.Pv);
+    render(game, camera.Pv, RenderingPhase.Opaque);
+
+    game.Gl.enable(GL_BLEND);
+    render(game, camera.Pv, RenderingPhase.Translucent);
+    game.Gl.disable(GL_BLEND);
 }
 
 function render_vr(game: Game, camera: CameraXr) {
@@ -47,11 +56,15 @@ function render_vr(game: Game, camera: CameraXr) {
     for (let eye of camera.Eyes) {
         let viewport = layer.getViewport(eye.View);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        render(game, eye.Pv);
+        render(game, eye.Pv, RenderingPhase.Opaque);
+
+        game.Gl.enable(GL_BLEND);
+        render(game, eye.Pv, RenderingPhase.Translucent);
+        game.Gl.disable(GL_BLEND);
     }
 }
 
-function render(game: Game, pv: Mat4) {
+function render(game: Game, pv: Mat4, phase: RenderingPhase) {
     // Keep track of the current material to minimize switching.
     let current_material = null;
     let current_front_face = null;
@@ -60,6 +73,19 @@ function render(game: Game, pv: Mat4) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
             let transform = game.World.Transform[i];
             let render = game.World.Render[i];
+
+            switch (phase) {
+                case RenderingPhase.Opaque:
+                    if (render.Color[3] < 1) {
+                        continue;
+                    }
+                    break;
+                case RenderingPhase.Translucent:
+                    if (render.Color[3] === 1) {
+                        continue;
+                    }
+                    break;
+            }
 
             if (render.Material !== current_material) {
                 current_material = render.Material;

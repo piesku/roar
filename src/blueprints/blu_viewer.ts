@@ -37,7 +37,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                                         game.MeshCube,
                                         game.Textures["fire"],
                                         GL_CW,
-                                        [1, 1, 1, 1],
+                                        [1, 1, 1, 0.2],
                                         [10, 10]
                                     ),
                                 ],
