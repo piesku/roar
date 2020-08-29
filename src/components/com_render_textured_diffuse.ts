@@ -23,6 +23,7 @@ export function render_textured_diffuse(
     material: Material<TexturedDiffuseLayout>,
     mesh: Mesh,
     texture: WebGLTexture,
+    front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
     texture_offset?: () => number
 ) {
@@ -69,7 +70,7 @@ export function render_textured_diffuse(
             Kind: RenderKind.TexturedDiffuse,
             Material: material,
             Mesh: mesh,
-            FrontFace: GL_CW,
+            FrontFace: front_face,
             Vao: vaos.get(mesh)!,
             Color: color,
             Texture: texture,

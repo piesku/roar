@@ -3,6 +3,7 @@ import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {render_colored_diffuse} from "../components/com_render_colored_diffuse.js";
+import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
@@ -44,10 +45,10 @@ export function blueprint_viewer(game: Game): Blueprint {
                     {
                         Scale: [-1, 1, 1],
                         Using: [
-                            render_colored_diffuse(
-                                game.MaterialDiffuseToon,
+                            render_textured_diffuse(
+                                game.MaterialTexturedDiffuse,
                                 game.MeshHand,
-                                [1, 1, 0.3, 1],
+                                game.Textures["claws"],
                                 GL_CCW
                             ),
                         ],
@@ -64,12 +65,11 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Children: [
                     {
                         Using: [
-                            render_colored_diffuse(game.MaterialDiffuseToon, game.MeshHand, [
-                                1,
-                                1,
-                                0.3,
-                                1,
-                            ]),
+                            render_textured_diffuse(
+                                game.MaterialTexturedDiffuse,
+                                game.MeshHand,
+                                game.Textures["claws"]
+                            ),
                         ],
                     },
                 ],
