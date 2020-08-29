@@ -6,7 +6,7 @@ import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {light_directional, light_point} from "../components/com_light.js";
-import {render_diffuse} from "../components/com_render_diffuse.js";
+import {render_colored_diffuse} from "../components/com_render_colored_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
@@ -54,7 +54,7 @@ export function scene_stage(game: Game) {
         Using: [
             collide(false, Layer.Terrain, Layer.None),
             rigid_body(RigidKind.Static),
-            render_diffuse(game.MaterialDiffuseToon, game.MeshCube, [1, 1, 1, 1]),
+            render_colored_diffuse(game.MaterialDiffuseToon, game.MeshCube, [1, 1, 1, 1]),
         ],
     });
 
@@ -65,7 +65,7 @@ export function scene_stage(game: Game) {
             }
             let count = integer(1, 4);
             let c = float(0.2, 0.8);
-            let b = Math.random() > 0.2 ? blueprint_block(game, c) : blueprint_star(game, c);
+            let b = Math.random() > 0.2 ? blueprint_block(game) : blueprint_star(game, c);
             for (let y = 0; y < count; y++) {
                 instantiate(game, {
                     ...b,

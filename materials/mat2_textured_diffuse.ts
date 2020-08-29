@@ -1,36 +1,32 @@
 import {link, Material} from "../common/material.js";
 import {GL_TRIANGLES} from "../common/webgl.js";
-import {SpecularLayout} from "./layout_specular.js";
+import {TexturedDiffuseLayout} from "./layout_textured_diffuse.js";
 
 let vertex = `#version 300 es\n
-
-    // See Game.LightPositions and Game.LightDetails.
     const int MAX_LIGHTS = 8;
 
     uniform mat4 pv;
     uniform mat4 world;
     uniform mat4 self;
-    uniform vec3 eye;
-    uniform vec4 color_diffuse;
-    uniform vec4 color_specular;
-    uniform float shininess;
+    uniform vec4 color;
     uniform vec4 light_positions[MAX_LIGHTS];
     uniform vec4 light_details[MAX_LIGHTS];
 
     in vec3 position;
+    in vec2 texcoord;
     in vec3 normal;
-    out vec4 vert_color;
+    out vec2 vert_texcoord;
+    out vec3 vert_color;
 
     void main() {
         vec4 vert_pos = world * vec4(position, 1.0);
         vec3 vert_normal = normalize((vec4(normal, 1.0) * self).xyz);
         gl_Position = pv * vert_pos;
 
-        vec3 view_dir = eye - vert_pos.xyz;
-        vec3 view_normal = normalize(view_dir);
+        vert_texcoord = texcoord;
 
         // Ambient light.
-        vec3 rgb = color_diffuse.rgb * 0.1;
+        vert_color = vec3(0.1);
 
         for (int i = 0; i < MAX_LIGHTS; i++) {
             if (light_positions[i].w == 0.0) {
@@ -55,35 +51,33 @@ let vertex = `#version 300 es\n
             float diffuse_factor = dot(vert_normal, light_normal);
             if (diffuse_factor > 0.0) {
                 // Diffuse color.
-                rgb += color_diffuse.rgb * diffuse_factor * light_color * light_intensity;
-
-                // Blinn-Phong reflection model.
-                vec3 h = normalize(light_normal + view_normal);
-                float specular_angle = max(dot(h, vert_normal), 0.0);
-                float specular_factor = pow(specular_angle, shininess);
-
-                // Specular color.
-                rgb += color_specular.rgb * specular_factor * light_color * light_intensity;
+                vert_color += color.rgb * diffuse_factor * light_color * light_intensity;
             }
         }
-
-        vert_color = vec4(rgb, 1.0);
     }
 `;
 
-let fragment = `#version 300 es\n
-
+let fragment = `#version 300 es
     precision mediump float;
+    uniform sampler2D sampler;
+    uniform float texoffset;
 
-    in vec4 vert_color;
+    in vec2 vert_texcoord;
+    in vec3 vert_color;
+
     out vec4 frag_color;
 
     void main() {
-        frag_color = vert_color;
+        if (texoffset == 0.0) {
+            frag_color = vec4(vert_color, 1.0) * texture(sampler, vert_texcoord);
+        } else {
+            frag_color = vec4(vert_color, 1.0) * texture(sampler, vert_texcoord + vec2(texoffset, 0.0));
+        }
+
     }
 `;
 
-export function mat2_specular_gouraud(gl: WebGL2RenderingContext): Material<SpecularLayout> {
+export function mat2_textured_diffuse(gl: WebGL2RenderingContext): Material<TexturedDiffuseLayout> {
     let program = link(gl, vertex, fragment);
     return {
         Mode: GL_TRIANGLES,
@@ -92,13 +86,13 @@ export function mat2_specular_gouraud(gl: WebGL2RenderingContext): Material<Spec
             Pv: gl.getUniformLocation(program, "pv")!,
             World: gl.getUniformLocation(program, "world")!,
             Self: gl.getUniformLocation(program, "self")!,
-            Eye: gl.getUniformLocation(program, "eye")!,
-            ColorDiffuse: gl.getUniformLocation(program, "color_diffuse")!,
-            ColorSpecular: gl.getUniformLocation(program, "color_specular")!,
-            Shininess: gl.getUniformLocation(program, "shininess")!,
+            Color: gl.getUniformLocation(program, "color")!,
+            Sampler: gl.getUniformLocation(program, "sampler")!,
+            TexOffset: gl.getUniformLocation(program, "texoffset")!,
             LightPositions: gl.getUniformLocation(program, "light_positions")!,
             LightDetails: gl.getUniformLocation(program, "light_details")!,
             VertexPosition: gl.getAttribLocation(program, "position")!,
+            VertexTexCoord: gl.getAttribLocation(program, "texcoord")!,
             VertexNormal: gl.getAttribLocation(program, "normal")!,
         },
     };

@@ -1,0 +1,15 @@
+html,
+body {
+    overflow: hidden;
+    margin: 0;
+}
+canvas,
+main {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+}
+img {
+    display: none;
+}

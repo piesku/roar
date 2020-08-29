@@ -4,15 +4,13 @@ import {
     GL_DEPTH_COMPONENT,
     GL_DEPTH_COMPONENT16,
     GL_LINEAR,
+    GL_NEAREST,
     GL_NEAREST_MIPMAP_LINEAR,
     GL_PIXEL_UNSIGNED_BYTE,
-    GL_REPEAT,
     GL_RGBA,
     GL_TEXTURE_2D,
     GL_TEXTURE_MAG_FILTER,
     GL_TEXTURE_MIN_FILTER,
-    GL_TEXTURE_WRAP_S,
-    GL_TEXTURE_WRAP_T,
 } from "./webgl.js";
 
 export function fetch_image(path: string): Promise<HTMLImageElement> {
@@ -28,24 +26,9 @@ export function create_texture_from(gl: WebGLRenderingContext, image: HTMLImageE
     gl.bindTexture(GL_TEXTURE_2D, texture);
     gl.texImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GL_RGBA, GL_PIXEL_UNSIGNED_BYTE, image);
 
-    // WebGL1 can only mipmap images which are a power of 2 in both dimensions.
-    // When targeting WebGL2 only, this if guard can be removed.
-    if (is_power_of_2(image.width) && is_power_of_2(image.height)) {
-        gl.generateMipmap(GL_TEXTURE_2D);
-        // GL_NEAREST_MIPMAP_LINEAR is the default. Consider switching to
-        // GL_LINEAR_MIPMAP_LINEAR for the best quality.
-        gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-        // GL_LINEAR is the default; make it explicit.
-        gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    } else {
-        // GL_LINEAR is the default; make it explicit.
-        gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-
-    // GL_REPEAT is the default; make it explicit.
-    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    gl.generateMipmap(GL_TEXTURE_2D);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    gl.texParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     return texture;
 }
