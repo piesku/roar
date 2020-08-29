@@ -22,7 +22,7 @@ let fragment = `#version 300 es\n
 
     uniform vec4 color;
     uniform sampler2D sampler;
-    uniform float texscale;
+    uniform vec2 texscale;
 
     in vec2 vert_texcoord;
     out vec4 frag_color;

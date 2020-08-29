@@ -30,7 +30,7 @@ let fragment = `#version 300 es\n
 
     uniform vec4 color;
     uniform sampler2D sampler;
-    uniform float texscale;
+    uniform vec2 texscale;
     uniform float texoffset;
     uniform vec4 light_positions[MAX_LIGHTS];
     uniform vec4 light_details[MAX_LIGHTS];

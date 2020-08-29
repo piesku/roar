@@ -61,7 +61,7 @@ export function scene_stage(game: Game) {
                 game.Textures["noise"],
                 GL_CW,
                 [0.1, 0.5, 0.4, 1],
-                grid_size * 2
+                [grid_size * 2, grid_size * 2]
             ),
         ],
     });
