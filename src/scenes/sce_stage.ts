@@ -60,7 +60,8 @@ export function scene_stage(game: Game) {
                 game.MeshCube,
                 game.Textures["ground"],
                 GL_CW,
-                [0.1, 0.5, 0.4, 1]
+                [0.1, 0.5, 0.4, 1],
+                grid_size * 2
             ),
         ],
     });

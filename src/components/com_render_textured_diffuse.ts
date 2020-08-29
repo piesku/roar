@@ -14,6 +14,7 @@ export interface RenderTexturedDiffuse {
     readonly Vao: WebGLVertexArrayObject;
     Color: Vec4;
     Texture: WebGLTexture;
+    TexScale: number;
     TexOffset?: () => number;
 }
 
@@ -25,6 +26,7 @@ export function render_textured_diffuse(
     texture: WebGLTexture,
     front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
+    texture_scale: number = 1,
     texture_offset?: () => number
 ) {
     return (game: Game, entity: Entity) => {
@@ -74,6 +76,7 @@ export function render_textured_diffuse(
             Vao: vaos.get(mesh)!,
             Color: color,
             Texture: texture,
+            TexScale: texture_scale,
             TexOffset: texture_offset,
         };
     };

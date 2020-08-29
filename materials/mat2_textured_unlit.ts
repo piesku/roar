@@ -22,12 +22,13 @@ let fragment = `#version 300 es\n
 
     uniform vec4 color;
     uniform sampler2D sampler;
+    uniform float texscale;
 
     in vec2 vert_texcoord;
     out vec4 frag_color;
 
     void main() {
-        frag_color = color * texture(sampler, vert_texcoord);
+        frag_color = color * texture(sampler, vert_texcoord * texscale);
     }
 `;
 
@@ -41,6 +42,7 @@ export function mat2_textured_unlit(gl: WebGL2RenderingContext): Material<Textur
             World: gl.getUniformLocation(program, "world")!,
             Color: gl.getUniformLocation(program, "color")!,
             Sampler: gl.getUniformLocation(program, "sampler")!,
+            TexScale: gl.getUniformLocation(program, "texscale")!,
             VertexPosition: gl.getAttribLocation(program, "position")!,
             VertexTexCoord: gl.getAttribLocation(program, "texcoord")!,
         },

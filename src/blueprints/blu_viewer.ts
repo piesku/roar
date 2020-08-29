@@ -1,4 +1,4 @@
-import {GL_CCW} from "../../common/webgl.js";
+import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
 import {control_xr} from "../components/com_control_xr.js";
@@ -27,7 +27,10 @@ export function blueprint_viewer(game: Game): Blueprint {
                             render_textured_unlit(
                                 game.MaterialTexturedUnlit,
                                 game.MeshCube,
-                                game.Textures["fire"]
+                                game.Textures["fire"],
+                                GL_CW,
+                                [1, 1, 1, 1],
+                                10
                             ),
                         ],
                     },
