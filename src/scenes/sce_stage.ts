@@ -1,12 +1,13 @@
 import {from_euler} from "../../common/quat.js";
 import {float, integer, set_seed} from "../../common/random.js";
+import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {light_directional, light_point} from "../components/com_light.js";
-import {render_colored_diffuse} from "../components/com_render_colored_diffuse.js";
+import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
@@ -54,7 +55,13 @@ export function scene_stage(game: Game) {
         Using: [
             collide(false, Layer.Terrain, Layer.None),
             rigid_body(RigidKind.Static),
-            render_colored_diffuse(game.MaterialDiffuseToon, game.MeshCube, [1, 1, 1, 1]),
+            render_textured_diffuse(
+                game.MaterialTexturedDiffuse,
+                game.MeshCube,
+                game.Textures["ground"],
+                GL_CW,
+                [0.1, 0.5, 0.4, 1]
+            ),
         ],
     });
 

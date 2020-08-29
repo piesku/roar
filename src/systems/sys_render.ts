@@ -8,12 +8,10 @@ import {
     GL_TEXTURE_2D,
     GL_UNSIGNED_SHORT,
 } from "../../common/webgl.js";
-import {ColoredDiffuseLayout} from "../../materials/layout_colored_diffuse.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {RenderKind} from "../components/com_render.js";
-import {RenderColoredDiffuse} from "../components/com_render_colored_diffuse.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
 import {RenderTexturedUnlit} from "../components/com_render_textured_unlit.js";
 import {Transform} from "../components/com_transform.js";
@@ -66,9 +64,6 @@ function render(game: Game, pv: Mat4) {
             if (render.Material !== current_material) {
                 current_material = render.Material;
                 switch (render.Kind) {
-                    case RenderKind.ColoredDiffuse:
-                        use_colored_diffuse(game, render.Material, pv);
-                        break;
                     case RenderKind.TexturedDiffuse:
                         use_textured_diffuse(game, render.Material, pv);
                         break;
@@ -84,9 +79,6 @@ function render(game: Game, pv: Mat4) {
             }
 
             switch (render.Kind) {
-                case RenderKind.ColoredDiffuse:
-                    draw_colored_diffuse(game, transform, render);
-                    break;
                 case RenderKind.TexturedDiffuse:
                     draw_textured_diffuse(game, transform, render);
                     break;
@@ -96,22 +88,6 @@ function render(game: Game, pv: Mat4) {
             }
         }
     }
-}
-
-function use_colored_diffuse(game: Game, material: Material<ColoredDiffuseLayout>, pv: Mat4) {
-    game.Gl.useProgram(material.Program);
-    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, pv);
-    game.Gl.uniform4fv(material.Locations.LightPositions, game.LightPositions);
-    game.Gl.uniform4fv(material.Locations.LightDetails, game.LightDetails);
-}
-
-function draw_colored_diffuse(game: Game, transform: Transform, render: RenderColoredDiffuse) {
-    game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
-    game.Gl.uniformMatrix4fv(render.Material.Locations.Self, false, transform.Self);
-    game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
-    game.Gl.bindVertexArray(render.Vao);
-    game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
-    game.Gl.bindVertexArray(null);
 }
 
 function use_textured_diffuse(game: Game, material: Material<TexturedDiffuseLayout>, pv: Mat4) {
