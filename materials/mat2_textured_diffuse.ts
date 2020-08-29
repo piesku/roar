@@ -3,30 +3,53 @@ import {GL_TRIANGLES} from "../common/webgl.js";
 import {TexturedDiffuseLayout} from "./layout_textured_diffuse.js";
 
 let vertex = `#version 300 es\n
-    const int MAX_LIGHTS = 8;
-
     uniform mat4 pv;
     uniform mat4 world;
     uniform mat4 self;
-    uniform vec4 color;
-    uniform vec4 light_positions[MAX_LIGHTS];
-    uniform vec4 light_details[MAX_LIGHTS];
 
     in vec3 position;
-    in vec2 texcoord;
     in vec3 normal;
+    in vec2 texcoord;
+    out vec4 vert_pos;
+    out vec3 vert_normal;
     out vec2 vert_texcoord;
-    out vec3 vert_color;
 
     void main() {
-        vec4 vert_pos = world * vec4(position, 1.0);
-        vec3 vert_normal = normalize((vec4(normal, 1.0) * self).xyz);
-        gl_Position = pv * vert_pos;
-
+        vert_pos = world * vec4(position, 1.0);
+        vert_normal = (vec4(normal, 1.0) * self).xyz;
         vert_texcoord = texcoord;
+        gl_Position = pv * vert_pos;
+    }
+`;
+
+let fragment = `#version 300 es\n
+    precision mediump float;
+
+    // See Game.LightPositions and Game.LightDetails.
+    const int MAX_LIGHTS = 8;
+
+    uniform vec4 color;
+    uniform sampler2D sampler;
+    uniform vec4 light_positions[MAX_LIGHTS];
+    uniform vec4 light_details[MAX_LIGHTS];
+    uniform float texoffset;
+
+    in vec4 vert_pos;
+    in vec3 vert_normal;
+    in vec2 vert_texcoord;
+    out vec4 frag_color;
+
+    const float bands = 4.0;
+
+    float posterize(float factor) {
+        return floor(factor * bands) / bands;
+    }
+
+    void main() {
+        vec3 frag_normal = normalize(vert_normal);
 
         // Ambient light.
-        vert_color = vec3(0.1);
+        vec3 rgb = color.rgb * 0.2;
 
         for (int i = 0; i < MAX_LIGHTS; i++) {
             if (light_positions[i].w == 0.0) {
@@ -48,32 +71,14 @@ let vertex = `#version 300 es\n
                 light_intensity /= (light_dist * light_dist);
             }
 
-            float diffuse_factor = dot(vert_normal, light_normal);
+            float diffuse_factor = dot(frag_normal, light_normal);
             if (diffuse_factor > 0.0) {
                 // Diffuse color.
-                vert_color += color.rgb * diffuse_factor * light_color * light_intensity;
+                rgb += color.rgb * light_color * posterize(diffuse_factor * light_intensity);
             }
         }
-    }
-`;
 
-let fragment = `#version 300 es
-    precision mediump float;
-    uniform sampler2D sampler;
-    uniform float texoffset;
-
-    in vec2 vert_texcoord;
-    in vec3 vert_color;
-
-    out vec4 frag_color;
-
-    void main() {
-        if (texoffset == 0.0) {
-            frag_color = vec4(vert_color, 1.0) * texture(sampler, vert_texcoord);
-        } else {
-            frag_color = vec4(vert_color, 1.0) * texture(sampler, vert_texcoord + vec2(texoffset, 0.0));
-        }
-
+        frag_color = vec4(rgb, 1.0) * texture(sampler, vert_texcoord);
     }
 `;
 

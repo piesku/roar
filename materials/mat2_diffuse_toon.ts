@@ -20,7 +20,7 @@ let vertex = `#version 300 es\n
     }
 `;
 
-let fragment = `#version 300 es
+let fragment = `#version 300 es\n
     precision mediump float;
 
     // See Game.LightPositions and Game.LightDetails.
