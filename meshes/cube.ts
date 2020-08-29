@@ -87,8 +87,6 @@ let normal_arr = Float32Array.from([
 
 // prettier-ignore
 let texcoord_arr = Float32Array.from([
-    0, 1,
-    0, 0.5,
     0.5, 0.5,
     0.5, 1,
     0, 1,
@@ -99,14 +97,16 @@ let texcoord_arr = Float32Array.from([
     0, 0.5,
     0.5, 0.5,
     0.5, 1,
+    0, 1,
+    0, 0.5,
     1, 0.5,
     1, 1,
     0.5, 1,
     0.5, 0.5,
-    1, 0.5,
-    0.5, 0.5,
     0.5, 0,
     1, 0,
+    1, 0.5,
+    0.5, 0.5,
     0.5, 0,
     0.5, 0.5,
     0, 0.5,

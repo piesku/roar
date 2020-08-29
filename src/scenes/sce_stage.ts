@@ -43,7 +43,7 @@ export function scene_stage(game: Game) {
     });
 
     // Moon.
-    instantiate(game, blueprint_moon());
+    instantiate(game, blueprint_moon(game));
 
     let grid_size = 10;
 
