@@ -7,13 +7,16 @@ import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
 import {sys_camera} from "./systems/sys_camera.js";
 import {sys_collide} from "./systems/sys_collide.js";
+import {sys_control_rotate} from "./systems/sys_control_rotate.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_light} from "./systems/sys_light.js";
+import {sys_move} from "./systems/sys_move.js";
 import {sys_physics} from "./systems/sys_physics.js";
 import {sys_render} from "./systems/sys_render.js";
 import {sys_resolution} from "./systems/sys_resolution.js";
+import {sys_shake} from "./systems/sys_shake.js";
 import {sys_transform} from "./systems/sys_transform.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
@@ -68,8 +71,13 @@ export class Game {
     FrameUpdate(delta: number) {
         let now = performance.now();
 
-        // User input.
+        // User input and AI.
         sys_control_xr(this, delta);
+        sys_control_rotate(this, delta);
+
+        // Game logic.
+        sys_move(this, delta);
+        sys_shake(this, delta);
 
         // Physics and collisions.
         sys_physics(this, delta);

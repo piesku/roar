@@ -175,3 +175,18 @@ export function get_axis(out_axis: Vec3, q: Quat) {
     }
     return rad;
 }
+
+export function random(out: Quat) {
+    let u1 = Math.random();
+    let u2 = Math.random();
+    let u3 = Math.random();
+
+    let sqrt1MinusU1 = Math.sqrt(1 - u1);
+    let sqrtU1 = Math.sqrt(u1);
+
+    out[0] = sqrt1MinusU1 * Math.sin(2.0 * Math.PI * u2);
+    out[1] = sqrt1MinusU1 * Math.cos(2.0 * Math.PI * u2);
+    out[2] = sqrtU1 * Math.sin(2.0 * Math.PI * u3);
+    out[3] = sqrtU1 * Math.cos(2.0 * Math.PI * u3);
+    return out;
+}
