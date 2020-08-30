@@ -4,7 +4,6 @@ import {Game} from "../game.js";
 
 export function blueprint_camera(game: Game): Blueprint {
     return {
-        Rotation: [0, 1, 0, 0],
         Children: [
             {
                 Rotation: [0, 1, 0, 0],

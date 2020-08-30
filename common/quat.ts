@@ -1,4 +1,4 @@
-import {EPSILON, Quat, Vec3} from "./math.js";
+import {DEG_TO_RAD, EPSILON, Quat, Vec3} from "./math.js";
 import {cross, dot, length, normalize as normalize_vec3} from "./vec3.js";
 
 export function normalize(out: Quat, a: Quat) {
@@ -34,24 +34,19 @@ export function multiply(out: Quat, a: Quat, b: Quat) {
     return out;
 }
 
+// Order: YXZ
 export function from_euler(out: Quat, x: number, y: number, z: number) {
-    let halfToRad = (0.5 * Math.PI) / 180.0;
-    x *= halfToRad;
-    y *= halfToRad;
-    z *= halfToRad;
+    let sx = Math.sin((x / 2) * DEG_TO_RAD);
+    let cx = Math.cos((x / 2) * DEG_TO_RAD);
+    let sy = Math.sin((y / 2) * DEG_TO_RAD);
+    let cy = Math.cos((y / 2) * DEG_TO_RAD);
+    let sz = Math.sin((z / 2) * DEG_TO_RAD);
+    let cz = Math.cos((z / 2) * DEG_TO_RAD);
 
-    let sx = Math.sin(x);
-    let cx = Math.cos(x);
-    let sy = Math.sin(y);
-    let cy = Math.cos(y);
-    let sz = Math.sin(z);
-    let cz = Math.cos(z);
-
-    out[0] = sx * cy * cz - cx * sy * sz;
-    out[1] = cx * sy * cz + sx * cy * sz;
+    out[0] = sx * cy * cz + cx * sy * sz;
+    out[1] = cx * sy * cz - sx * cy * sz;
     out[2] = cx * cy * sz - sx * sy * cz;
     out[3] = cx * cy * cz + sx * sy * sz;
-
     return out;
 }
 
