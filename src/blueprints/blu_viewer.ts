@@ -30,8 +30,8 @@ export function blueprint_viewer(game: Game): Blueprint {
                                 Rotation: [0, 1, 0, 0],
                                 Using: [
                                     shake(Infinity, 0.05),
-                                    emit_particles(5, 0, 10),
-                                    render_particles([1, 1, 0, 0.3], 20, [1, 0, 0, 0.7], 100),
+                                    emit_particles(2, 0, 10),
+                                    render_particles([1, 1, 0, 1], 80, [1, 0, 0, 0], 200),
                                 ],
                             },
                         ],

@@ -5,6 +5,7 @@ export interface EmitParticles {
     readonly Lifespan: number;
     readonly Frequency: number;
     readonly Speed: number;
+    Trigger: boolean;
     Instances: Array<number>;
     SinceLast: number;
 }
@@ -23,6 +24,7 @@ export function emit_particles(lifespan: number, frequency: number, speed: numbe
             Lifespan: lifespan,
             Frequency: frequency,
             Speed: speed,
+            Trigger: false,
             Instances: [],
             SinceLast: 0,
         };

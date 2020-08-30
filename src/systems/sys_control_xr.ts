@@ -34,7 +34,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
         transform.Dirty = true;
 
         let flame = game.World.Transform[transform.Children[0]].Children[0];
-        game.World.Signature[flame] &= ~Has.Transform;
+        game.World.EmitParticles[flame].Trigger = false;
 
         let left = inputs["left"];
         let right = inputs["right"];
@@ -42,7 +42,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                game.World.Signature[flame] |= Has.Transform;
+                game.World.EmitParticles[flame].Trigger = true;
             }
         }
         return;

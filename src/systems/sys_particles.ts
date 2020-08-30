@@ -21,7 +21,7 @@ function update(game: Game, entity: Entity, delta: number) {
     let transform = game.World.Transform[entity];
 
     emitter.SinceLast += delta;
-    if (emitter.SinceLast > emitter.Frequency) {
+    if (emitter.Trigger && emitter.SinceLast > emitter.Frequency) {
         emitter.SinceLast = 0;
         get_translation(origin, transform.World);
         get_forward(forward, transform.World);
