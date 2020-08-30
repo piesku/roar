@@ -45,27 +45,31 @@ export function scene_stage(game: Game) {
     // Moon.
     instantiate(game, blueprint_moon(game));
 
-    let grid_size = 20;
+    let grid_size = 16;
 
     // Ground.
     instantiate(game, {
         Scale: [grid_size, 1, grid_size],
-        Using: [
-            collide(false, Layer.Terrain, Layer.None),
-            rigid_body(RigidKind.Static),
-            render_textured_diffuse(
-                game.MaterialTexturedDiffuse,
-                game.MeshCube,
-                game.Textures["noise"],
-                GL_CW,
-                [0.1, 0.5, 0.4, 1],
-                [grid_size * 2, grid_size * 2]
-            ),
+        Using: [collide(false, Layer.Terrain, Layer.None), rigid_body(RigidKind.Static)],
+        Children: [
+            {
+                Translation: [0, 0.5, 0],
+                Using: [
+                    render_textured_diffuse(
+                        game.MaterialTexturedDiffuse,
+                        game.MeshPlane,
+                        game.Textures["road"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        [grid_size / 2, grid_size / 2]
+                    ),
+                ],
+            },
         ],
     });
 
-    for (let z = -grid_size / 2; z <= grid_size / 2; z++) {
-        for (let x = -grid_size / 2; x <= grid_size / 2; x++) {
+    for (let z = -grid_size / 2; z < grid_size / 2; z++) {
+        for (let x = -grid_size / 2; x < grid_size / 2; x++) {
             if (x % 2 === 0 || z % 2 === 0) {
                 continue;
             }
@@ -74,7 +78,7 @@ export function scene_stage(game: Game) {
                 // Square tower.
                 instantiate(game, {
                     ...blueprint_block(game, count),
-                    Translation: [x, 1, z],
+                    Translation: [x + 0.5, 1, z - 0.5],
                 });
             } else {
                 // Star tower.
@@ -82,7 +86,7 @@ export function scene_stage(game: Game) {
                     let c = float(0.2, 0.8);
                     instantiate(game, {
                         ...blueprint_star(game, c),
-                        Translation: [x, y + 1, z],
+                        Translation: [x + 0.5, y + 1, z - 0.5],
                     });
                 }
             }
