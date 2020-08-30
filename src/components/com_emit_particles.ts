@@ -4,6 +4,7 @@ import {Has} from "../world.js";
 export interface EmitParticles {
     readonly Lifespan: number;
     readonly Frequency: number;
+    readonly Speed: number;
     Instances: Array<number>;
     SinceLast: number;
 }
@@ -11,15 +12,17 @@ export interface EmitParticles {
 /**
  * Add EmitParticles.
  *
- * @param Lifespan How long particles live for.
- * @param Frequency How often particles spawn.
+ * @param lifespan How long particles live for.
+ * @param frequency How often particles spawn.
+ * @param speed How fast particles move.
  */
-export function emit_particles(Lifespan: number, Frequency: number) {
+export function emit_particles(lifespan: number, frequency: number, speed: number) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.EmitParticles;
         game.World.EmitParticles[entity] = {
-            Lifespan,
-            Frequency,
+            Lifespan: lifespan,
+            Frequency: frequency,
+            Speed: speed,
             Instances: [],
             SinceLast: 0,
         };

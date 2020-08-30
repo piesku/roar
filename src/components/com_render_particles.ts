@@ -1,5 +1,5 @@
 import {Material} from "../../common/material.js";
-import {Vec3, Vec4} from "../../common/math.js";
+import {Vec2, Vec4} from "../../common/math.js";
 import {GL_CW} from "../../common/webgl.js";
 import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {Entity, Game} from "../game.js";
@@ -11,26 +11,28 @@ export interface RenderParticles {
     readonly Phase: RenderPhase;
     readonly Material: Material<ParticlesLayout>;
     readonly Buffer: WebGLBuffer;
-    readonly ColorSizeStart: Vec4;
-    readonly ColorSizeEnd: Vec4;
+    readonly ColorStart: Vec4;
+    readonly ColorEnd: Vec4;
+    readonly Size: Vec2;
     readonly FrontFace: GLenum;
 }
 
 export function render_particles(
-    start_color: Vec3,
+    start_color: Vec4,
     start_size: number,
-    end_color: Vec3,
+    end_color: Vec4,
     end_size: number
 ) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.Render;
         game.World.Render[entity] = {
             Kind: RenderKind.Particles,
-            Phase: RenderPhase.Opaque,
+            Phase: RenderPhase.Translucent,
             Material: game.MaterialParticles,
             Buffer: game.Gl.createBuffer()!,
-            ColorSizeStart: <Vec4>[...start_color, start_size],
-            ColorSizeEnd: <Vec4>[...end_color, end_size],
+            ColorStart: start_color,
+            ColorEnd: end_color,
+            Size: [start_size, end_size],
             FrontFace: GL_CW,
         };
     };
