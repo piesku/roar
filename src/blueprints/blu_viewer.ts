@@ -1,11 +1,10 @@
-import {GL_CCW, GL_CW} from "../../common/webgl.js";
+import {GL_CCW} from "../../common/webgl.js";
 import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
-import {control_rotate} from "../components/com_control_rotate.js";
 import {control_xr} from "../components/com_control_xr.js";
-import {move} from "../components/com_move.js";
+import {emit_particles} from "../components/com_emit_particles.js";
+import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
-import {render_textured_unlit} from "../components/com_render_textured_unlit.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
@@ -23,24 +22,16 @@ export function blueprint_viewer(game: Game): Blueprint {
                 Using: [control_xr("head")],
                 Children: [
                     {
-                        // Flame.
+                        // Mouth.
                         Translation: [0, -0.3, 0],
-                        Scale: [1, 0.1, 10],
                         Children: [
                             {
+                                // Flame emitter.
+                                Rotation: [0, 1, 0, 0],
                                 Using: [
-                                    control_rotate([-0.995, 0.0995, 0, 0]),
-                                    move(0, 0),
-                                    shake(Infinity, 0.02),
-                                    render_textured_unlit(
-                                        game.MaterialTexturedUnlit,
-                                        game.MeshPlane,
-                                        game.Textures["fire"],
-                                        GL_CW,
-                                        [1, 1, 1, 0.2],
-                                        [2, 8],
-                                        () => [0, -(Date.now() % 1e3) / 1e2]
-                                    ),
+                                    shake(Infinity, 0.05),
+                                    emit_particles(5, 0, 10),
+                                    render_particles([1, 1, 0, 0.3], 20, [1, 0, 0, 0.7], 100),
                                 ],
                             },
                         ],

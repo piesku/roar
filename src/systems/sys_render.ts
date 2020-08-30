@@ -45,6 +45,8 @@ function render_screen(game: Game, camera: CameraPerspective) {
 
     render(game, camera.Pv, RenderPhase.Opaque);
 
+    // For best results, we should sort translucent entities by their distance
+    // to the camera first. For our use-case skipping sorting is good enough.
     game.Gl.enable(GL_BLEND);
     render(game, camera.Pv, RenderPhase.Translucent);
     game.Gl.disable(GL_BLEND);

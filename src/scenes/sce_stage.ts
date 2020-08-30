@@ -7,14 +7,9 @@ import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
-import {control_rotate} from "../components/com_control_rotate.js";
-import {emit_particles} from "../components/com_emit_particles.js";
 import {light_directional} from "../components/com_light.js";
-import {move} from "../components/com_move.js";
-import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
-import {shake} from "../components/com_shake.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -96,24 +91,4 @@ export function scene_stage(game: Game) {
             }
         }
     }
-
-    instantiate(game, {
-        Translation: [0, 1, 0],
-        Using: [control_rotate([0, 1, 0, 0]), move(0, 2)],
-        Children: [
-            {
-                Translation: [0, 0, 5],
-                Children: [
-                    {
-                        Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
-                        Using: [
-                            shake(Infinity, 0.5),
-                            emit_particles(2.5, 0, 4),
-                            render_particles([1, 1, 0, 0.3], 5, [1, 0, 0, 0.7], 30),
-                        ],
-                    },
-                ],
-            },
-        ],
-    });
 }

@@ -15,13 +15,12 @@ let vertex = `#version 300 es\n
     out vec4 vert_color;
 
     void main() {
-        vec4 origin = vec4(origin_age.xyz, 1.0);
+        vec3 origin = origin_age.xyz;
         float age = origin_age.w;
         vec3 velocity = direction * details.y;
 
         // Move the particle along the direction axis.
-        origin += vec4(velocity * age, 1.0);
-        gl_Position = pv * origin;
+        gl_Position = pv * vec4(origin + velocity * age, 1.0);
 
         // Interpolate color and size.
         float t = age / details.x;

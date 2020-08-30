@@ -80,11 +80,11 @@ export class Game {
         // User input and AI.
         sys_control_xr(this, delta);
         sys_control_rotate(this, delta);
+        sys_particles(this, delta);
 
         // Game logic.
         sys_move(this, delta);
         sys_shake(this, delta);
-        sys_particles(this, delta);
 
         // Physics and collisions.
         sys_physics(this, delta);
