@@ -73,22 +73,19 @@ export function scene_stage(game: Game) {
             if (x % 2 === 0 || z % 2 === 0) {
                 continue;
             }
-            let count = integer(1, 4);
+            let height = integer(1, 4);
             if (float() > 0.2) {
                 // Square tower.
                 instantiate(game, {
-                    ...blueprint_block(game, count),
+                    ...blueprint_block(game, height),
                     Translation: [x + 0.5, 1, z - 0.5],
                 });
             } else {
                 // Star tower.
-                for (let y = 0; y < count; y++) {
-                    let c = float(0.2, 0.8);
-                    instantiate(game, {
-                        ...blueprint_star(game, c),
-                        Translation: [x + 0.5, y + 1, z - 0.5],
-                    });
-                }
+                instantiate(game, {
+                    ...blueprint_star(game, height),
+                    Translation: [x + 0.5, 1, z - 0.5],
+                });
             }
         }
     }
