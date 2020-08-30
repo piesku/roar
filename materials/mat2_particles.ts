@@ -4,28 +4,28 @@ import {ParticlesLayout} from "./layout_particles.js";
 
 let vertex = `#version 300 es\n
     uniform mat4 pv;
-    // [red, green, blue, alpha]
     uniform vec4 color_start;
     uniform vec4 color_end;
-    // [lifespan, size_start, size_end];
-    uniform vec3 lifespan_size;
+    // [x: lifespan, y: speed, z: size_start, w: size_end];
+    uniform vec4 details;
 
-    // [x, y, z, age]
+    // [x, y, z, w: age]
     in vec4 origin_age;
-    // [x, y, z, speed]
-    in vec4 direction_speed;
+    in vec3 direction;
     out vec4 vert_color;
 
     void main() {
         vec4 origin = vec4(origin_age.xyz, 1.0);
         float age = origin_age.w;
-        vec3 velocity = direction_speed.xyz * direction_speed.w;
+        vec3 velocity = direction * details.y;
 
+        // Move the particle along the direction axis.
         origin += vec4(velocity * age, 1.0);
-
-        float t = age / lifespan_size.x;
-        gl_PointSize = mix(lifespan_size.y, lifespan_size.z, t);
         gl_Position = pv * origin;
+
+        // Interpolate color and size.
+        float t = age / details.x;
+        gl_PointSize = mix(details.z, details.w, t);
         vert_color = mix(color_start, color_end, t);
     }
 `;
@@ -50,9 +50,9 @@ export function mat2_particles(gl: WebGL2RenderingContext): Material<ParticlesLa
             Pv: gl.getUniformLocation(program, "pv")!,
             ColorStart: gl.getUniformLocation(program, "color_start")!,
             ColorEnd: gl.getUniformLocation(program, "color_end")!,
-            LifespanSize: gl.getUniformLocation(program, "lifespan_size")!,
+            Details: gl.getUniformLocation(program, "details")!,
             OriginAge: gl.getAttribLocation(program, "origin_age")!,
-            DirectionSpeed: gl.getAttribLocation(program, "direction_speed")!,
+            Direction: gl.getAttribLocation(program, "direction")!,
         },
     };
 }

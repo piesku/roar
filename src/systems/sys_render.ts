@@ -177,20 +177,24 @@ function use_particles(game: Game, material: Material<ParticlesLayout>, pv: Mat4
 function draw_particles(game: Game, render: RenderParticles, emitter: EmitParticles) {
     game.Gl.uniform4fv(render.Material.Locations.ColorStart, render.ColorStart);
     game.Gl.uniform4fv(render.Material.Locations.ColorEnd, render.ColorEnd);
-    game.Gl.uniform3fv(render.Material.Locations.LifespanSize, [emitter.Lifespan, ...render.Size]);
+    game.Gl.uniform4fv(render.Material.Locations.Details, [
+        emitter.Lifespan,
+        emitter.Speed,
+        ...render.Size,
+    ]);
     game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
     let instances = Float32Array.from(emitter.Instances);
     game.Gl.enableVertexAttribArray(render.Material.Locations.OriginAge);
-    game.Gl.vertexAttribPointer(render.Material.Locations.OriginAge, 4, GL_FLOAT, false, 8 * 4, 0);
-    game.Gl.enableVertexAttribArray(render.Material.Locations.DirectionSpeed);
+    game.Gl.vertexAttribPointer(render.Material.Locations.OriginAge, 4, GL_FLOAT, false, 7 * 4, 0);
+    game.Gl.enableVertexAttribArray(render.Material.Locations.Direction);
     game.Gl.vertexAttribPointer(
-        render.Material.Locations.DirectionSpeed,
-        4,
+        render.Material.Locations.Direction,
+        3,
         GL_FLOAT,
         false,
-        8 * 4,
+        7 * 4,
         4 * 4
     );
     game.Gl.bufferData(GL_ARRAY_BUFFER, instances, GL_DYNAMIC_DRAW);
-    game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / 8);
+    game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / 7);
 }

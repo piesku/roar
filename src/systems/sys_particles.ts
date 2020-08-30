@@ -27,8 +27,8 @@ function update(game: Game, entity: Entity, delta: number) {
         get_forward(forward, transform.World);
         // Push [x, y, z, age].
         emitter.Instances.push(...origin, 0);
-        // Push [x, y, z, velocity].
-        emitter.Instances.push(...forward, emitter.Speed);
+        // Push [x, y, z].
+        emitter.Instances.push(...forward);
     }
 
     // A flat continuous array of particle data, from which a Float32Array
@@ -36,9 +36,9 @@ function update(game: Game, entity: Entity, delta: number) {
     for (let i = 0; i < emitter.Instances.length; ) {
         emitter.Instances[i + 3] += delta;
         if (emitter.Instances[i + 3] > emitter.Lifespan) {
-            emitter.Instances.splice(i, 8);
+            emitter.Instances.splice(i, 7);
         } else {
-            i += 8;
+            i += 7;
         }
     }
 }
