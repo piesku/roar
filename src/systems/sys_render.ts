@@ -177,11 +177,12 @@ function use_particles(game: Game, material: Material<ParticlesLayout>, pv: Mat4
 function draw_particles(game: Game, render: RenderParticles, emitter: EmitParticles) {
     game.Gl.uniform4fv(render.Material.Locations.ColorStart, render.ColorStart);
     game.Gl.uniform4fv(render.Material.Locations.ColorEnd, render.ColorEnd);
-    game.Gl.uniform4fv(render.Material.Locations.Details, [
+    game.Gl.uniform4f(
+        render.Material.Locations.Details,
         emitter.Lifespan,
         emitter.Speed,
-        ...render.Size,
-    ]);
+        ...render.Size
+    );
     game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
     let instances = Float32Array.from(emitter.Instances);
     game.Gl.enableVertexAttribArray(render.Material.Locations.OriginAge);
