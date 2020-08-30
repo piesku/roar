@@ -3,6 +3,7 @@ import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_textured_unlit} from "../materials/mat2_textured_unlit.js";
 import {mesh_claws} from "../meshes/claws.js";
 import {mesh_cube} from "../meshes/cube.js";
+import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
 import {sys_camera} from "./systems/sys_camera.js";
@@ -43,6 +44,7 @@ export class Game {
     MaterialTexturedDiffuse = mat2_textured_diffuse(this.Gl);
     MaterialTexturedUnlit = mat2_textured_unlit(this.Gl);
     MeshCube = mesh_cube(this.Gl);
+    MeshPlane = mesh_plane(this.Gl);
     MeshHand = mesh_claws(this.Gl);
     Textures: Record<string, WebGLTexture> = {};
 

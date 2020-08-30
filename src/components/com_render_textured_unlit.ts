@@ -15,7 +15,7 @@ export interface RenderTexturedUnlit {
     Color: Vec4;
     Texture: WebGLTexture;
     TexScale: Vec2;
-    TexOffset?: () => number;
+    TexOffset?: () => Vec2;
 }
 
 let vaos: WeakMap<Mesh, WebGLVertexArrayObject> = new WeakMap();
@@ -27,7 +27,7 @@ export function render_textured_unlit(
     front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
     texture_scale: Vec2 = [1, 1],
-    texture_offset?: () => number
+    texture_offset?: () => Vec2
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {

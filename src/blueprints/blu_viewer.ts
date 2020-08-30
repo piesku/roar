@@ -30,15 +30,16 @@ export function blueprint_viewer(game: Game): Blueprint {
                             {
                                 Using: [
                                     control_rotate([-0.995, 0.0995, 0, 0]),
-                                    move(0, 5),
-                                    shake(Infinity, 0.05),
+                                    move(0, 0),
+                                    shake(Infinity, 0.02),
                                     render_textured_unlit(
                                         game.MaterialTexturedUnlit,
-                                        game.MeshCube,
+                                        game.MeshPlane,
                                         game.Textures["fire"],
                                         GL_CW,
                                         [1, 1, 1, 0.2],
-                                        [10, 10]
+                                        [2, 8],
+                                        () => [0, -(Date.now() % 1e3) / 1e2]
                                     ),
                                 ],
                             },

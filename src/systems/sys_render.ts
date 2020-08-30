@@ -134,9 +134,9 @@ function draw_textured_diffuse(game: Game, transform: Transform, render: RenderT
     game.Gl.uniform2fv(render.Material.Locations.TexScale, render.TexScale);
 
     if (render.TexOffset) {
-        game.Gl.uniform1f(render.Material.Locations.TexOffset, render.TexOffset());
+        game.Gl.uniform2fv(render.Material.Locations.TexOffset, render.TexOffset());
     } else {
-        game.Gl.uniform1f(render.Material.Locations.TexOffset, 0);
+        game.Gl.uniform2fv(render.Material.Locations.TexOffset, [0, 0]);
     }
 
     game.Gl.bindVertexArray(render.Vao);
@@ -157,6 +157,12 @@ function draw_textured_unlit(game: Game, transform: Transform, render: RenderTex
     game.Gl.bindTexture(GL_TEXTURE_2D, render.Texture);
     game.Gl.uniform1i(render.Material.Locations.Sampler, 0);
     game.Gl.uniform2fv(render.Material.Locations.TexScale, render.TexScale);
+
+    if (render.TexOffset) {
+        game.Gl.uniform2fv(render.Material.Locations.TexOffset, render.TexOffset());
+    } else {
+        game.Gl.uniform2fv(render.Material.Locations.TexOffset, [0, 0]);
+    }
 
     game.Gl.bindVertexArray(render.Vao);
     game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
