@@ -1,18 +1,24 @@
 import {Material} from "../../common/material.js";
 import {Mat4} from "../../common/math.js";
 import {
+    GL_ARRAY_BUFFER,
     GL_BLEND,
     GL_COLOR_BUFFER_BIT,
     GL_DEPTH_BUFFER_BIT,
+    GL_DYNAMIC_DRAW,
+    GL_FLOAT,
     GL_FRAMEBUFFER,
     GL_TEXTURE0,
     GL_TEXTURE_2D,
     GL_UNSIGNED_SHORT,
 } from "../../common/webgl.js";
+import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
-import {RenderKind} from "../components/com_render.js";
+import {EmitParticles} from "../components/com_emit_particles.js";
+import {RenderKind, RenderPhase} from "../components/com_render.js";
+import {RenderParticles} from "../components/com_render_particles.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
 import {RenderTexturedUnlit} from "../components/com_render_textured_unlit.js";
 import {Transform} from "../components/com_transform.js";
@@ -20,10 +26,6 @@ import {Game} from "../game.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.Render;
-const enum RenderingPhase {
-    Opaque,
-    Translucent,
-}
 
 export function sys_render(game: Game, delta: number) {
     let camera = game.Camera!;
@@ -41,10 +43,10 @@ function render_screen(game: Game, camera: CameraPerspective) {
         game.Gl.viewport(0, 0, game.ViewportWidth, game.ViewportHeight);
     }
 
-    render(game, camera.Pv, RenderingPhase.Opaque);
+    render(game, camera.Pv, RenderPhase.Opaque);
 
     game.Gl.enable(GL_BLEND);
-    render(game, camera.Pv, RenderingPhase.Translucent);
+    render(game, camera.Pv, RenderPhase.Translucent);
     game.Gl.disable(GL_BLEND);
 }
 
@@ -56,15 +58,15 @@ function render_vr(game: Game, camera: CameraXr) {
     for (let eye of camera.Eyes) {
         let viewport = layer.getViewport(eye.View);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        render(game, eye.Pv, RenderingPhase.Opaque);
+        render(game, eye.Pv, RenderPhase.Opaque);
 
         game.Gl.enable(GL_BLEND);
-        render(game, eye.Pv, RenderingPhase.Translucent);
+        render(game, eye.Pv, RenderPhase.Translucent);
         game.Gl.disable(GL_BLEND);
     }
 }
 
-function render(game: Game, pv: Mat4, phase: RenderingPhase) {
+function render(game: Game, pv: Mat4, phase: RenderPhase) {
     // Keep track of the current material to minimize switching.
     let current_material = null;
     let current_front_face = null;
@@ -74,17 +76,8 @@ function render(game: Game, pv: Mat4, phase: RenderingPhase) {
             let transform = game.World.Transform[i];
             let render = game.World.Render[i];
 
-            switch (phase) {
-                case RenderingPhase.Opaque:
-                    if (render.Color[3] < 1) {
-                        continue;
-                    }
-                    break;
-                case RenderingPhase.Translucent:
-                    if (render.Color[3] === 1) {
-                        continue;
-                    }
-                    break;
+            if (render.Phase !== phase) {
+                continue;
             }
 
             if (render.Material !== current_material) {
@@ -95,6 +88,9 @@ function render(game: Game, pv: Mat4, phase: RenderingPhase) {
                         break;
                     case RenderKind.TexturedUnlit:
                         use_textured_unlit(game, render.Material, pv);
+                        break;
+                    case RenderKind.Particles:
+                        use_particles(game, render.Material, pv);
                         break;
                 }
             }
@@ -110,6 +106,10 @@ function render(game: Game, pv: Mat4, phase: RenderingPhase) {
                     break;
                 case RenderKind.TexturedUnlit:
                     draw_textured_unlit(game, transform, render);
+                    break;
+                case RenderKind.Particles:
+                    let emitter = game.World.EmitParticles[i];
+                    draw_particles(game, render, emitter);
                     break;
             }
         }
@@ -167,4 +167,19 @@ function draw_textured_unlit(game: Game, transform: Transform, render: RenderTex
     game.Gl.bindVertexArray(render.Vao);
     game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
     game.Gl.bindVertexArray(null);
+}
+
+function use_particles(game: Game, material: Material<ParticlesLayout>, pv: Mat4) {
+    game.Gl.useProgram(material.Program);
+    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, pv);
+}
+
+function draw_particles(game: Game, render: RenderParticles, emitter: EmitParticles) {
+    game.Gl.uniform4fv(render.Material.Locations.ColorSizeStart, render.ColorSizeStart);
+    game.Gl.uniform4fv(render.Material.Locations.ColorSizeEnd, render.ColorSizeEnd);
+    game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
+    game.Gl.bufferData(GL_ARRAY_BUFFER, Float32Array.from(emitter.Instances), GL_DYNAMIC_DRAW);
+    game.Gl.enableVertexAttribArray(render.Material.Locations.OriginAge);
+    game.Gl.vertexAttribPointer(render.Material.Locations.OriginAge, 4, GL_FLOAT, false, 4 * 4, 0);
+    game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / 4);
 }

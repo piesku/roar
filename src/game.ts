@@ -1,4 +1,5 @@
 import {GL_CULL_FACE, GL_DEPTH_TEST, GL_ONE, GL_ONE_MINUS_SRC_ALPHA} from "../common/webgl.js";
+import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_textured_unlit} from "../materials/mat2_textured_unlit.js";
 import {mesh_claws} from "../meshes/claws.js";
@@ -14,6 +15,7 @@ import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_light} from "./systems/sys_light.js";
 import {sys_move} from "./systems/sys_move.js";
+import {sys_particles} from "./systems/sys_particles.js";
 import {sys_physics} from "./systems/sys_physics.js";
 import {sys_render} from "./systems/sys_render.js";
 import {sys_resolution} from "./systems/sys_resolution.js";
@@ -43,6 +45,7 @@ export class Game {
 
     MaterialTexturedDiffuse = mat2_textured_diffuse(this.Gl);
     MaterialTexturedUnlit = mat2_textured_unlit(this.Gl);
+    MaterialParticles = mat2_particles(this.Gl);
     MeshCube = mesh_cube(this.Gl);
     MeshPlane = mesh_plane(this.Gl);
     MeshHand = mesh_claws(this.Gl);
@@ -81,6 +84,7 @@ export class Game {
         // Game logic.
         sys_move(this, delta);
         sys_shake(this, delta);
+        sys_particles(this, delta);
 
         // Physics and collisions.
         sys_physics(this, delta);

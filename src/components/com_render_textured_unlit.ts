@@ -4,10 +4,11 @@ import {GL_ARRAY_BUFFER, GL_CW, GL_ELEMENT_ARRAY_BUFFER, GL_FLOAT} from "../../c
 import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
-import {RenderKind} from "./com_render.js";
+import {RenderKind, RenderPhase} from "./com_render.js";
 
 export interface RenderTexturedUnlit {
     readonly Kind: RenderKind.TexturedUnlit;
+    readonly Phase: RenderPhase;
     readonly Material: Material<TexturedUnlitLayout>;
     readonly Mesh: Mesh;
     readonly FrontFace: GLenum;
@@ -66,6 +67,7 @@ export function render_textured_unlit(
         game.World.Signature[entity] |= Has.Render;
         game.World.Render[entity] = {
             Kind: RenderKind.TexturedUnlit,
+            Phase: color[3] < 1 ? RenderPhase.Translucent : RenderPhase.Opaque,
             Material: material,
             Mesh: mesh,
             FrontFace: front_face,

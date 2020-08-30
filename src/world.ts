@@ -2,6 +2,7 @@ import {Camera} from "./components/com_camera.js";
 import {Collide} from "./components/com_collide.js";
 import {ControlRotate} from "./components/com_control_rotate.js";
 import {ControlXr} from "./components/com_control_xr.js";
+import {EmitParticles} from "./components/com_emit_particles.js";
 import {Light} from "./components/com_light.js";
 import {Move} from "./components/com_move.js";
 import {Render} from "./components/com_render.js";
@@ -14,6 +15,7 @@ const enum Component {
     Collide,
     ControlRotate,
     ControlXr,
+    EmitParticles,
     Light,
     Move,
     Render,
@@ -27,6 +29,7 @@ export const enum Has {
     Collide = 1 << Component.Collide,
     ControlRotate = 1 << Component.ControlRotate,
     ControlXr = 1 << Component.ControlXr,
+    EmitParticles = 1 << Component.EmitParticles,
     Light = 1 << Component.Light,
     Move = 1 << Component.Move,
     Render = 1 << Component.Render,
@@ -43,6 +46,7 @@ export class World {
     Collide: Array<Collide> = [];
     ControlRotate: Array<ControlRotate> = [];
     ControlXr: Array<ControlXr> = [];
+    EmitParticles: Array<EmitParticles> = [];
     Light: Array<Light> = [];
     Move: Array<Move> = [];
     Render: Array<Render> = [];

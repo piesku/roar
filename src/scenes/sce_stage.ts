@@ -7,9 +7,12 @@ import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
+import {emit_particles} from "../components/com_emit_particles.js";
 import {light_directional} from "../components/com_light.js";
+import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
+import {shake} from "../components/com_shake.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -91,4 +94,12 @@ export function scene_stage(game: Game) {
             }
         }
     }
+
+    instantiate(game, {
+        Using: [
+            emit_particles(10, 0.01),
+            shake(Infinity, 0.5),
+            render_particles([1, 1, 0], 5, [1, 0, 0], 30),
+        ],
+    });
 }
