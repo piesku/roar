@@ -11,6 +11,7 @@ export interface RenderParticles {
     readonly Phase: RenderPhase;
     readonly Material: Material<ParticlesLayout>;
     readonly Buffer: WebGLBuffer;
+    readonly Texture: WebGLTexture;
     readonly ColorStart: Vec4;
     readonly ColorEnd: Vec4;
     readonly Size: Vec2;
@@ -18,6 +19,7 @@ export interface RenderParticles {
 }
 
 export function render_particles(
+    texture: WebGLTexture,
     start_color: Vec4,
     start_size: number,
     end_color: Vec4,
@@ -30,6 +32,7 @@ export function render_particles(
             Phase: RenderPhase.Translucent,
             Material: game.MaterialParticles,
             Buffer: game.Gl.createBuffer()!,
+            Texture: texture,
             ColorStart: start_color,
             ColorEnd: end_color,
             Size: [start_size, end_size],

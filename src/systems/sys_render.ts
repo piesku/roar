@@ -179,6 +179,10 @@ function use_particles(game: Game, material: Material<ParticlesLayout>, pv: Mat4
 function draw_particles(game: Game, render: RenderParticles, emitter: EmitParticles) {
     game.Gl.uniform4fv(render.Material.Locations.ColorStart, render.ColorStart);
     game.Gl.uniform4fv(render.Material.Locations.ColorEnd, render.ColorEnd);
+    game.Gl.activeTexture(GL_TEXTURE0);
+    game.Gl.bindTexture(GL_TEXTURE_2D, render.Texture);
+    game.Gl.uniform1i(render.Material.Locations.Sampler, 0);
+
     game.Gl.uniform4f(
         render.Material.Locations.Details,
         emitter.Lifespan,
