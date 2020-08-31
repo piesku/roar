@@ -24,17 +24,31 @@ export function blueprint_viewer(game: Game): Blueprint {
                     {
                         // Mouth.
                         Translation: [0, -0.2, 0],
+                        Rotation: [0, 1, 0, 0],
                         Children: [
                             {
                                 // Flame emitter.
-                                Rotation: [0, 1, 0, 0],
                                 Using: [
-                                    shake(Infinity, 0.07),
-                                    emit_particles(2, 0, 7),
+                                    shake(Infinity, 0.05),
+                                    emit_particles(2, 0, 9),
                                     render_particles(
                                         game.Textures["fire"],
-                                        [1, 1, 0, 1],
-                                        100,
+                                        [1, 1, 0, 0.1],
+                                        150,
+                                        [1, 0, 0, 0],
+                                        200
+                                    ),
+                                ],
+                            },
+                            {
+                                // Flame emitter.
+                                Using: [
+                                    shake(Infinity, 0.05),
+                                    emit_particles(2, 0, 9),
+                                    render_particles(
+                                        game.Textures["fire"],
+                                        [1, 1, 0, 0.2],
+                                        150,
                                         [1, 0, 0, 0],
                                         200
                                     ),

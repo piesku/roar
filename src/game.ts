@@ -1,9 +1,4 @@
-import {
-    GL_CULL_FACE,
-    GL_DEPTH_TEST,
-    GL_ONE_MINUS_SRC_ALPHA,
-    GL_SRC_ALPHA,
-} from "../common/webgl.js";
+import {GL_CULL_FACE, GL_DEPTH_TEST, GL_ONE, GL_SRC_ALPHA} from "../common/webgl.js";
 import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_textured_unlit} from "../materials/mat2_textured_unlit.js";
@@ -68,7 +63,8 @@ export class Game {
 
         this.Gl.enable(GL_DEPTH_TEST);
         this.Gl.enable(GL_CULL_FACE);
-        this.Gl.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // Additive blending for particles.
+        this.Gl.blendFunc(GL_SRC_ALPHA, GL_ONE);
 
         if (navigator.xr) {
             xr_init(this);

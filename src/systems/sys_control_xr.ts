@@ -1,5 +1,6 @@
 import {map_range} from "../../common/number.js";
 import {from_euler} from "../../common/quat.js";
+import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -33,8 +34,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
         transform.World = headset.transform.matrix;
         transform.Dirty = true;
 
-        let flame = game.World.Transform[transform.Children[0]].Children[0];
-        game.World.EmitParticles[flame].Trigger = false;
+        for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
+            game.World.EmitParticles[emitter].Trigger = false;
+        }
 
         let left = inputs["left"];
         let right = inputs["right"];
@@ -42,7 +44,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                game.World.EmitParticles[flame].Trigger = true;
+                for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
+                    game.World.EmitParticles[emitter].Trigger = true;
+                }
             }
         }
         return;
