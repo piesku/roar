@@ -1,10 +1,12 @@
 import {GL_CW} from "../../common/webgl.js";
 import {control_rotate} from "../components/com_control_rotate.js";
+import {cull} from "../components/com_cull.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_unlit} from "../components/com_render_textured_unlit.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
+import {Has} from "../world.js";
 
 export function blueprint_moon(game: Game): Blueprint {
     return {
@@ -27,6 +29,7 @@ export function blueprint_moon(game: Game): Blueprint {
                         GL_CW,
                         [2, 2, 2, 1]
                     ),
+                    cull(Has.Render),
                 ],
             },
         ],

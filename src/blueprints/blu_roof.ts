@@ -1,6 +1,8 @@
+import {cull} from "../components/com_cull.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
+import {Has} from "../world.js";
 
 export function blueprint_roof(game: Game, type: number): Blueprint {
     switch (type) {
@@ -14,6 +16,7 @@ export function blueprint_roof(game: Game, type: number): Blueprint {
                         game.MeshCube,
                         game.Textures["building" + type]
                     ),
+                    cull(Has.Render),
                 ],
             };
         case 2:
@@ -26,6 +29,7 @@ export function blueprint_roof(game: Game, type: number): Blueprint {
                         game.MeshCube,
                         game.Textures["building" + type]
                     ),
+                    cull(Has.Render),
                 ],
             };
         // Cases 3 and 4
@@ -39,6 +43,7 @@ export function blueprint_roof(game: Game, type: number): Blueprint {
                         game.MeshCube,
                         game.Textures["building" + type]
                     ),
+                    cull(Has.Render),
                 ],
             };
     }
