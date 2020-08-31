@@ -34,3 +34,11 @@ index.html: game.html game.terser.js
 # On Ubuntu, install p7zip-full. See https://www.7-zip.org/download.html.
 index.zip: index.html
 	@7z a -mx=9 -mfb=256 -mpass=15 $@ $<
+
+.PHONY: validate
+validate: index.zip
+	@curl -s -X POST \
+		--form bundle=@$< \
+		--form category=webxr \
+		https://iw8sii1h9b.execute-api.eu-west-1.amazonaws.com/stage/analyze-bundle \
+		| jq -S '.checks'
