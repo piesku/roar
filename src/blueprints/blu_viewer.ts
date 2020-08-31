@@ -33,9 +33,9 @@ export function blueprint_viewer(game: Game): Blueprint {
                                     emit_particles(2, 0, 7),
                                     render_particles(
                                         game.Textures["fire"],
-                                        [1, 1, 0, 0.8],
+                                        [1, 1, 0, 1],
                                         100,
-                                        [1, 0, 0, 0.3],
+                                        [1, 0, 0, 0],
                                         200
                                     ),
                                 ],
