@@ -13,10 +13,11 @@ let vertex = `#version 300 es\n
     in vec4 origin_age;
     in vec3 direction;
     out vec4 vert_color;
+    out float age;
 
     void main() {
         vec3 origin = origin_age.xyz;
-        float age = origin_age.w;
+        age = origin_age.w;
         vec3 velocity = direction * details.y;
 
         // Move the particle along the direction axis.
@@ -35,10 +36,12 @@ let fragment = `#version 300 es\n
     uniform sampler2D sampler;
 
     in vec4 vert_color;
+    in float age;
     out vec4 frag_color;
 
     void main(){
-        frag_color = vert_color * texture(sampler, gl_PointCoord);
+        vec2 uv = gl_PointCoord + round(vec2(age, sin(age)));
+        frag_color = vert_color * texture(sampler, uv / 2.0);
     }
 `;
 
