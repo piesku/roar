@@ -3,6 +3,7 @@ import {render_textured_diffuse} from "../components/com_render_textured_diffuse
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {blueprint_fire} from "./blu_fire.js";
 import {blueprint_roof} from "./blu_roof.js";
 
 export function blueprint_block(game: Game, variant: number, has_roof: boolean): Blueprint {
@@ -16,10 +17,11 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
                 game.Textures["building" + variant]
             ),
         ],
+        Children: [blueprint_fire(game)],
     };
 
     if (has_roof) {
-        block.Children = [blueprint_roof(game, variant)];
+        block.Children?.push(blueprint_roof(game, variant));
     }
 
     return block;

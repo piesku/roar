@@ -72,9 +72,9 @@ export function scene_stage(game: Game) {
     let max_height = 4;
     let rotations: Array<Quat> = [
         [0, 0, 0, 1],
-        [0, 0.707, 0, 0.707],
+        [0, 0.7071, 0, 0.7071],
         [0, 1, 0, 0],
-        [0, -0.707, 0, 0.707],
+        [0, -0.7071, 0, 0.7071],
     ];
 
     for (let z = -grid_size / 2; z < grid_size / 2; z++) {

@@ -17,14 +17,19 @@ export interface EmitParticles {
  * @param frequency How often particles spawn.
  * @param speed How fast particles move.
  */
-export function emit_particles(lifespan: number, frequency: number, speed: number) {
+export function emit_particles(
+    lifespan: number,
+    frequency: number,
+    speed: number,
+    trigger = false
+) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.EmitParticles;
         game.World.EmitParticles[entity] = {
             Lifespan: lifespan,
             Frequency: frequency,
             Speed: speed,
-            Trigger: false,
+            Trigger: trigger,
             Instances: [],
             SinceLast: 0,
         };

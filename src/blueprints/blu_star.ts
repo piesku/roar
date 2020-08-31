@@ -4,6 +4,7 @@ import {render_textured_diffuse} from "../components/com_render_textured_diffuse
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {blueprint_fire} from "./blu_fire.js";
 
 export function blueprint_star(game: Game): Blueprint {
     return {
@@ -28,6 +29,7 @@ export function blueprint_star(game: Game): Blueprint {
                     ),
                 ],
             },
+            blueprint_fire(game),
         ],
     };
 }

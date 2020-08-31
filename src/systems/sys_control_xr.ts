@@ -5,7 +5,6 @@ import {from_euler} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
 import {Collide} from "../components/com_collide.js";
 import {query_all} from "../components/com_transform.js";
-import {destroy} from "../core.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -55,7 +54,6 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                 let mouth = transform.Children[0];
                 let mouth_transform = game.World.Transform[mouth];
-
                 let mouth_position: Vec3 = [0, 0, 0];
                 let mouth_direction: Vec3 = [0, 0, 0];
                 get_translation(mouth_position, mouth_transform.World);
@@ -73,8 +71,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                 let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
                 if (hit) {
-                    let other = hit.Collider as Collide;
-                    destroy(game.World, other.Entity);
+                    let other = (hit.Collider as Collide).Entity;
+                    for (let fire of query_all(game.World, other, Has.EmitParticles)) {
+                        game.World.Signature[fire] |= Has.Transform;
+                    }
                 }
             }
         }
