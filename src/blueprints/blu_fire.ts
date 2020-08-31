@@ -12,8 +12,8 @@ export function blueprint_fire(game: Game): Blueprint {
             {
                 Using: [
                     shake(Infinity, 0.5),
-                    emit_particles(5, 0.05, 1, true),
-                    render_particles(game.Textures["fire"], [1, 1, 0, 0.3], 50, [1, 0, 0, 0], 10),
+                    emit_particles(5, 0.1, 1, true),
+                    render_particles(game.Textures["fire"], [1, 0.5, 0, 0.1], 50, [1, 0, 0, 0], 10),
                 ],
                 Disable: Has.Transform,
             },

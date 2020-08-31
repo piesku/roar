@@ -30,10 +30,10 @@ export function blueprint_viewer(game: Game): Blueprint {
                                 // Flame emitter.
                                 Using: [
                                     shake(Infinity, 0.05),
-                                    emit_particles(2, 0, 9),
+                                    emit_particles(2, 0.01, 9),
                                     render_particles(
                                         game.Textures["fire"],
-                                        [1, 1, 0, 0.1],
+                                        [0.8, 0.4, 0, 0.1],
                                         150,
                                         [1, 0, 0, 0],
                                         200
@@ -43,11 +43,11 @@ export function blueprint_viewer(game: Game): Blueprint {
                             {
                                 // Flame emitter.
                                 Using: [
-                                    shake(Infinity, 0.05),
-                                    emit_particles(2, 0, 9),
+                                    shake(Infinity, 0.1),
+                                    emit_particles(3, 0.01, 6),
                                     render_particles(
                                         game.Textures["fire"],
-                                        [1, 1, 0, 0.2],
+                                        [0.8, 0.4, 0, 0.1],
                                         150,
                                         [1, 0, 0, 0],
                                         200

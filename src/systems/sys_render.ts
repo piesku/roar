@@ -5,6 +5,7 @@ import {
     GL_BLEND,
     GL_COLOR_BUFFER_BIT,
     GL_DEPTH_BUFFER_BIT,
+    GL_DEPTH_TEST,
     GL_DYNAMIC_DRAW,
     GL_FLOAT,
     GL_FRAMEBUFFER,
@@ -47,9 +48,11 @@ function render_screen(game: Game, camera: CameraPerspective) {
 
     // For best results, we should sort translucent entities by their distance
     // to the camera first. For our use-case skipping sorting is good enough.
+    game.Gl.disable(GL_DEPTH_TEST);
     game.Gl.enable(GL_BLEND);
     render(game, camera.Pv, RenderPhase.Translucent);
     game.Gl.disable(GL_BLEND);
+    game.Gl.enable(GL_DEPTH_TEST);
 }
 
 function render_vr(game: Game, camera: CameraXr) {
@@ -62,9 +65,11 @@ function render_vr(game: Game, camera: CameraXr) {
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
         render(game, eye.Pv, RenderPhase.Opaque);
 
+        game.Gl.disable(GL_DEPTH_TEST);
         game.Gl.enable(GL_BLEND);
         render(game, eye.Pv, RenderPhase.Translucent);
         game.Gl.disable(GL_BLEND);
+        game.Gl.enable(GL_DEPTH_TEST);
     }
 }
 
