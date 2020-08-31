@@ -1,3 +1,4 @@
+import {cull} from "../components/com_cull.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {shake} from "../components/com_shake.js";
@@ -14,6 +15,7 @@ export function blueprint_fire(game: Game): Blueprint {
                     shake(Infinity, 0.5),
                     emit_particles(5, 0.1, 1, true),
                     render_particles(game.Textures["fire"], [1, 0.5, 0, 0.1], 50, [1, 0, 0, 0], 10),
+                    cull(Has.Shake | Has.EmitParticles | Has.Render),
                 ],
                 Disable: Has.Transform,
             },

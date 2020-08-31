@@ -11,6 +11,7 @@ import {sys_camera} from "./systems/sys_camera.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_rotate} from "./systems/sys_control_rotate.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
+import {sys_cull} from "./systems/sys_cull.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_light} from "./systems/sys_light.js";
@@ -97,6 +98,7 @@ export class Game {
 
         // Rendering.
         sys_camera(this, delta);
+        sys_cull(this, delta);
         sys_light(this, delta);
         sys_render(this, delta);
         sys_ui(this, delta);
