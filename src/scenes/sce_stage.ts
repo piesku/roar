@@ -1,5 +1,6 @@
+import {Quat} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {float, integer, set_seed} from "../../common/random.js";
+import {element, float, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -68,24 +69,40 @@ export function scene_stage(game: Game) {
         ],
     });
 
+    let max_height = 4;
+    let rotations: Array<Quat> = [
+        [0, 0, 0, 1],
+        [0, 0.707, 0, 0.707],
+        [0, 1, 0, 0],
+        [0, -0.707, 0, 0.707],
+    ];
+
     for (let z = -grid_size / 2; z < grid_size / 2; z++) {
         for (let x = -grid_size / 2; x < grid_size / 2; x++) {
             if (x % 2 === 0 || z % 2 === 0) {
                 continue;
             }
-            let height = integer(1, 4);
+            let height = integer(1, max_height);
+            let variant = integer(1, 4);
+            let rotation = element(rotations);
             if (float() > 0.2) {
                 // Square tower.
-                instantiate(game, {
-                    ...blueprint_block(game, height),
-                    Translation: [x + 0.5, 1, z - 0.5],
-                });
+                for (let y = 1; y <= height; y++) {
+                    instantiate(game, {
+                        ...blueprint_block(game, variant, y === height),
+                        Translation: [x + 0.5, y, z - 0.5],
+                        Rotation: rotation,
+                    });
+                }
             } else {
                 // Star tower.
-                instantiate(game, {
-                    ...blueprint_star(game, height),
-                    Translation: [x + 0.5, 1, z - 0.5],
-                });
+                for (let y = 1; y <= height; y++) {
+                    instantiate(game, {
+                        ...blueprint_star(game),
+                        Translation: [x + 0.5, y, z - 0.5],
+                        Rotation: rotation,
+                    });
+                }
             }
         }
     }
