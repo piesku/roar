@@ -1,6 +1,11 @@
+import {get_forward, get_translation} from "../../common/mat4.js";
+import {Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
 import {from_euler} from "../../common/quat.js";
+import {ray_intersect_aabb} from "../../common/raycast.js";
+import {Collide} from "../components/com_collide.js";
 import {query_all} from "../components/com_transform.js";
+import {destroy} from "../core.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -46,6 +51,30 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             if (trigger_left?.pressed && trigger_right?.pressed) {
                 for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
                     game.World.EmitParticles[emitter].Trigger = true;
+                }
+
+                let mouth = transform.Children[0];
+                let mouth_transform = game.World.Transform[mouth];
+
+                let mouth_position: Vec3 = [0, 0, 0];
+                let mouth_direction: Vec3 = [0, 0, 0];
+                get_translation(mouth_position, mouth_transform.World);
+                get_forward(mouth_direction, mouth_transform.World);
+
+                let colliders: Array<Collide> = [];
+                for (let i = 0; i < game.World.Signature.length; i++) {
+                    if (game.World.Signature[i] & Has.Collide) {
+                        let collide = game.World.Collide[i];
+                        if (collide.Dynamic) {
+                            colliders.push(collide);
+                        }
+                    }
+                }
+
+                let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
+                if (hit) {
+                    let other = hit.Collider as Collide;
+                    destroy(game.World, other.Entity);
                 }
             }
         }

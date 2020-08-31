@@ -28,7 +28,10 @@ export function ray_intersect_aabb(
         let intersection: Vec3 = [0, 0, 0];
         scale(intersection, direction, nearest_t);
         add(intersection, intersection, origin);
-        return {Collider: colliders[nearest_i], Point: intersection};
+        return {
+            Collider: colliders[nearest_i],
+            Point: intersection,
+        };
     }
 
     return null;
