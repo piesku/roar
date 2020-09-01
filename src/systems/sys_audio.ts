@@ -1,4 +1,5 @@
 import {play_note} from "../../common/audio.js";
+import {element} from "../../common/random.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -22,6 +23,11 @@ function update(game: Game, entity: Entity, delta: number) {
         // Track timing is based on sixteenth notes.
         let interval = spb / 4;
         for (let track of audio_source.Trigger.Tracks) {
+            if (track.Randomize) {
+                let note = element(track.Notes);
+                play_note(game.Audio, track.Instrument, note, 0);
+                continue;
+            }
             for (let i = 0; i < track.Notes.length; i++) {
                 if (track.Notes[i]) {
                     play_note(game.Audio, track.Instrument, track.Notes[i], i * interval);

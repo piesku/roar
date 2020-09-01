@@ -40,4 +40,5 @@ export interface AudioClip {
 export interface AudioTrack {
     Instrument: Instrument;
     Notes: Array<number>;
+    Randomize?: boolean;
 }
