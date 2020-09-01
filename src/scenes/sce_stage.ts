@@ -5,10 +5,14 @@ import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
+import {blueprint_police} from "../blueprints/blu_police.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
+import {control_move} from "../components/com_control_move.js";
+import {control_spawn} from "../components/com_control_spawn.js";
 import {light_directional} from "../components/com_light.js";
+import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
@@ -106,4 +110,16 @@ export function scene_stage(game: Game) {
             }
         }
     }
+
+    // Police car spawner.
+    instantiate(game, {
+        Translation: [0, 1, 0],
+        Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
+        Children: [
+            {
+                Translation: [0, 0, -8],
+                Using: [control_spawn(blueprint_police, 20)],
+            },
+        ],
+    });
 }

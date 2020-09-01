@@ -7,14 +7,17 @@ import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
+import {sys_audio} from "./systems/sys_audio.js";
 import {sys_camera} from "./systems/sys_camera.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_fire} from "./systems/sys_control_fire.js";
-import {sys_control_rotate} from "./systems/sys_control_rotate.js";
+import {sys_control_move} from "./systems/sys_control_move.js";
+import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
+import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
 import {sys_move} from "./systems/sys_move.js";
 import {sys_particles} from "./systems/sys_particles.js";
@@ -22,6 +25,7 @@ import {sys_physics} from "./systems/sys_physics.js";
 import {sys_render} from "./systems/sys_render.js";
 import {sys_resolution} from "./systems/sys_resolution.js";
 import {sys_shake} from "./systems/sys_shake.js";
+import {sys_toggle} from "./systems/sys_toggle.js";
 import {sys_transform} from "./systems/sys_transform.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
@@ -38,6 +42,7 @@ export class Game {
     Ui = document.querySelector("main")!;
     Canvas = document.querySelector("canvas")!;
     Gl = this.Canvas.getContext("webgl2", {xrCompatible: true})! as WebGL2RenderingContext;
+    Audio = new (window["AudioContext"] || window.webkitAudioContext)();
 
     XrSupported = false;
     XrSession?: XRSession;
@@ -80,15 +85,19 @@ export class Game {
     FrameUpdate(delta: number) {
         let now = performance.now();
 
+        sys_lifespan(this, delta);
+
         // User input and AI.
         sys_control_xr(this, delta);
-        sys_control_rotate(this, delta);
         sys_control_fire(this, delta);
+        sys_control_move(this, delta);
+        sys_control_spawn(this, delta);
 
         // Game logic.
         sys_move(this, delta);
         sys_shake(this, delta);
         sys_particles(this, delta);
+        sys_toggle(this, delta);
 
         // Physics and collisions.
         sys_physics(this, delta);
@@ -99,6 +108,7 @@ export class Game {
         sys_transform(this, delta);
 
         // Rendering.
+        sys_audio(this, delta);
         sys_camera(this, delta);
         sys_cull(this, delta);
         sys_light(this, delta);
