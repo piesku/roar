@@ -32,7 +32,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                                     shake(Infinity, 0.05),
                                     emit_particles(1, 0.01, 15),
                                     render_particles(
-                                        game.Textures["spark"],
+                                        game.Textures["fire"],
                                         [0.8, 0.4, 0, 0.2],
                                         150,
                                         [1, 0, 0, 0],
@@ -46,7 +46,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                                     shake(Infinity, 0.1),
                                     emit_particles(1.5, 0.01, 13),
                                     render_particles(
-                                        game.Textures["spark"],
+                                        game.Textures["fire"],
                                         [0.8, 0.4, 0, 0.2],
                                         150,
                                         [1, 0, 0, 0],
