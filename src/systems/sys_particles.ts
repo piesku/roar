@@ -1,10 +1,10 @@
 import {get_forward, get_translation} from "../../common/mat4.js";
 import {Vec3} from "../../common/math.js";
+import {DATA_PER_PARTICLE} from "../components/com_render_particles.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.EmitParticles;
-export const DATA_PER_PARTICLE = 8;
 
 export function sys_particles(game: Game, delta: number) {
     for (let i = 0; i < game.World.Signature.length; i++) {

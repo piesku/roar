@@ -6,7 +6,6 @@ import {
     GL_COLOR_BUFFER_BIT,
     GL_DEPTH_BUFFER_BIT,
     GL_DEPTH_TEST,
-    GL_DYNAMIC_DRAW,
     GL_FLOAT,
     GL_FRAMEBUFFER,
     GL_TEXTURE0,
@@ -19,13 +18,12 @@ import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {EmitParticles} from "../components/com_emit_particles.js";
 import {RenderKind, RenderPhase} from "../components/com_render.js";
-import {RenderParticles} from "../components/com_render_particles.js";
+import {DATA_PER_PARTICLE, RenderParticles} from "../components/com_render_particles.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
 import {RenderTexturedUnlit} from "../components/com_render_textured_unlit.js";
 import {Transform} from "../components/com_transform.js";
 import {Game} from "../game.js";
 import {Has} from "../world.js";
-import {DATA_PER_PARTICLE} from "./sys_particles.js";
 
 const QUERY = Has.Transform | Has.Render;
 
@@ -195,8 +193,11 @@ function draw_particles(game: Game, render: RenderParticles, emitter: EmitPartic
         emitter.Speed,
         ...render.Size
     );
-    game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
+
     let instances = Float32Array.from(emitter.Instances);
+    game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
+    game.Gl.bufferSubData(GL_ARRAY_BUFFER, 0, instances);
+
     game.Gl.enableVertexAttribArray(render.Material.Locations.OriginAge);
     game.Gl.vertexAttribPointer(
         render.Material.Locations.OriginAge,
@@ -215,6 +216,5 @@ function draw_particles(game: Game, render: RenderParticles, emitter: EmitPartic
         DATA_PER_PARTICLE * 4,
         4 * 4
     );
-    game.Gl.bufferData(GL_ARRAY_BUFFER, instances, GL_DYNAMIC_DRAW);
     game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / DATA_PER_PARTICLE);
 }
