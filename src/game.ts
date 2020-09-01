@@ -7,7 +7,8 @@ import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop, xr_init} from "./core.js";
-import {sys_audio} from "./systems/sys_audio.js";
+import {sys_audio_listener} from "./systems/sys_audio_listener.js";
+import {sys_audio_source} from "./systems/sys_audio_source.js";
 import {sys_camera} from "./systems/sys_camera.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_fire} from "./systems/sys_control_fire.js";
@@ -108,7 +109,8 @@ export class Game {
         sys_transform(this, delta);
 
         // Rendering.
-        sys_audio(this, delta);
+        sys_audio_listener(this, delta);
+        sys_audio_source(this, delta);
         sys_camera(this, delta);
         sys_cull(this, delta);
         sys_light(this, delta);

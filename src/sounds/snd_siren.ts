@@ -4,7 +4,7 @@ export let snd_siren: AudioClip = {
     Tracks: [
         {
             Instrument: [
-                5,
+                6,
                 "lowpass",
                 8,
                 0,

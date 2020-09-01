@@ -17,6 +17,7 @@ import {Toggle} from "./components/com_toggle.js";
 import {Transform} from "./components/com_transform.js";
 
 const enum Component {
+    AudioListener,
     AudioSource,
     Camera,
     Collide,
@@ -37,6 +38,7 @@ const enum Component {
 }
 
 export const enum Has {
+    AudioListener = 1 << Component.AudioListener,
     AudioSource = 1 << Component.AudioSource,
     Camera = 1 << Component.Camera,
     Collide = 1 << Component.Collide,

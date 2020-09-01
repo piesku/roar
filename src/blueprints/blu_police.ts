@@ -26,7 +26,7 @@ export function blueprint_police(game: Game): Blueprint {
         Using: [
             control_move([0, 0, 1], element(rotations)),
             move(float(1, 3), float(0, 0.3)),
-            audio_source(snd_siren),
+            audio_source(true, snd_siren),
             lifespan(8),
         ],
         Children: [

@@ -1,4 +1,5 @@
 import {GL_CCW} from "../../common/webgl.js";
+import {audio_listener} from "../components/com_audio_listener.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
@@ -20,13 +21,13 @@ export function blueprint_viewer(game: Game): Blueprint {
             },
             {
                 // Head.
-                Using: [control_xr("head")],
+                Using: [control_xr("head"), audio_listener()],
                 Children: [
                     {
                         // Mouth.
                         Translation: [0, -0.2, 0],
                         Rotation: [0, 1, 0, 0],
-                        Using: [audio_source()],
+                        Using: [audio_source(false)],
                         Children: [
                             {
                                 // Flame emitter.

@@ -13,7 +13,7 @@ export function blueprint_helicopter(game: Game): Blueprint {
         Using: [
             control_move([0, 0, 1], null),
             move(float(3, 5), 0),
-            audio_source(snd_helicopter),
+            audio_source(true, snd_helicopter),
             lifespan(8),
         ],
     };
