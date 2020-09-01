@@ -18,7 +18,7 @@ export function blueprint_moon(game: Game): Blueprint {
             },
             {
                 Translation: [0, 100, 100],
-                Rotation: from_euler([0, 0, 0, 0], -100, 0, 0),
+                Rotation: from_euler([0, 0, 0, 0], -135, 0, 0),
                 Scale: [20, 20, 20],
                 Using: [
                     render_textured_unlit(
