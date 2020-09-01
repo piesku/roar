@@ -118,7 +118,7 @@ export function scene_stage(game: Game) {
         Children: [
             {
                 Translation: [0, 0, -8],
-                Using: [control_spawn(blueprint_police, 20)],
+                Using: [control_spawn(blueprint_police, 15)],
             },
         ],
     });

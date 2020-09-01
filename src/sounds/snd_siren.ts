@@ -17,5 +17,5 @@ export let snd_siren: AudioClip = {
             Notes: [77],
         },
     ],
-    Exit: 5,
+    Exit: 9,
 };
