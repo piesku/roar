@@ -1,4 +1,4 @@
-import {GL_CW} from "../../common/webgl.js";
+import {from_euler} from "../../common/quat.js";
 import {control_rotate} from "../components/com_control_rotate.js";
 import {cull} from "../components/com_cull.js";
 import {light_point} from "../components/com_light.js";
@@ -18,16 +18,13 @@ export function blueprint_moon(game: Game): Blueprint {
             },
             {
                 Translation: [0, 100, 100],
-                // Y 45°
-                Rotation: [0, 0.3826834, 0, 0.9238795],
+                Rotation: from_euler([0, 0, 0, 0], -100, 0, 0),
                 Scale: [20, 20, 20],
                 Using: [
                     render_textured_unlit(
                         game.MaterialTexturedUnlit,
-                        game.MeshCube,
-                        game.Textures["noise"],
-                        GL_CW,
-                        [2, 2, 2, 1]
+                        game.MeshPlane,
+                        game.Textures["fire"]
                     ),
                     cull(Has.Render),
                 ],
