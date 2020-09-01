@@ -2,9 +2,9 @@ import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
 export interface EmitParticles {
-    readonly Lifespan: number;
-    readonly Frequency: number;
-    readonly Speed: number;
+    Lifespan: number;
+    Frequency: number;
+    Speed: number;
     Trigger: boolean;
     Instances: Array<number>;
     SinceLast: number;

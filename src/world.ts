@@ -1,5 +1,6 @@
 import {Camera} from "./components/com_camera.js";
 import {Collide} from "./components/com_collide.js";
+import {ControlFire} from "./components/com_control_fire.js";
 import {ControlRotate} from "./components/com_control_rotate.js";
 import {ControlXr} from "./components/com_control_xr.js";
 import {Cull} from "./components/com_cull.js";
@@ -14,6 +15,7 @@ import {Transform} from "./components/com_transform.js";
 const enum Component {
     Camera,
     Collide,
+    ControlFire,
     ControlRotate,
     ControlXr,
     Cull,
@@ -29,6 +31,7 @@ const enum Component {
 export const enum Has {
     Camera = 1 << Component.Camera,
     Collide = 1 << Component.Collide,
+    ControlFire = 1 << Component.ControlFire,
     ControlRotate = 1 << Component.ControlRotate,
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
@@ -47,6 +50,7 @@ export class World {
     // Component data
     Camera: Array<Camera> = [];
     Collide: Array<Collide> = [];
+    ControlFire: Array<ControlFire> = [];
     ControlRotate: Array<ControlRotate> = [];
     ControlXr: Array<ControlXr> = [];
     Cull: Array<Cull> = [];

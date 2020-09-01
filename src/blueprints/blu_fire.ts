@@ -1,4 +1,5 @@
 import {from_euler} from "../../common/quat.js";
+import {control_fire} from "../components/com_control_fire.js";
 import {cull} from "../components/com_cull.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {render_particles} from "../components/com_render_particles.js";
@@ -13,6 +14,7 @@ export function blueprint_fire(game: Game): Blueprint {
         Children: [
             {
                 Using: [
+                    control_fire(60),
                     shake(Infinity, 0.5),
                     emit_particles(5, 0.05, 1, true),
                     render_particles(game.Textures["fire"], [1, 0.5, 0, 0.2], 50, [1, 0, 0, 0], 10),

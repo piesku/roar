@@ -72,8 +72,8 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                 let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
                 if (hit) {
                     let other = (hit.Collider as Collide).Entity;
-                    for (let fire of query_all(game.World, other, Has.EmitParticles)) {
-                        game.World.Signature[fire] |= Has.Transform;
+                    for (let fire of query_all(game.World, other, Has.ControlFire)) {
+                        game.World.ControlFire[fire].Trigger = true;
                     }
                 }
             }
