@@ -6,6 +6,7 @@ import {ray_intersect_aabb} from "../../common/raycast.js";
 import {Collide} from "../components/com_collide.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
+import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.ControlXr;
@@ -48,11 +49,14 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
+                let mouth = transform.Children[0];
+
+                game.World.AudioSource[mouth].Trigger = snd_breath;
+
+                for (let emitter of query_all(game.World, mouth, Has.EmitParticles)) {
                     game.World.EmitParticles[emitter].Trigger = true;
                 }
 
-                let mouth = transform.Children[0];
                 let mouth_transform = game.World.Transform[mouth];
                 let mouth_position: Vec3 = [0, 0, 0];
                 let mouth_direction: Vec3 = [0, 0, 0];
