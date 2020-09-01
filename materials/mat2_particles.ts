@@ -11,22 +11,23 @@ let vertex = `#version 300 es\n
 
     // [x, y, z, w: age]
     in vec4 origin_age;
-    in vec3 direction;
+    // [x, y, z, w: seed]
+    in vec4 direction_seed;
     out vec4 vert_color;
-    out float age;
+    out float rand;
 
     void main() {
-        vec3 origin = origin_age.xyz;
-        age = origin_age.w;
-        vec3 velocity = direction * details.y;
-
         // Move the particle along the direction axis.
-        gl_Position = pv * vec4(origin + velocity * age, 1.0);
+        vec3 velocity = direction_seed.xyz * details.y;
+        gl_Position = pv * vec4(origin_age.xyz + velocity * origin_age.w, 1.0);
 
         // Interpolate color and size.
-        float t = age / details.x;
+        float t = origin_age.w / details.x;
         gl_PointSize = mix(details.z, details.w, t);
         vert_color = mix(color_start, color_end, t);
+
+        // Random seed to pick the sprite.
+        rand = origin_age.w * direction_seed.w * 9.0;
     }
 `;
 
@@ -36,11 +37,12 @@ let fragment = `#version 300 es\n
     uniform sampler2D sampler;
 
     in vec4 vert_color;
-    in float age;
+    in float rand;
     out vec4 frag_color;
 
     void main(){
-        vec2 uv = gl_PointCoord + round(vec2(age, sin(age)));
+        // Add -1, 0, or 1 to each component of the point coord vector.
+        vec2 uv = gl_PointCoord + round(vec2(cos(rand), sin(rand)));
         frag_color = vert_color * texture(sampler, uv / 2.0);
     }
 `;
@@ -57,7 +59,7 @@ export function mat2_particles(gl: WebGL2RenderingContext): Material<ParticlesLa
             ColorEnd: gl.getUniformLocation(program, "color_end")!,
             Details: gl.getUniformLocation(program, "details")!,
             OriginAge: gl.getAttribLocation(program, "origin_age")!,
-            Direction: gl.getAttribLocation(program, "direction")!,
+            DirectionSeed: gl.getAttribLocation(program, "direction_seed")!,
         },
     };
 }

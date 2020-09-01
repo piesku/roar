@@ -7,5 +7,5 @@ export interface ParticlesLayout {
     Details: WebGLUniformLocation;
     // Attributes
     OriginAge: GLint;
-    Direction: GLint;
+    DirectionSeed: GLint;
 }

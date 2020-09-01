@@ -25,6 +25,7 @@ import {RenderTexturedUnlit} from "../components/com_render_textured_unlit.js";
 import {Transform} from "../components/com_transform.js";
 import {Game} from "../game.js";
 import {Has} from "../world.js";
+import {DATA_PER_PARTICLE} from "./sys_particles.js";
 
 const QUERY = Has.Transform | Has.Render;
 
@@ -197,16 +198,23 @@ function draw_particles(game: Game, render: RenderParticles, emitter: EmitPartic
     game.Gl.bindBuffer(GL_ARRAY_BUFFER, render.Buffer);
     let instances = Float32Array.from(emitter.Instances);
     game.Gl.enableVertexAttribArray(render.Material.Locations.OriginAge);
-    game.Gl.vertexAttribPointer(render.Material.Locations.OriginAge, 4, GL_FLOAT, false, 7 * 4, 0);
-    game.Gl.enableVertexAttribArray(render.Material.Locations.Direction);
     game.Gl.vertexAttribPointer(
-        render.Material.Locations.Direction,
-        3,
+        render.Material.Locations.OriginAge,
+        4,
         GL_FLOAT,
         false,
-        7 * 4,
+        DATA_PER_PARTICLE * 4,
+        0
+    );
+    game.Gl.enableVertexAttribArray(render.Material.Locations.DirectionSeed);
+    game.Gl.vertexAttribPointer(
+        render.Material.Locations.DirectionSeed,
+        4,
+        GL_FLOAT,
+        false,
+        DATA_PER_PARTICLE * 4,
         4 * 4
     );
     game.Gl.bufferData(GL_ARRAY_BUFFER, instances, GL_DYNAMIC_DRAW);
-    game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / 7);
+    game.Gl.drawArrays(render.Material.Mode, 0, emitter.Instances.length / DATA_PER_PARTICLE);
 }

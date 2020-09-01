@@ -4,6 +4,7 @@ import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.EmitParticles;
+export const DATA_PER_PARTICLE = 8;
 
 export function sys_particles(game: Game, delta: number) {
     for (let i = 0; i < game.World.Signature.length; i++) {
@@ -27,8 +28,8 @@ function update(game: Game, entity: Entity, delta: number) {
         get_forward(forward, transform.World);
         // Push [x, y, z, age].
         emitter.Instances.push(...origin, 0);
-        // Push [x, y, z].
-        emitter.Instances.push(...forward);
+        // Push [x, y, z, seed].
+        emitter.Instances.push(...forward, Math.random());
     }
 
     // A flat continuous array of particle data, from which a Float32Array
@@ -36,9 +37,9 @@ function update(game: Game, entity: Entity, delta: number) {
     for (let i = 0; i < emitter.Instances.length; ) {
         emitter.Instances[i + 3] += delta;
         if (emitter.Instances[i + 3] > emitter.Lifespan) {
-            emitter.Instances.splice(i, 7);
+            emitter.Instances.splice(i, DATA_PER_PARTICLE);
         } else {
-            i += 7;
+            i += DATA_PER_PARTICLE;
         }
     }
 }
