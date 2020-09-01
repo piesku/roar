@@ -113,7 +113,7 @@ export function scene_stage(game: Game) {
 
     // Police car spawner.
     instantiate(game, {
-        Translation: [0, 1, 0],
+        Translation: [0, 0.6, 0],
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
         Children: [
             {

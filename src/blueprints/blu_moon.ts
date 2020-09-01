@@ -24,7 +24,7 @@ export function blueprint_moon(game: Game): Blueprint {
                     render_textured_unlit(
                         game.MaterialTexturedUnlit,
                         game.MeshPlane,
-                        game.Textures["fire"]
+                        game.Textures["one"]
                     ),
                     cull(Has.Render),
                 ],
