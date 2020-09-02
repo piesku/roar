@@ -8,7 +8,7 @@ const QUERY = Has.AudioListener | Has.Transform;
 export function sys_audio_listener(game: Game, delta: number) {
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, delta);
+            update(game, i);
         }
     }
 }
@@ -17,7 +17,7 @@ let position: Vec3 = [0, 0, 0];
 let forward: Vec3 = [0, 0, 0];
 let up: Vec3 = [0, 0, 0];
 
-function update(game: Game, entity: Entity, delta: number) {
+function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     get_translation(position, transform.World);
     get_forward(forward, transform.World);
