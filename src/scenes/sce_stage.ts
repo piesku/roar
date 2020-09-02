@@ -5,6 +5,7 @@ import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
+import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
 import {blueprint_star} from "../blueprints/blu_star.js";
@@ -130,8 +131,21 @@ export function scene_stage(game: Game) {
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.5)],
         Children: [
             {
-                Translation: [0, 0, -16],
+                Translation: [0, 0, -10],
                 Using: [control_spawn(blueprint_helicopter, 22)],
+            },
+        ],
+    });
+
+    // Missile spawner.
+    instantiate(game, {
+        Translation: [0, 10, 0],
+        Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
+        Children: [
+            {
+                Translation: [0, 0, -10],
+                Rotation: from_euler([0, 0, 0, 0], 30, 0, 0),
+                Using: [control_spawn(blueprint_missile, 5)],
             },
         ],
     });
