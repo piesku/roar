@@ -38,8 +38,7 @@ export function blueprint_missile(game: Game): Blueprint {
             },
             {
                 // Jet.
-                Translation: [0, 0, -0.5],
-                Scale: [0.1, 0.1, 0.1],
+                Translation: [0, 0, -1],
                 Using: [light_point([0.5, 0.5, 1], 1)],
                 Children: [
                     {
