@@ -80,6 +80,7 @@ let fragment = `#version 300 es\n
         }
 
         frag_color = vec4(rgb, color.a) * texture(sampler, vert_texcoord * texscale);
+        frag_color = mix(frag_color, vec4(0.2, 0.2, 0.15, 1.0), clamp(1.0 / ((vert_pos.y + 0.6) * 2.0) + 0.1, 0.2, 1.0));
     }
 `;
 
