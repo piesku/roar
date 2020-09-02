@@ -39,8 +39,7 @@ export function scene_stage(game: Game) {
     // VR Camera.
     instantiate(game, {
         ...blueprint_viewer(game),
-        Translation: [0, 6, 0],
-        Scale: [4, 4, 4],
+        Scale: [3, 3, 3],
     });
 
     // Main Light.
