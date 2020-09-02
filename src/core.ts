@@ -91,33 +91,3 @@ export function destroy(world: World, entity: Entity) {
     }
     world.Signature[entity] = 0;
 }
-
-export async function xr_init(game: Game) {
-    game.XrSupported = await navigator.xr.isSessionSupported("immersive-vr");
-}
-
-export async function xr_enter(game: Game) {
-    let session = await navigator.xr.requestSession("immersive-vr", {
-        requiredFeatures: ["local-floor"],
-        // optionalFeatures: ["bounded-floor"],
-    });
-
-    game.XrSpace = await session.requestReferenceSpace("local-floor");
-
-    session.updateRenderState({
-        baseLayer: new XRWebGLLayer(session, game.Gl),
-    });
-
-    loop_stop(game);
-    game.XrSession = session;
-    loop_start(game);
-
-    game.XrSession.addEventListener("end", () => {
-        loop_stop(game);
-        game.XrSession = undefined;
-        game.XrSpace = undefined;
-        game.XrFrame = undefined;
-        game.ViewportResized = true;
-        loop_start(game);
-    });
-}

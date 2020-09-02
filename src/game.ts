@@ -6,7 +6,7 @@ import {mesh_claws} from "../meshes/claws.js";
 import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
-import {loop_start, loop_stop, xr_init} from "./core.js";
+import {loop_start, loop_stop} from "./core.js";
 import {sys_audio_listener} from "./systems/sys_audio_listener.js";
 import {sys_audio_source} from "./systems/sys_audio_source.js";
 import {sys_camera} from "./systems/sys_camera.js";
@@ -30,6 +30,7 @@ import {sys_toggle} from "./systems/sys_toggle.js";
 import {sys_transform} from "./systems/sys_transform.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
+import {xr_init} from "./xr.js";
 
 export type Entity = number;
 
