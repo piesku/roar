@@ -22,7 +22,7 @@ let rotations: Array<Quat> = [
 
 export function blueprint_police(game: Game): Blueprint {
     return {
-        Scale: [0.04, 0.04, 0.04],
+        Scale: [0.03, 0.03, 0.03],
         Using: [
             control_move([0, 0, 1], element(rotations)),
             move(float(1, 3), float(0, 0.3)),
@@ -31,7 +31,7 @@ export function blueprint_police(game: Game): Blueprint {
         ],
         Children: [
             {
-                Translation: [-1, 1.5, 0],
+                Translation: [-0.5, 2, 0],
                 Using: [
                     light_point([1, 0, 0], 1),
                     render_textured_unlit(
@@ -45,7 +45,7 @@ export function blueprint_police(game: Game): Blueprint {
                 ],
             },
             {
-                Translation: [1, 1.5, 0],
+                Translation: [0.5, 2, 0],
                 Using: [
                     light_point([0, 0, 1], 1),
                     render_textured_unlit(
@@ -59,7 +59,8 @@ export function blueprint_police(game: Game): Blueprint {
                 ],
             },
             {
-                Scale: [3, 2, 5],
+                Translation: [0, 0.75, 0],
+                Scale: [2, 1.5, 5],
                 Using: [
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
