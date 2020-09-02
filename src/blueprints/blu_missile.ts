@@ -1,5 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {float} from "../../common/random.js";
+import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {lifespan} from "../components/com_lifespan.js";
@@ -10,10 +11,16 @@ import {render_textured_diffuse} from "../components/com_render_textured_diffuse
 import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
+import {snd_missile} from "../sounds/snd_missile.js";
 
 export function blueprint_missile(game: Game): Blueprint {
     return {
-        Using: [control_move([0, 0, 1], null), move(float(2, 5), 0), lifespan(9)],
+        Using: [
+            control_move([0, 0, 1], null),
+            move(float(4, 5), 0),
+            lifespan(9),
+            audio_source(true, snd_missile),
+        ],
         Children: [
             {
                 // Body.

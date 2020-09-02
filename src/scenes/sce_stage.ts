@@ -139,13 +139,13 @@ export function scene_stage(game: Game) {
 
     // Missile spawner.
     instantiate(game, {
-        Translation: [0, 10, 0],
+        Translation: [0, 20, 0],
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
         Children: [
             {
-                Translation: [0, 0, -10],
+                Translation: [0, 0, -20],
                 Rotation: from_euler([0, 0, 0, 0], 30, 0, 0),
-                Using: [control_spawn(blueprint_missile, 5)],
+                Using: [control_spawn(blueprint_missile, 14)],
             },
         ],
     });
