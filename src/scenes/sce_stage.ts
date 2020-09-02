@@ -144,7 +144,7 @@ export function scene_stage(game: Game) {
         Children: [
             {
                 Translation: [0, 0, -20],
-                Rotation: from_euler([0, 0, 0, 0], 30, 0, 0),
+                Rotation: from_euler([0, 0, 0, 0], 40, 0, 0),
                 Using: [control_spawn(blueprint_missile, 14)],
             },
         ],
