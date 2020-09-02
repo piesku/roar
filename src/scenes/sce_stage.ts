@@ -75,6 +75,7 @@ export function scene_stage(game: Game) {
         ],
     });
 
+    let min_height = 2;
     let max_height = 4;
     let rotations: Array<Quat> = [
         [0, 0, 0, 1],
@@ -88,7 +89,7 @@ export function scene_stage(game: Game) {
             if (x % 2 === 0 || z % 2 === 0) {
                 continue;
             }
-            let height = integer(1, max_height);
+            let height = integer(min_height, max_height);
             let variant = integer(1, 4);
             let rotation = element(rotations);
             if (float() > 0.2) {
