@@ -12,8 +12,9 @@ import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 
-export function blueprint_viewer(game: Game): Blueprint {
+export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
+        Scale: [scale, scale, scale],
         Children: [
             {
                 // Headset camera.
@@ -63,12 +64,19 @@ export function blueprint_viewer(game: Game): Blueprint {
             },
             {
                 // Left hand.
-                Using: [
-                    control_xr("left"),
-                    collide(true, Layer.None, Layer.Building, [0.2, 0.3, 0.4]),
-                ],
+                Using: [control_xr("left")],
                 Children: [
                     {
+                        // Grip point.
+                        Translation: [0.3, 0, 0],
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
+                        Using: [
+                            collide(true, Layer.None, Layer.Building, [0.02, 0.02, 0.02]),
+                            rigid_body(RigidKind.Kinematic),
+                        ],
+                    },
+                    {
+                        // Hand mesh.
                         Scale: [-1, 1, 1],
                         Using: [
                             collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
@@ -81,17 +89,23 @@ export function blueprint_viewer(game: Game): Blueprint {
                             ),
                         ],
                     },
-                    // The second child must be empty to make room for a grabbed building block.
                 ],
             },
             {
                 // Right hand.
-                Using: [
-                    control_xr("right"),
-                    collide(true, Layer.None, Layer.Building, [0.2, 0.3, 0.4]),
-                ],
+                Using: [control_xr("right")],
                 Children: [
                     {
+                        // Grip point.
+                        Translation: [-0.3, 0, 0],
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
+                        Using: [
+                            collide(true, Layer.None, Layer.Building, [0.02, 0.02, 0.02]),
+                            rigid_body(RigidKind.Kinematic),
+                        ],
+                    },
+                    {
+                        // Hand mesh.
                         Using: [
                             collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
                             rigid_body(RigidKind.Kinematic),
@@ -102,7 +116,6 @@ export function blueprint_viewer(game: Game): Blueprint {
                             ),
                         ],
                     },
-                    // The second child must be empty to make room for a grabbed building block.
                 ],
             },
         ],

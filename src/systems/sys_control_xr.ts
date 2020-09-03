@@ -90,30 +90,33 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
         let input = inputs["left"];
         if (input) {
             if (input.gamepad) {
-                let hand = game.World.Transform[transform.Children[0]];
                 let squeeze = input.gamepad.buttons[1];
                 if (squeeze) {
                     if (squeeze.touched) {
                         // Close the hand.
+                        let hand = game.World.Transform[transform.Children[1]];
                         hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
                         from_euler(hand.Rotation, 0, -45 * squeeze.value, 0);
                         hand.Dirty = true;
                     }
 
+                    let grip_entity = transform.Children[0];
+                    let grip_transform = game.World.Transform[grip_entity];
+                    let grip_collider = game.World.Collide[grip_entity];
+
                     if (squeeze.pressed) {
-                        if (!transform.Children[1]) {
-                            let collide = game.World.Collide[entity];
-                            if (collide.Collisions.length > 0) {
+                        if (!grip_transform.Children[0]) {
+                            if (grip_collider.Collisions.length > 0) {
                                 // Grab the first building.
-                                let building_entity = collide.Collisions[0].Other;
+                                let building_entity = grip_collider.Collisions[0].Other;
                                 let building_transform = game.World.Transform[building_entity];
 
                                 // Anchor the building as the second child of the hand.
-                                transform.Children[1] = building_entity;
-                                building_transform.Parent = entity;
-                                set_vec3(building_transform.Translation, 0.3, 0, 0);
+                                grip_transform.Children[0] = building_entity;
+                                building_transform.Parent = grip_entity;
+                                set_vec3(building_transform.Translation, 0, 0, 0);
                                 set_quat(building_transform.Rotation, 0, 0, 0, 1);
-                                set_vec3(building_transform.Scale, 1 / 3, 1 / 3, 1 / 3);
+                                set_vec3(building_transform.Scale, 1, 1, 1);
                                 building_transform.Dirty = true;
 
                                 // Disable the rigid body.
@@ -121,16 +124,15 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             }
                         }
                     } else {
-                        if (transform.Children[1]) {
+                        if (grip_transform.Children[0]) {
                             // Release the building.
-                            let building_entity = transform.Children[1];
+                            let building_entity = grip_transform.Children[0];
                             let building_transform = game.World.Transform[building_entity];
 
-                            transform.Children.pop();
+                            grip_transform.Children.pop();
                             building_transform.Parent = undefined;
-                            get_translation(building_transform.Translation, transform.World);
-                            building_transform.Translation[1] -= 1;
-                            get_rotation(building_transform.Rotation, transform.World);
+                            get_translation(building_transform.Translation, grip_transform.World);
+                            get_rotation(building_transform.Rotation, grip_transform.World);
                             set_vec3(building_transform.Scale, 1, 1, 1);
                             building_transform.Dirty = true;
 
@@ -138,7 +140,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             game.World.Signature[building_entity] |= Has.RigidBody;
                             copy(
                                 game.World.RigidBody[building_entity].VelocityResolved,
-                                game.World.RigidBody[transform.Children[0]].VelocityIntegrated
+                                game.World.RigidBody[grip_entity].VelocityIntegrated
                             );
                         }
                     }
@@ -157,20 +159,68 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
     if (control.Controller === "right") {
         let input = inputs["right"];
         if (input) {
+            if (input.gamepad) {
+                let squeeze = input.gamepad.buttons[1];
+                if (squeeze) {
+                    if (squeeze.touched) {
+                        // Close the hand.
+                        let hand = game.World.Transform[transform.Children[1]];
+                        hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                        from_euler(hand.Rotation, 0, 45 * squeeze.value, 0);
+                        hand.Dirty = true;
+                    }
+
+                    let grip_entity = transform.Children[0];
+                    let grip_transform = game.World.Transform[grip_entity];
+                    let grip_collider = game.World.Collide[grip_entity];
+
+                    if (squeeze.pressed) {
+                        if (!grip_transform.Children[0]) {
+                            if (grip_collider.Collisions.length > 0) {
+                                // Grab the first building.
+                                let building_entity = grip_collider.Collisions[0].Other;
+                                let building_transform = game.World.Transform[building_entity];
+
+                                // Anchor the building as the second child of the hand.
+                                grip_transform.Children[0] = building_entity;
+                                building_transform.Parent = grip_entity;
+                                set_vec3(building_transform.Translation, 0, 0, 0);
+                                set_quat(building_transform.Rotation, 0, 0, 0, 1);
+                                set_vec3(building_transform.Scale, 1, 1, 1);
+                                building_transform.Dirty = true;
+
+                                // Disable the rigid body.
+                                game.World.Signature[building_entity] &= ~Has.RigidBody;
+                            }
+                        }
+                    } else {
+                        if (grip_transform.Children[0]) {
+                            // Release the building.
+                            let building_entity = grip_transform.Children[0];
+                            let building_transform = game.World.Transform[building_entity];
+
+                            grip_transform.Children.pop();
+                            building_transform.Parent = undefined;
+                            get_translation(building_transform.Translation, grip_transform.World);
+                            get_rotation(building_transform.Rotation, grip_transform.World);
+                            set_vec3(building_transform.Scale, 1, 1, 1);
+                            building_transform.Dirty = true;
+
+                            // Enable the rigid body and transfer the hand's velocity.
+                            game.World.Signature[building_entity] |= Has.RigidBody;
+                            copy(
+                                game.World.RigidBody[building_entity].VelocityResolved,
+                                game.World.RigidBody[grip_entity].VelocityIntegrated
+                            );
+                        }
+                    }
+                }
+            }
+
             let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
             if (pose) {
                 transform.World = pose.transform.matrix;
                 transform.Dirty = true;
-            }
-
-            if (input.gamepad) {
-                let hand = game.World.Transform[transform.Children[0]];
-                let squeeze = input.gamepad.buttons[1];
-                if (squeeze?.touched) {
-                    hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                    from_euler(hand.Rotation, 0, 45 * squeeze.value, 0);
-                    hand.Dirty = true;
-                }
             }
         }
         return;

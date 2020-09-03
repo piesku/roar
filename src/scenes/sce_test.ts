@@ -28,10 +28,7 @@ export function scene_test(game: Game) {
     });
 
     // VR Camera.
-    instantiate(game, {
-        ...blueprint_viewer(game),
-        Scale: [3, 3, 3],
-    });
+    instantiate(game, blueprint_viewer(game, 3));
 
     // Main Light.
     instantiate(game, {
