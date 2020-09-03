@@ -98,7 +98,7 @@ export function scene_stage(game: Game) {
                     instantiate(game, {
                         ...blueprint_block(game, variant, y === height),
                         Translation: [x + 0.5, y - 0.5, z - 0.5],
-                        Rotation: rotation,
+                        Rotation: rotation.slice() as Quat,
                     });
                 }
             } else {
