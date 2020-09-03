@@ -65,13 +65,14 @@ export function blueprint_viewer(game: Game): Blueprint {
                 // Left hand.
                 Using: [
                     control_xr("left"),
-                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.15]),
-                    rigid_body(RigidKind.Kinematic),
+                    collide(true, Layer.None, Layer.Building, [0.2, 0.3, 0.4]),
                 ],
                 Children: [
                     {
                         Scale: [-1, 1, 1],
                         Using: [
+                            collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
+                            rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
                                 game.MeshHand,
@@ -80,18 +81,20 @@ export function blueprint_viewer(game: Game): Blueprint {
                             ),
                         ],
                     },
+                    // The second child must be empty to make room for a grabbed building block.
                 ],
             },
             {
                 // Right hand.
                 Using: [
                     control_xr("right"),
-                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.15]),
-                    rigid_body(RigidKind.Kinematic),
+                    collide(true, Layer.None, Layer.Building, [0.2, 0.3, 0.4]),
                 ],
                 Children: [
                     {
                         Using: [
+                            collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
+                            rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
                                 game.MeshHand,
@@ -99,6 +102,7 @@ export function blueprint_viewer(game: Game): Blueprint {
                             ),
                         ],
                     },
+                    // The second child must be empty to make room for a grabbed building block.
                 ],
             },
         ],

@@ -1,8 +1,9 @@
-import {get_forward, get_translation} from "../../common/mat4.js";
+import {get_forward, get_rotation, get_translation} from "../../common/mat4.js";
 import {Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
-import {from_euler} from "../../common/quat.js";
+import {from_euler, set as set_quat} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
+import {copy, set as set_vec3} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
@@ -88,20 +89,66 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
     if (control.Controller === "left") {
         let input = inputs["left"];
         if (input) {
+            if (input.gamepad) {
+                let hand = game.World.Transform[transform.Children[0]];
+                let squeeze = input.gamepad.buttons[1];
+                if (squeeze) {
+                    if (squeeze.touched) {
+                        // Close the hand.
+                        hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                        from_euler(hand.Rotation, 0, -45 * squeeze.value, 0);
+                        hand.Dirty = true;
+                    }
+
+                    if (squeeze.pressed) {
+                        if (!transform.Children[1]) {
+                            let collide = game.World.Collide[entity];
+                            if (collide.Collisions.length > 0) {
+                                // Grab the first building.
+                                let building_entity = collide.Collisions[0].Other;
+                                let building_transform = game.World.Transform[building_entity];
+
+                                // Anchor the building as the second child of the hand.
+                                transform.Children[1] = building_entity;
+                                building_transform.Parent = entity;
+                                set_vec3(building_transform.Translation, 0.3, 0, 0);
+                                set_quat(building_transform.Rotation, 0, 0, 0, 1);
+                                set_vec3(building_transform.Scale, 1 / 3, 1 / 3, 1 / 3);
+                                building_transform.Dirty = true;
+
+                                // Disable the rigid body.
+                                game.World.Signature[building_entity] &= ~Has.RigidBody;
+                            }
+                        }
+                    } else {
+                        if (transform.Children[1]) {
+                            // Release the building.
+                            let building_entity = transform.Children[1];
+                            let building_transform = game.World.Transform[building_entity];
+
+                            transform.Children.pop();
+                            building_transform.Parent = undefined;
+                            get_translation(building_transform.Translation, transform.World);
+                            building_transform.Translation[1] -= 1;
+                            get_rotation(building_transform.Rotation, transform.World);
+                            set_vec3(building_transform.Scale, 1, 1, 1);
+                            building_transform.Dirty = true;
+
+                            // Enable the rigid body and transfer the hand's velocity.
+                            game.World.Signature[building_entity] |= Has.RigidBody;
+                            copy(
+                                game.World.RigidBody[building_entity].VelocityResolved,
+                                game.World.RigidBody[transform.Children[0]].VelocityIntegrated
+                            );
+                        }
+                    }
+                }
+            }
+
             let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
             if (pose) {
                 transform.World = pose.transform.matrix;
                 transform.Dirty = true;
-            }
-
-            if (input.gamepad) {
-                let hand = game.World.Transform[transform.Children[0]];
-                let squeeze = input.gamepad.buttons[1];
-                if (squeeze?.touched) {
-                    hand.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                    from_euler(hand.Rotation, 0, -45 * squeeze.value, 0);
-                    hand.Dirty = true;
-                }
             }
         }
         return;

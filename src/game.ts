@@ -124,4 +124,5 @@ export const enum Layer {
     None = 0,
     Player = 1,
     Terrain = 2,
+    Building = 4,
 }

@@ -1,6 +1,14 @@
 import {DEG_TO_RAD, EPSILON, Quat, Vec3} from "./math.js";
 import {cross, dot, length, normalize as normalize_vec3} from "./vec3.js";
 
+export function set(out: Quat, x: number, y: number, z: number, w: number) {
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
+    return out;
+}
+
 export function normalize(out: Quat, a: Quat) {
     let x = a[0];
     let y = a[1];
