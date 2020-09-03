@@ -98,16 +98,13 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                         grip_anchor_entity,
                     ] = transform.Children;
 
-                    if (squeeze.touched) {
-                        // Close the hand.
-                        let hand_transform = game.World.Transform[hand_entity];
-                        hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                        from_euler(hand_transform.Rotation, 0, -45 * squeeze.value, 0);
-                        hand_transform.Dirty = true;
-                    }
+                    // Open or close the hand.
+                    let hand_transform = game.World.Transform[hand_entity];
+                    hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                    from_euler(hand_transform.Rotation, 0, -45 * squeeze.value, 0);
+                    hand_transform.Dirty = true;
 
                     let grip_anchor_transform = game.World.Transform[grip_anchor_entity];
-
                     if (squeeze.pressed) {
                         if (!grip_anchor_transform.Children[0]) {
                             let grip_detector_collider = game.World.Collide[grip_detector_entity];
@@ -176,16 +173,13 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                         grip_anchor_entity,
                     ] = transform.Children;
 
-                    if (squeeze.touched) {
-                        // Close the hand.
-                        let hand_transform = game.World.Transform[hand_entity];
-                        hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                        from_euler(hand_transform.Rotation, 0, 45 * squeeze.value, 0);
-                        hand_transform.Dirty = true;
-                    }
+                    // Open or close the hand.
+                    let hand_transform = game.World.Transform[hand_entity];
+                    hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
+                    from_euler(hand_transform.Rotation, 0, 45 * squeeze.value, 0);
+                    hand_transform.Dirty = true;
 
                     let grip_anchor_transform = game.World.Transform[grip_anchor_entity];
-
                     if (squeeze.pressed) {
                         if (!grip_anchor_transform.Children[0]) {
                             let grip_detector_collider = game.World.Collide[grip_detector_entity];

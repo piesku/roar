@@ -90,7 +90,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     },
                     {
                         // Grip anchor.
-                        Translation: [-0.22, 0, 0],
+                        Translation: [0.22, 0, 0],
                         Scale: [1 / scale, 1 / scale, 1 / scale],
                     },
                 ],
