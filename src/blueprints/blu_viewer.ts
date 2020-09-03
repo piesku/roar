@@ -67,15 +67,6 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                 Using: [control_xr("left")],
                 Children: [
                     {
-                        // Grip point.
-                        Translation: [0.3, 0, 0],
-                        Scale: [1 / scale, 1 / scale, 1 / scale],
-                        Using: [
-                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                        ],
-                    },
-                    {
                         // Hand mesh.
                         Scale: [-1, 1, 1],
                         Using: [
@@ -89,21 +80,25 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                             ),
                         ],
                     },
+                    {
+                        // Grip detector.
+                        Translation: [0.1, 0, 0],
+                        Using: [
+                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
+                            rigid_body(RigidKind.Kinematic),
+                        ],
+                    },
+                    {
+                        // Grip anchor.
+                        Translation: [-0.22, 0, 0],
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
+                    },
                 ],
             },
             {
                 // Right hand.
                 Using: [control_xr("right")],
                 Children: [
-                    {
-                        // Grip point.
-                        Translation: [-0.3, 0, 0],
-                        Scale: [1 / scale, 1 / scale, 1 / scale],
-                        Using: [
-                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                        ],
-                    },
                     {
                         // Hand mesh.
                         Using: [
@@ -115,6 +110,19 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 game.Textures["claws"]
                             ),
                         ],
+                    },
+                    {
+                        // Grip detector.
+                        Translation: [-0.1, 0, 0],
+                        Using: [
+                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
+                            rigid_body(RigidKind.Kinematic),
+                        ],
+                    },
+                    {
+                        // Grip anchor.
+                        Translation: [-0.22, 0, 0],
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
                     },
                 ],
             },
