@@ -71,7 +71,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Translation: [0.3, 0, 0],
                         Scale: [1 / scale, 1 / scale, 1 / scale],
                         Using: [
-                            collide(true, Layer.None, Layer.Building, [0.02, 0.02, 0.02]),
+                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],
                     },
@@ -79,7 +79,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         // Hand mesh.
                         Scale: [-1, 1, 1],
                         Using: [
-                            collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
+                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
@@ -100,14 +100,14 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Translation: [-0.3, 0, 0],
                         Scale: [1 / scale, 1 / scale, 1 / scale],
                         Using: [
-                            collide(true, Layer.None, Layer.Building, [0.02, 0.02, 0.02]),
+                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],
                     },
                     {
                         // Hand mesh.
                         Using: [
-                            collide(true, Layer.Player, Layer.None, [0.04, 0.04, 0.04]),
+                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
