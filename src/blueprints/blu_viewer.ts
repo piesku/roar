@@ -22,8 +22,15 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Head.
-                Using: [control_xr("head"), audio_listener()],
+                Using: [control_xr("head")],
                 Children: [
+                    {
+                        // The head space has +Z towards the user, so we need to
+                        // rotate the ears and the mouth (below) to point
+                        // towards where the users is looking.
+                        Rotation: [0, 1, 0, 0],
+                        Using: [audio_listener()],
+                    },
                     {
                         // Mouth.
                         Translation: [0, -0.2, 0],
