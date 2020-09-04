@@ -12,7 +12,7 @@ import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
-export function scene_test(game: Game) {
+export function scene_test1(game: Game) {
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
