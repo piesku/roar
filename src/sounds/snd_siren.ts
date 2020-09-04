@@ -1,22 +1,24 @@
+import {float, integer} from "../../common/random.js";
 import {AudioClip} from "../components/com_audio_source.js";
 
-export let snd_siren: AudioClip = {
-    Tracks: [
-        {
-            Instrument: [
-                6,
-                "lowpass",
-                8,
-                0,
-                false,
-                "square",
-                3,
-                3,
-                [["square", 8, 5, 18, 10, 7, true, false, 0, 0, 0]],
-            ],
-            Notes: [65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76],
-            Randomize: true,
-        },
-    ],
-    Exit: 9,
-};
+export function snd_siren(): AudioClip {
+    return {
+        Tracks: [
+            {
+                Instrument: [
+                    6,
+                    "lowpass",
+                    8,
+                    0,
+                    false,
+                    "square",
+                    3,
+                    float(2.5, 3.5),
+                    [["square", 8, 5, 18, 10, 7, true, false, 0, 0, 0]],
+                ],
+                Notes: [integer(65, 76)],
+            },
+        ],
+        Exit: 9,
+    };
+}
