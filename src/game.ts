@@ -8,6 +8,7 @@ import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop} from "./core.js";
+import {sys_aim} from "./systems/sys_aim.js";
 import {sys_audio_listener} from "./systems/sys_audio_listener.js";
 import {sys_audio_source} from "./systems/sys_audio_source.js";
 import {sys_camera} from "./systems/sys_camera.js";
@@ -99,6 +100,7 @@ export class Game {
         sys_control_spawn(this, delta);
 
         // Game logic.
+        sys_aim(this, delta);
         sys_move(this, delta);
         sys_shake(this, delta);
         sys_particles(this, delta);

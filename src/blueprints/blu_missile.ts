@@ -1,5 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {float} from "../../common/random.js";
+import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
 import {emit_particles} from "../components/com_emit_particles.js";
@@ -17,7 +18,8 @@ export function blueprint_missile(game: Game): Blueprint {
     return {
         Using: [
             control_move([0, 0, 1], null),
-            move(float(4, 5), 0),
+            aim(4), // the player's headset
+            move(float(8, 12), 3),
             lifespan(9),
             audio_source(true, snd_missile),
         ],
