@@ -93,8 +93,8 @@ function wireframe_collider(game: Game, entity: Entity) {
 
     let render = game.World.Render[wireframe.entity] as RenderColoredBasic;
     if (anchor_collide.Collisions.length > 0) {
-        render.Color[2] = 1;
+        render.Color[0] = 1;
     } else {
-        render.Color[2] = 0;
+        render.Color[0] = 0;
     }
 }

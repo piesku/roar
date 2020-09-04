@@ -5,6 +5,7 @@ import {conjugate, from_euler, multiply} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
 import {copy, transform_point} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
+import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
@@ -147,8 +148,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                                 building_transform.Dirty = true;
 
-                                // Disable the rigid body.
-                                game.World.Signature[building_entity] &= ~Has.RigidBody;
+                                // Switch to a kinematic rigid body.
+                                let rigid_body = game.World.RigidBody[building_entity];
+                                rigid_body.Kind = RigidKind.Kinematic;
+                                get_translation(rigid_body.LastPosition, building_transform.World);
                             }
                         }
                     } else {
@@ -169,12 +172,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
-                            // Enable the rigid body and transfer the hand's velocity.
-                            game.World.Signature[building_entity] |= Has.RigidBody;
-                            copy(
-                                game.World.RigidBody[building_entity].VelocityResolved,
-                                game.World.RigidBody[grip_detector_entity].VelocityIntegrated
-                            );
+                            // Switch back to a dynamic rigid body.
+                            let rigid_body = game.World.RigidBody[building_entity];
+                            rigid_body.Kind = RigidKind.Dynamic;
+                            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
                         }
                     }
                 }
@@ -250,8 +251,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                                 building_transform.Dirty = true;
 
-                                // Disable the rigid body.
-                                game.World.Signature[building_entity] &= ~Has.RigidBody;
+                                // Switch to a kinematic rigid body.
+                                let rigid_body = game.World.RigidBody[building_entity];
+                                rigid_body.Kind = RigidKind.Kinematic;
+                                get_translation(rigid_body.LastPosition, building_transform.World);
                             }
                         }
                     } else {
@@ -272,12 +275,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
-                            // Enable the rigid body and transfer the hand's velocity.
-                            game.World.Signature[building_entity] |= Has.RigidBody;
-                            copy(
-                                game.World.RigidBody[building_entity].VelocityResolved,
-                                game.World.RigidBody[grip_detector_entity].VelocityIntegrated
-                            );
+                            // Switch back to a dynamic rigid body.
+                            let rigid_body = game.World.RigidBody[building_entity];
+                            rigid_body.Kind = RigidKind.Dynamic;
+                            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
                         }
                     }
                 }

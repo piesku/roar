@@ -83,10 +83,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [0.1, 0, 0],
-                        Using: [
-                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                        ],
+                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
                     },
                     {
                         // Grip anchor.
@@ -113,10 +110,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [-0.1, 0, 0],
-                        Using: [
-                            collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                        ],
+                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
                     },
                     {
                         // Grip anchor.
