@@ -16,7 +16,6 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
-import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
@@ -85,8 +84,6 @@ export class Game {
     }
 
     FrameUpdate(delta: number) {
-        let now = performance.now();
-
         sys_lifespan(this, delta);
 
         // User input and AI.
@@ -117,7 +114,6 @@ export class Game {
         sys_light(this, delta);
         sys_render(this, delta);
         sys_ui(this, delta);
-        sys_framerate(this, delta, performance.now() - now);
     }
 }
 export const enum Layer {
