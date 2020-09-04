@@ -3,7 +3,7 @@ import {control_move} from "../components/com_control_move.js";
 import {cull} from "../components/com_cull.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
-import {render_textured_unlit} from "../components/com_render_textured_unlit.js";
+import {render_colored_unlit} from "../components/com_render_colored_unlit.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
 import {Has} from "../world.js";
@@ -21,11 +21,7 @@ export function blueprint_moon(game: Game): Blueprint {
                 Rotation: from_euler([0, 0, 0, 0], -135, 0, 0),
                 Scale: [20, 20, 20],
                 Using: [
-                    render_textured_unlit(
-                        game.MaterialTexturedUnlit,
-                        game.MeshPlane,
-                        game.Textures["one"]
-                    ),
+                    render_colored_unlit(game.MaterialColoredUnlit, game.MeshPlane, [1, 1, 1, 1]),
                     cull(Has.Render),
                 ],
             },

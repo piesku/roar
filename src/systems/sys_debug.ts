@@ -1,6 +1,6 @@
 import {scale} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
-import {RenderColoredBasic, render_colored_basic} from "../components/com_render_colored_basic.js";
+import {RenderColoredUnlit, render_colored_unlit} from "../components/com_render_colored_unlit.js";
 import {Transform} from "../components/com_transform.js";
 import {destroy, instantiate} from "../core.js";
 import {Entity, Game} from "../game.js";
@@ -51,7 +51,7 @@ function wireframe_invisible(game: Game, entity: Entity) {
 
     if (!wireframe) {
         let wireframe_entity = instantiate(game, {
-            Using: [render_colored_basic(game.MaterialWireframe, game.MeshCube, [1, 0, 1, 1])],
+            Using: [render_colored_unlit(game.MaterialWireframe, game.MeshCube, [1, 0, 1, 1])],
         });
         let wireframe_transform = game.World.Transform[wireframe_entity];
         wireframe_transform.World = anchor_transform.World;
@@ -74,7 +74,7 @@ function wireframe_collider(game: Game, entity: Entity) {
         let wireframe_entity = instantiate(game, {
             Translation: anchor_collide.Center,
             Scale: scale([0, 0, 0], anchor_collide.Half, 2),
-            Using: [render_colored_basic(game.MaterialWireframe, game.MeshCube, [0, 1, 0, 1])],
+            Using: [render_colored_unlit(game.MaterialWireframe, game.MeshCube, [0, 1, 0, 1])],
         });
         wireframe = {
             entity: wireframe_entity,
@@ -91,7 +91,7 @@ function wireframe_collider(game: Game, entity: Entity) {
         wireframe.transform.Dirty = true;
     }
 
-    let render = game.World.Render[wireframe.entity] as RenderColoredBasic;
+    let render = game.World.Render[wireframe.entity] as RenderColoredUnlit;
     if (anchor_collide.Collisions.length > 0) {
         render.Color[0] = 1;
     } else {

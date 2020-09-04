@@ -12,17 +12,15 @@ import {
     GL_TEXTURE_2D,
     GL_UNSIGNED_SHORT,
 } from "../../common/webgl.js";
-import {ColoredBasicLayout} from "../../materials/layout_colored_basic.js";
+import {ColoredUnlitLayout} from "../../materials/layout_colored_unlit.js";
 import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
-import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {EmitParticles} from "../components/com_emit_particles.js";
 import {RenderKind, RenderPhase} from "../components/com_render.js";
-import {RenderColoredBasic} from "../components/com_render_colored_basic.js";
+import {RenderColoredUnlit} from "../components/com_render_colored_unlit.js";
 import {DATA_PER_PARTICLE, RenderParticles} from "../components/com_render_particles.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
-import {RenderTexturedUnlit} from "../components/com_render_textured_unlit.js";
 import {Transform} from "../components/com_transform.js";
 import {Game} from "../game.js";
 import {Has} from "../world.js";
@@ -91,14 +89,11 @@ function render(game: Game, pv: Mat4, phase: RenderPhase) {
             if (render.Material !== current_material) {
                 current_material = render.Material;
                 switch (render.Kind) {
-                    case RenderKind.ColoredBasic:
-                        use_colored_basic(game, render.Material, pv);
+                    case RenderKind.ColoredUnlit:
+                        use_colored_unlit(game, render.Material, pv);
                         break;
                     case RenderKind.TexturedDiffuse:
                         use_textured_diffuse(game, render.Material, pv);
-                        break;
-                    case RenderKind.TexturedUnlit:
-                        use_textured_unlit(game, render.Material, pv);
                         break;
                     case RenderKind.Particles:
                         use_particles(game, render.Material, pv);
@@ -112,14 +107,11 @@ function render(game: Game, pv: Mat4, phase: RenderPhase) {
             }
 
             switch (render.Kind) {
-                case RenderKind.ColoredBasic:
-                    draw_colored_basic(game, transform, render);
+                case RenderKind.ColoredUnlit:
+                    draw_colored_unlit(game, transform, render);
                     break;
                 case RenderKind.TexturedDiffuse:
                     draw_textured_diffuse(game, transform, render);
-                    break;
-                case RenderKind.TexturedUnlit:
-                    draw_textured_unlit(game, transform, render);
                     break;
                 case RenderKind.Particles:
                     let emitter = game.World.EmitParticles[i];
@@ -130,12 +122,12 @@ function render(game: Game, pv: Mat4, phase: RenderPhase) {
     }
 }
 
-function use_colored_basic(game: Game, material: Material<ColoredBasicLayout>, pv: Mat4) {
+function use_colored_unlit(game: Game, material: Material<ColoredUnlitLayout>, pv: Mat4) {
     game.Gl.useProgram(material.Program);
     game.Gl.uniformMatrix4fv(material.Locations.Pv, false, pv);
 }
 
-function draw_colored_basic(game: Game, transform: Transform, render: RenderColoredBasic) {
+function draw_colored_unlit(game: Game, transform: Transform, render: RenderColoredUnlit) {
     game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
     game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
     game.Gl.bindVertexArray(render.Vao);
@@ -153,31 +145,6 @@ function use_textured_diffuse(game: Game, material: Material<TexturedDiffuseLayo
 function draw_textured_diffuse(game: Game, transform: Transform, render: RenderTexturedDiffuse) {
     game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
     game.Gl.uniformMatrix4fv(render.Material.Locations.Self, false, transform.Self);
-    game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
-
-    game.Gl.activeTexture(GL_TEXTURE0);
-    game.Gl.bindTexture(GL_TEXTURE_2D, render.Texture);
-    game.Gl.uniform1i(render.Material.Locations.Sampler, 0);
-    game.Gl.uniform2fv(render.Material.Locations.TexScale, render.TexScale);
-
-    if (render.TexOffset) {
-        game.Gl.uniform2fv(render.Material.Locations.TexOffset, render.TexOffset());
-    } else {
-        game.Gl.uniform2fv(render.Material.Locations.TexOffset, [0, 0]);
-    }
-
-    game.Gl.bindVertexArray(render.Vao);
-    game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
-    game.Gl.bindVertexArray(null);
-}
-
-function use_textured_unlit(game: Game, material: Material<TexturedUnlitLayout>, pv: Mat4) {
-    game.Gl.useProgram(material.Program);
-    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, pv);
-}
-
-function draw_textured_unlit(game: Game, transform: Transform, render: RenderTexturedUnlit) {
-    game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
     game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
 
     game.Gl.activeTexture(GL_TEXTURE0);

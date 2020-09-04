@@ -1,4 +1,4 @@
-export interface ColoredBasicLayout {
+export interface ColoredUnlitLayout {
     // Uniforms
     Pv: WebGLUniformLocation;
     World: WebGLUniformLocation;

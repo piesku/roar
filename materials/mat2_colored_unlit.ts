@@ -1,5 +1,5 @@
 import {link, Material} from "../common/material.js";
-import {GL_LINE_LOOP} from "../common/webgl.js";
+import {GL_TRIANGLES} from "../common/webgl.js";
 import {ColoredUnlitLayout} from "./layout_colored_unlit.js";
 
 let vertex = `#version 300 es\n
@@ -25,10 +25,10 @@ let fragment = `#version 300 es\n
     }
 `;
 
-export function mat2_wireframe(gl: WebGL2RenderingContext): Material<ColoredUnlitLayout> {
+export function mat2_colored_unlit(gl: WebGL2RenderingContext): Material<ColoredUnlitLayout> {
     let program = link(gl, vertex, fragment);
     return {
-        Mode: GL_LINE_LOOP,
+        Mode: GL_TRIANGLES,
         Program: program,
         Locations: {
             Pv: gl.getUniformLocation(program, "pv")!,

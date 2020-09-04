@@ -1,34 +1,27 @@
 import {Material, Mesh} from "../../common/material.js";
-import {Vec2, Vec4} from "../../common/math.js";
+import {Vec4} from "../../common/math.js";
 import {GL_ARRAY_BUFFER, GL_CW, GL_ELEMENT_ARRAY_BUFFER, GL_FLOAT} from "../../common/webgl.js";
-import {TexturedUnlitLayout} from "../../materials/layout_textured_unlit.js";
+import {ColoredUnlitLayout} from "../../materials/layout_colored_unlit.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 import {RenderKind, RenderPhase} from "./com_render.js";
 
-export interface RenderTexturedUnlit {
-    readonly Kind: RenderKind.TexturedUnlit;
+export interface RenderColoredUnlit {
+    readonly Kind: RenderKind.ColoredUnlit;
     readonly Phase: RenderPhase;
-    readonly Material: Material<TexturedUnlitLayout>;
+    readonly Material: Material<ColoredUnlitLayout>;
     readonly Mesh: Mesh;
     readonly FrontFace: GLenum;
     readonly Vao: WebGLVertexArrayObject;
     Color: Vec4;
-    Texture: WebGLTexture;
-    TexScale: Vec2;
-    TexOffset?: () => Vec2;
 }
 
 let vaos: WeakMap<Mesh, WebGLVertexArrayObject> = new WeakMap();
 
-export function render_textured_unlit(
-    material: Material<TexturedUnlitLayout>,
+export function render_colored_unlit(
+    material: Material<ColoredUnlitLayout>,
     mesh: Mesh,
-    texture: WebGLTexture,
-    front_face: GLenum = GL_CW,
-    color: Vec4 = [1, 1, 1, 1],
-    texture_scale: Vec2 = [1, 1],
-    texture_offset?: () => Vec2
+    color: Vec4
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {
@@ -47,17 +40,6 @@ export function render_textured_unlit(
                 0
             );
 
-            game.Gl.bindBuffer(GL_ARRAY_BUFFER, mesh.TexCoordBuffer);
-            game.Gl.enableVertexAttribArray(material.Locations.VertexTexCoord);
-            game.Gl.vertexAttribPointer(
-                material.Locations.VertexTexCoord,
-                2,
-                GL_FLOAT,
-                false,
-                0,
-                0
-            );
-
             game.Gl.bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.IndexBuffer);
 
             game.Gl.bindVertexArray(null);
@@ -66,16 +48,13 @@ export function render_textured_unlit(
 
         game.World.Signature[entity] |= Has.Render;
         game.World.Render[entity] = {
-            Kind: RenderKind.TexturedUnlit,
-            Phase: color[3] < 1 ? RenderPhase.Translucent : RenderPhase.Opaque,
+            Kind: RenderKind.ColoredUnlit,
+            Phase: RenderPhase.Opaque,
             Material: material,
             Mesh: mesh,
-            FrontFace: front_face,
+            FrontFace: GL_CW,
             Vao: vaos.get(mesh)!,
             Color: color,
-            Texture: texture,
-            TexScale: texture_scale,
-            TexOffset: texture_offset,
         };
     };
 }
