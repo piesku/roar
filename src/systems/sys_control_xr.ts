@@ -114,12 +114,24 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let building_entity = grip_detector_collider.Collisions[0].Other;
                                 let building_transform = game.World.Transform[building_entity];
 
+                                if (building_transform.Parent) {
+                                    // Release the building from the other hand.
+                                    let other_hand_transform =
+                                        game.World.Transform[building_transform.Parent];
+                                    other_hand_transform.Children.pop();
+                                }
+
                                 // Parent the building at the grip anchor point.
                                 grip_anchor_transform.Children[0] = building_entity;
                                 building_transform.Parent = grip_anchor_entity;
 
-                                // The building is in the world space, no need to transform
-                                // its Translation by its World matrix first.
+                                // The building might have been anchored at the other hand, in which case
+                                // its translation isn't global. Compute the global translation.
+                                get_translation(
+                                    building_transform.Translation,
+                                    building_transform.World
+                                );
+                                // Compute the translation relative to this hand's anchor point.
                                 transform_point(
                                     building_transform.Translation,
                                     building_transform.Translation,
@@ -140,6 +152,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let grip_world_rotation: Quat = [0, 0, 0, 0];
                                 get_rotation(grip_world_rotation, grip_anchor_transform.World);
                                 conjugate(grip_world_rotation, grip_world_rotation);
+
+                                // Find out the building's rotation in the world space and compute
+                                // it relative to this hand's anchor point.
+                                get_rotation(building_transform.Rotation, building_transform.World);
                                 multiply(
                                     building_transform.Rotation,
                                     grip_world_rotation,
@@ -217,12 +233,24 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let building_entity = grip_detector_collider.Collisions[0].Other;
                                 let building_transform = game.World.Transform[building_entity];
 
+                                if (building_transform.Parent) {
+                                    // Release the building from the other hand.
+                                    let other_hand_transform =
+                                        game.World.Transform[building_transform.Parent];
+                                    other_hand_transform.Children.pop();
+                                }
+
                                 // Parent the building at the grip anchor point.
                                 grip_anchor_transform.Children[0] = building_entity;
                                 building_transform.Parent = grip_anchor_entity;
 
-                                // The building is in the world space, no need to transform
-                                // its Translation by its World matrix first.
+                                // The building might have been anchored at the other hand, in which case
+                                // its translation isn't global. Compute the global translation.
+                                get_translation(
+                                    building_transform.Translation,
+                                    building_transform.World
+                                );
+                                // Compute the translation relative to this hand's anchor point.
                                 transform_point(
                                     building_transform.Translation,
                                     building_transform.Translation,
@@ -243,6 +271,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let grip_world_rotation: Quat = [0, 0, 0, 0];
                                 get_rotation(grip_world_rotation, grip_anchor_transform.World);
                                 conjugate(grip_world_rotation, grip_world_rotation);
+
+                                // Find out the building's rotation in the world space and compute
+                                // it relative to this hand's anchor point.
+                                get_rotation(building_transform.Rotation, building_transform.World);
                                 multiply(
                                     building_transform.Rotation,
                                     grip_world_rotation,
