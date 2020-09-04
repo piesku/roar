@@ -2,7 +2,6 @@ import {GL_CULL_FACE, GL_DEPTH_TEST, GL_ONE, GL_SRC_ALPHA} from "../common/webgl
 import {mat2_colored_unlit} from "../materials/mat2_colored_unlit.js";
 import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
-import {mat2_wireframe} from "../materials/mat2_wireframe.js";
 import {mesh_claws} from "../meshes/claws.js";
 import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
@@ -17,7 +16,6 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
-import {sys_debug} from "./systems/sys_debug.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_lifespan} from "./systems/sys_lifespan.js";
@@ -54,7 +52,6 @@ export class Game {
     // XrFrame can be used to check whether we're presenting to a VR display.
     XrFrame?: XRFrame;
 
-    MaterialWireframe = mat2_wireframe(this.Gl);
     MaterialTexturedDiffuse = mat2_textured_diffuse(this.Gl);
     MaterialColoredUnlit = mat2_colored_unlit(this.Gl);
     MaterialParticles = mat2_particles(this.Gl);
@@ -111,10 +108,6 @@ export class Game {
         sys_collide(this, delta);
         sys_resolution(this, delta);
         sys_transform(this, delta);
-
-        if (false) {
-            sys_debug(this, delta);
-        }
 
         // Rendering.
         sys_audio_listener(this, delta);
