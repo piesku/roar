@@ -37,10 +37,7 @@ export function scene_stage(game: Game) {
     });
 
     // VR Camera.
-    instantiate(game, {
-        ...blueprint_viewer(game),
-        Scale: [3, 3, 3],
-    });
+    instantiate(game, blueprint_viewer(game, 3));
 
     // Main Light.
     instantiate(game, {
@@ -57,7 +54,10 @@ export function scene_stage(game: Game) {
     instantiate(game, {
         Translation: [0, -0.5, 0],
         Scale: [grid_size, 1, grid_size],
-        Using: [collide(false, Layer.Terrain, Layer.None), rigid_body(RigidKind.Static)],
+        Using: [
+            collide(false, Layer.Terrain, Layer.None, [grid_size, 1, grid_size]),
+            rigid_body(RigidKind.Static),
+        ],
         Children: [
             {
                 Translation: [0, 0.5, 0],
@@ -98,7 +98,7 @@ export function scene_stage(game: Game) {
                     instantiate(game, {
                         ...blueprint_block(game, variant, y === height),
                         Translation: [x + 0.5, y - 0.5, z - 0.5],
-                        Rotation: rotation,
+                        Rotation: rotation.slice() as Quat,
                     });
                 }
             } else {
@@ -107,7 +107,7 @@ export function scene_stage(game: Game) {
                     instantiate(game, {
                         ...blueprint_star(game),
                         Translation: [x + 0.5, y - 0.5, z - 0.5],
-                        Rotation: rotation,
+                        Rotation: rotation.slice() as Quat,
                     });
                 }
             }

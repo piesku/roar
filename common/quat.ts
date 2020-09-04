@@ -1,6 +1,14 @@
 import {DEG_TO_RAD, EPSILON, Quat, Vec3} from "./math.js";
 import {cross, dot, length, normalize as normalize_vec3} from "./vec3.js";
 
+export function set(out: Quat, x: number, y: number, z: number, w: number) {
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
+    return out;
+}
+
 export function normalize(out: Quat, a: Quat) {
     let x = a[0];
     let y = a[1];
@@ -31,6 +39,14 @@ export function multiply(out: Quat, a: Quat, b: Quat) {
     out[1] = ay * bw + aw * by + az * bx - ax * bz;
     out[2] = az * bw + aw * bz + ax * by - ay * bx;
     out[3] = aw * bw - ax * bx - ay * by - az * bz;
+    return out;
+}
+
+export function conjugate(out: Quat, a: Quat) {
+    out[0] = -a[0];
+    out[1] = -a[1];
+    out[2] = -a[2];
+    out[3] = a[3];
     return out;
 }
 

@@ -1,4 +1,4 @@
-import {add, copy, negate, scale} from "../../common/vec3.js";
+import {add, copy, scale} from "../../common/vec3.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
@@ -38,7 +38,19 @@ function update(game: Game, entity: Entity) {
                 let other_body = game.World.RigidBody[collision.Other];
                 switch (other_body.Kind) {
                     case RigidKind.Static:
-                        negate(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                        // We should compute the reflection vector as
+                        //   r = v - 2 * (v·n) * n
+                        // where
+                        //   v is the incident velocity vector
+                        //   n is the normal of the surface of reflection
+                        // The only static rigid body in the game is the ground:
+                        //   n = [0,1,0]
+                        // We simplify:
+                        //   r = v - 2 * v[1] * n
+                        //   r = v - [0, 2 * v[1], 0]
+                        //   r[1] = v[1] - 2 * v[1]
+                        //   r[1] = v[1] * -1
+                        rigid_body.VelocityResolved[1] *= -1;
                         break;
                     case RigidKind.Dynamic:
                     case RigidKind.Kinematic:

@@ -1,4 +1,4 @@
-import {compute_aabb, intersect_aabb, penetrate_aabb} from "../../common/aabb.js";
+import {compute_aabb_without_scale, intersect_aabb, penetrate_aabb} from "../../common/aabb.js";
 import {negate} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
 import {Game} from "../game.js";
@@ -19,9 +19,9 @@ export function sys_collide(game: Game, delta: number) {
             collider.Collisions = [];
             if (collider.New) {
                 collider.New = false;
-                compute_aabb(transform.World, collider);
+                compute_aabb_without_scale(transform.World, collider);
             } else if (collider.Dynamic) {
-                compute_aabb(transform.World, collider);
+                compute_aabb_without_scale(transform.World, collider);
                 dynamic_colliders.push(collider);
             } else {
                 static_colliders.push(collider);

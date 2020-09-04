@@ -1,6 +1,6 @@
 import {get_translation} from "./mat4.js";
 import {Mat4, Vec3} from "./math.js";
-import {transform_point} from "./vec3.js";
+import {add, scale, subtract, transform_point} from "./vec3.js";
 
 export interface AABB {
     /** The size of the collider in self units. */
@@ -75,6 +75,13 @@ export function compute_aabb(world: Mat4, aabb: AABB) {
     aabb.Half[0] = (max_x - min_x) / 2;
     aabb.Half[1] = (max_y - min_y) / 2;
     aabb.Half[2] = (max_z - min_z) / 2;
+}
+
+export function compute_aabb_without_scale(world: Mat4, aabb: AABB) {
+    get_translation(aabb.Center, world);
+    scale(aabb.Half, aabb.Size, 0.5);
+    subtract(aabb.Min, aabb.Center, aabb.Half);
+    add(aabb.Max, aabb.Center, aabb.Half);
 }
 
 export function penetrate_aabb(a: AABB, b: AABB): Vec3 {

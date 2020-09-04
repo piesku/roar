@@ -12,8 +12,9 @@ import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 
-export function blueprint_viewer(game: Game): Blueprint {
+export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
+        Scale: [scale, scale, scale],
         Children: [
             {
                 // Headset camera.
@@ -63,15 +64,14 @@ export function blueprint_viewer(game: Game): Blueprint {
             },
             {
                 // Left hand.
-                Using: [
-                    control_xr("left"),
-                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.15]),
-                    rigid_body(RigidKind.Kinematic),
-                ],
+                Using: [control_xr("left")],
                 Children: [
                     {
+                        // Hand mesh.
                         Scale: [-1, 1, 1],
                         Using: [
+                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                            rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
                                 game.MeshHand,
@@ -80,24 +80,41 @@ export function blueprint_viewer(game: Game): Blueprint {
                             ),
                         ],
                     },
+                    {
+                        // Grip detector.
+                        Translation: [0.1, 0, 0],
+                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                    },
+                    {
+                        // Grip anchor.
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
+                    },
                 ],
             },
             {
                 // Right hand.
-                Using: [
-                    control_xr("right"),
-                    collide(true, Layer.Player, Layer.None, [0.05, 0.15, 0.15]),
-                    rigid_body(RigidKind.Kinematic),
-                ],
+                Using: [control_xr("right")],
                 Children: [
                     {
+                        // Hand mesh.
                         Using: [
+                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                            rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
                                 game.MeshHand,
                                 game.Textures["claws"]
                             ),
                         ],
+                    },
+                    {
+                        // Grip detector.
+                        Translation: [-0.1, 0, 0],
+                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                    },
+                    {
+                        // Grip anchor.
+                        Scale: [1 / scale, 1 / scale, 1 / scale],
                     },
                 ],
             },
