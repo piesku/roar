@@ -1,5 +1,6 @@
 import {Quat, Vec3} from "../common/math.js";
 import {transform} from "./components/com_transform.js";
+import {Err} from "./errors.js";
 import {Entity, Game} from "./game.js";
 import {Has, World} from "./world.js";
 
@@ -48,7 +49,7 @@ export function create(world: World, signature: number = 0) {
             return i;
         }
     }
-    throw new Error("No more entities available.");
+    return Err.NoMoreEntities;
 }
 
 type Mixin = (game: Game, entity: Entity) => void;
