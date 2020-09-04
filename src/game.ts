@@ -112,7 +112,7 @@ export class Game {
         sys_resolution(this, delta);
         sys_transform(this, delta);
 
-        if (true) {
+        if (false) {
             sys_debug(this, delta);
         }
 
