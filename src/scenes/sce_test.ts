@@ -40,7 +40,10 @@ export function scene_test(game: Game) {
     instantiate(game, {
         Translation: [0, -0.5, 0],
         Scale: [10, 1, 10],
-        Using: [collide(false, Layer.Terrain, Layer.None), rigid_body(RigidKind.Static)],
+        Using: [
+            collide(false, Layer.Terrain, Layer.None, [10, 1, 10]),
+            rigid_body(RigidKind.Static),
+        ],
         Children: [
             {
                 Translation: [0, 0.5, 0],

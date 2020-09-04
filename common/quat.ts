@@ -42,6 +42,14 @@ export function multiply(out: Quat, a: Quat, b: Quat) {
     return out;
 }
 
+export function conjugate(out: Quat, a: Quat) {
+    out[0] = -a[0];
+    out[1] = -a[1];
+    out[2] = -a[2];
+    out[3] = a[3];
+    return out;
+}
+
 // Order: YXZ
 export function from_euler(out: Quat, x: number, y: number, z: number) {
     let sx = Math.sin((x / 2) * DEG_TO_RAD);

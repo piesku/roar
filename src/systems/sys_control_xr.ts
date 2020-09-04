@@ -1,9 +1,9 @@
 import {get_forward, get_rotation, get_translation} from "../../common/mat4.js";
-import {Vec3} from "../../common/math.js";
+import {Quat, Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
-import {from_euler, set as set_quat} from "../../common/quat.js";
+import {conjugate, from_euler, multiply} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
-import {copy, set as set_vec3} from "../../common/vec3.js";
+import {copy, transform_point} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
@@ -113,12 +113,38 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let building_entity = grip_detector_collider.Collisions[0].Other;
                                 let building_transform = game.World.Transform[building_entity];
 
-                                // Anchor the building as the second child of the hand.
+                                // Parent the building at the grip anchor point.
                                 grip_anchor_transform.Children[0] = building_entity;
                                 building_transform.Parent = grip_anchor_entity;
-                                set_vec3(building_transform.Translation, 0, 0, 0);
-                                set_quat(building_transform.Rotation, 0, 0, 0, 1);
-                                set_vec3(building_transform.Scale, 1, 1, 1);
+
+                                // The building is in the world space, no need to transform
+                                // its Translation by its World matrix first.
+                                transform_point(
+                                    building_transform.Translation,
+                                    building_transform.Translation,
+                                    grip_anchor_transform.Self
+                                );
+
+                                // Compute the orientation of the building relative to the grip.
+                                // Given:
+                                //   qa - world orientation of the grip anchor
+                                //   qb - world orientation of the building
+                                //   qc - local orientation of the building as the child of the anchor
+                                // We know that after grabbing:
+                                //   qb = qa * qc
+                                // We solve for qc maintaining the order of multiplication:
+                                //   qc = invert(qa) * qb
+                                // Since rotations are unit quaternions, invert() is equal to conjugate():
+                                //   qc = conjugate(qa) * qb
+                                let grip_world_rotation: Quat = [0, 0, 0, 0];
+                                get_rotation(grip_world_rotation, grip_anchor_transform.World);
+                                conjugate(grip_world_rotation, grip_world_rotation);
+                                multiply(
+                                    building_transform.Rotation,
+                                    grip_world_rotation,
+                                    building_transform.Rotation
+                                );
+
                                 building_transform.Dirty = true;
 
                                 // Disable the rigid body.
@@ -131,14 +157,16 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let building_entity = grip_anchor_transform.Children[0];
                             let building_transform = game.World.Transform[building_entity];
 
+                            // Un-parent the building.
                             grip_anchor_transform.Children.pop();
                             building_transform.Parent = undefined;
+
+                            // Move the building into the world space.
                             get_translation(
                                 building_transform.Translation,
-                                grip_anchor_transform.World
+                                building_transform.World
                             );
-                            get_rotation(building_transform.Rotation, grip_anchor_transform.World);
-                            set_vec3(building_transform.Scale, 1, 1, 1);
+                            get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
                             // Enable the rigid body and transfer the hand's velocity.
@@ -188,12 +216,38 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let building_entity = grip_detector_collider.Collisions[0].Other;
                                 let building_transform = game.World.Transform[building_entity];
 
-                                // Anchor the building as the second child of the hand.
+                                // Parent the building at the grip anchor point.
                                 grip_anchor_transform.Children[0] = building_entity;
                                 building_transform.Parent = grip_anchor_entity;
-                                set_vec3(building_transform.Translation, 0, 0, 0);
-                                set_quat(building_transform.Rotation, 0, 0, 0, 1);
-                                set_vec3(building_transform.Scale, 1, 1, 1);
+
+                                // The building is in the world space, no need to transform
+                                // its Translation by its World matrix first.
+                                transform_point(
+                                    building_transform.Translation,
+                                    building_transform.Translation,
+                                    grip_anchor_transform.Self
+                                );
+
+                                // Compute the orientation of the building relative to the grip.
+                                // Given:
+                                //   qa - world orientation of the grip anchor
+                                //   qb - world orientation of the building
+                                //   qc - local orientation of the building as the child of the anchor
+                                // We know that after grabbing:
+                                //   qb = qa * qc
+                                // We solve for qc maintaining the order of multiplication:
+                                //   qc = invert(qa) * qb
+                                // Since rotations are unit quaternions, invert() is equal to conjugate():
+                                //   qc = conjugate(qa) * qb
+                                let grip_world_rotation: Quat = [0, 0, 0, 0];
+                                get_rotation(grip_world_rotation, grip_anchor_transform.World);
+                                conjugate(grip_world_rotation, grip_world_rotation);
+                                multiply(
+                                    building_transform.Rotation,
+                                    grip_world_rotation,
+                                    building_transform.Rotation
+                                );
+
                                 building_transform.Dirty = true;
 
                                 // Disable the rigid body.
@@ -206,14 +260,16 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let building_entity = grip_anchor_transform.Children[0];
                             let building_transform = game.World.Transform[building_entity];
 
+                            // Un-parent the building.
                             grip_anchor_transform.Children.pop();
                             building_transform.Parent = undefined;
+
+                            // Move the building into the world space.
                             get_translation(
                                 building_transform.Translation,
-                                grip_anchor_transform.World
+                                building_transform.World
                             );
-                            get_rotation(building_transform.Rotation, grip_anchor_transform.World);
-                            set_vec3(building_transform.Scale, 1, 1, 1);
+                            get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
                             // Enable the rigid body and transfer the hand's velocity.
