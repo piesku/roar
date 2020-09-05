@@ -1,4 +1,5 @@
 import {float} from "../../common/random.js";
+import {GL_CW} from "../../common/webgl.js";
 import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
@@ -47,7 +48,12 @@ export function blueprint_police(game: Game): Blueprint {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
-                        game.Textures["police"]
+                        game.Textures["police"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        [1, 1],
+                        () => [0, 0],
+                        -1
                     ),
                 ],
             },

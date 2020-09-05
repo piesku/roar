@@ -14,6 +14,7 @@ export interface RenderTexturedDiffuse {
     readonly FrontFace: GLenum;
     readonly Vao: WebGLVertexArrayObject;
     Color: Vec4;
+    FogLevel: number;
     Texture: WebGLTexture;
     TexScale: Vec2;
     TexOffset?: () => Vec2;
@@ -28,7 +29,8 @@ export function render_textured_diffuse(
     front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
     texture_scale: Vec2 = [1, 1],
-    texture_offset?: () => Vec2
+    texture_offset?: () => Vec2,
+    fog_level = 0
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {
@@ -77,6 +79,7 @@ export function render_textured_diffuse(
             FrontFace: front_face,
             Vao: vaos.get(mesh)!,
             Color: color,
+            FogLevel: fog_level,
             Texture: texture,
             TexScale: texture_scale,
             TexOffset: texture_offset,
