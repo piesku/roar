@@ -119,8 +119,12 @@ export function scene_stage(game: Game) {
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
         Children: [
             {
-                Translation: [0, 0, -8],
-                Using: [control_spawn(blueprint_police, 11)],
+                Translation: [0, 0, -4],
+                Using: [
+                    control_spawn(blueprint_police, 14),
+                    control_move(null, [0, 1, 0, 0]),
+                    move(0, 5),
+                ],
             },
         ],
     });
@@ -146,8 +150,8 @@ export function scene_stage(game: Game) {
                 Translation: [0, 0, -50],
                 Rotation: from_euler([0, 0, 0, 0], -70, 0, 0),
                 Using: [
+                    control_spawn(blueprint_missile, 9),
                     control_move(null, [0, 1, 0, 0]),
-                    control_spawn(blueprint_missile, 14),
                     move(0, 5),
                 ],
             },
