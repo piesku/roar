@@ -8,6 +8,7 @@ import {ControlSpawn} from "./components/com_control_spawn.js";
 import {ControlXr} from "./components/com_control_xr.js";
 import {Cull} from "./components/com_cull.js";
 import {EmitParticles} from "./components/com_emit_particles.js";
+import {Health} from "./components/com_health.js";
 import {Lifespan} from "./components/com_lifespan.js";
 import {Light} from "./components/com_light.js";
 import {Move} from "./components/com_move.js";
@@ -29,6 +30,7 @@ const enum Component {
     ControlXr,
     Cull,
     EmitParticles,
+    Health,
     Lifespan,
     Light,
     Move,
@@ -51,6 +53,7 @@ export const enum Has {
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
     EmitParticles = 1 << Component.EmitParticles,
+    Health = 1 << Component.Health,
     Lifespan = 1 << Component.Lifespan,
     Light = 1 << Component.Light,
     Move = 1 << Component.Move,
@@ -75,6 +78,7 @@ export class World {
     ControlXr: Array<ControlXr> = [];
     Cull: Array<Cull> = [];
     EmitParticles: Array<EmitParticles> = [];
+    Health: Array<Health> = [];
     Lifespan: Array<Lifespan> = [];
     Light: Array<Light> = [];
     Move: Array<Move> = [];

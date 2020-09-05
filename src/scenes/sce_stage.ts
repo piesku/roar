@@ -55,7 +55,7 @@ export function scene_stage(game: Game) {
         Translation: [0, -0.5, 0],
         Scale: [grid_size, 1, grid_size],
         Using: [
-            collide(false, Layer.Terrain, Layer.None, [grid_size, 1, grid_size]),
+            collide(false, Layer.Ground, Layer.None, [grid_size, 1, grid_size]),
             rigid_body(RigidKind.Static),
         ],
         Children: [

@@ -11,7 +11,7 @@ import {blueprint_fire} from "./blu_fire.js";
 export function blueprint_star(game: Game): Blueprint {
     return {
         Using: [
-            collide(true, Layer.Terrain | Layer.Building, Layer.Player | Layer.Terrain),
+            collide(true, Layer.Building, Layer.Ground | Layer.Building | Layer.Player),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(
                 game.MaterialTexturedDiffuse,
