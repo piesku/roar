@@ -1,3 +1,4 @@
+import {Aim} from "./components/com_aim.js";
 import {AudioSource} from "./components/com_audio_source.js";
 import {Camera} from "./components/com_camera.js";
 import {Collide} from "./components/com_collide.js";
@@ -17,6 +18,7 @@ import {Toggle} from "./components/com_toggle.js";
 import {Transform} from "./components/com_transform.js";
 
 const enum Component {
+    Aim,
     AudioListener,
     AudioSource,
     Camera,
@@ -26,6 +28,7 @@ const enum Component {
     ControlSpawn,
     ControlXr,
     Cull,
+    Damage,
     EmitParticles,
     Lifespan,
     Light,
@@ -38,6 +41,7 @@ const enum Component {
 }
 
 export const enum Has {
+    Aim = 1 << Component.Aim,
     AudioListener = 1 << Component.AudioListener,
     AudioSource = 1 << Component.AudioSource,
     Camera = 1 << Component.Camera,
@@ -47,6 +51,7 @@ export const enum Has {
     ControlSpawn = 1 << Component.ControlSpawn,
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
+    Damage = 1 << Component.Damage,
     EmitParticles = 1 << Component.EmitParticles,
     Lifespan = 1 << Component.Lifespan,
     Light = 1 << Component.Light,
@@ -62,6 +67,7 @@ export class World {
     // Component flags
     Signature: Array<number> = [];
     // Component data
+    Aim: Array<Aim> = [];
     AudioSource: Array<AudioSource> = [];
     Camera: Array<Camera> = [];
     Collide: Array<Collide> = [];

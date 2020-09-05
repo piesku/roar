@@ -11,7 +11,11 @@ import {blueprint_roof} from "./blu_roof.js";
 export function blueprint_block(game: Game, variant: number, has_roof: boolean): Blueprint {
     let block: Blueprint = {
         Using: [
-            collide(true, Layer.Terrain | Layer.Building, Layer.Player | Layer.Terrain),
+            collide(
+                true,
+                Layer.Building,
+                Layer.Ground | Layer.Building | Layer.Player | Layer.Missile
+            ),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(
                 game.MaterialTexturedDiffuse,

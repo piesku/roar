@@ -51,7 +51,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                let mouth = transform.Children[0];
+                let mouth = transform.Children[1];
 
                 game.World.AudioSource[mouth].Trigger = snd_breath;
 

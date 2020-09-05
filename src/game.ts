@@ -7,6 +7,7 @@ import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop} from "./core.js";
+import {sys_aim} from "./systems/sys_aim.js";
 import {sys_audio_listener} from "./systems/sys_audio_listener.js";
 import {sys_audio_source} from "./systems/sys_audio_source.js";
 import {sys_camera} from "./systems/sys_camera.js";
@@ -16,6 +17,7 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
+import {sys_damage} from "./systems/sys_damage.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
@@ -93,6 +95,8 @@ export class Game {
         sys_control_spawn(this, delta);
 
         // Game logic.
+        sys_damage(this, delta);
+        sys_aim(this, delta);
         sys_move(this, delta);
         sys_shake(this, delta);
         sys_particles(this, delta);
@@ -119,6 +123,7 @@ export class Game {
 export const enum Layer {
     None = 0,
     Player = 1,
-    Terrain = 2,
+    Ground = 2,
     Building = 4,
+    Missile = 8,
 }

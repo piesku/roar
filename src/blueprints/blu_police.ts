@@ -1,5 +1,5 @@
-import {Quat} from "../../common/math.js";
-import {element, float} from "../../common/random.js";
+import {float} from "../../common/random.js";
+import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
 import {lifespan} from "../components/com_lifespan.js";
@@ -13,18 +13,13 @@ import {Game} from "../game.js";
 import {snd_siren} from "../sounds/snd_siren.js";
 import {Has} from "../world.js";
 
-let rotations: Array<Quat> = [
-    [0, 0, 0, 1],
-    [0, 1, 0, 0],
-    [0, -1, 0, 0],
-];
-
 export function blueprint_police(game: Game): Blueprint {
     return {
         Scale: [0.03, 0.03, 0.03],
         Using: [
-            control_move([0, 0, 1], element(rotations)),
-            move(float(1, 3), float(0, 0.3)),
+            control_move([0, 0, 1], null),
+            aim(2), // The player's base.
+            move(float(1, 3), float(2, 4)),
             audio_source(true, snd_siren()),
             lifespan(8),
         ],
