@@ -4,8 +4,8 @@ import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
+import {damage} from "../components/com_damage.js";
 import {emit_particles} from "../components/com_emit_particles.js";
-import {health} from "../components/com_health.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
@@ -20,12 +20,12 @@ export function blueprint_missile(game: Game): Blueprint {
     return {
         Using: [
             control_move([0, 0, 1], null),
+            collide(true, Layer.Missile, Layer.Ground | Layer.Building | Layer.Player),
+            damage(),
             aim(4), // the player's headset
             move(float(8, 12), 3),
-            health(1, Layer.Ground | Layer.Building | Layer.Player),
             lifespan(9),
             audio_source(true, snd_missile),
-            collide(true, Layer.Missile, Layer.Ground | Layer.Building | Layer.Player),
         ],
         Children: [
             {

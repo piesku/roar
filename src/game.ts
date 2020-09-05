@@ -18,9 +18,9 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
+import {sys_damage} from "./systems/sys_damage.js";
 import {sys_debug} from "./systems/sys_debug.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
-import {sys_health} from "./systems/sys_health.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
@@ -101,7 +101,7 @@ export class Game {
         sys_control_spawn(this, delta);
 
         // Game logic.
-        sys_health(this, delta);
+        sys_damage(this, delta);
         sys_aim(this, delta);
         sys_move(this, delta);
         sys_shake(this, delta);
