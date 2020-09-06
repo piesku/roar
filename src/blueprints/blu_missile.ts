@@ -23,7 +23,7 @@ export function blueprint_missile(game: Game): Blueprint {
             collide(true, Layer.Missile, Layer.Ground | Layer.Building | Layer.Player),
             damage(),
             aim(4), // the player's headset
-            move(float(8, 12), 3),
+            move(float(8, 12), 2),
             lifespan(9),
             audio_source(true, snd_missile),
         ],
