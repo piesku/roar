@@ -49,13 +49,14 @@ export function scene_stage(game: Game) {
     instantiate(game, blueprint_moon(game));
 
     let grid_size = 16;
+    let ground_size = grid_size * 10;
 
     // Ground.
     instantiate(game, {
         Translation: [0, -0.5, 0],
-        Scale: [grid_size, 1, grid_size],
+        Scale: [ground_size, 1, ground_size],
         Using: [
-            collide(false, Layer.Ground, Layer.None, [grid_size, 1, grid_size]),
+            collide(false, Layer.Ground, Layer.None, [ground_size, 1, ground_size]),
             rigid_body(RigidKind.Static),
         ],
         Children: [
@@ -65,10 +66,10 @@ export function scene_stage(game: Game) {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
-                        game.Textures["road"],
+                        game.Textures["fire"],
                         GL_CW,
                         [1, 1, 1, 1],
-                        [grid_size / 2, grid_size / 2]
+                        [ground_size / 4, ground_size / 4]
                     ),
                 ],
             },
