@@ -24,6 +24,7 @@ export function blueprint_star(game: Game): Blueprint {
             ),
             cull(Has.Render),
         ],
+        Disable: Has.Collide | Has.RigidBody,
         Children: [
             {
                 Translation: [0, -0.1, 0],
