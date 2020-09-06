@@ -4,6 +4,7 @@ import {map_range} from "../../common/number.js";
 import {conjugate, from_euler, multiply} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
 import {copy, transform_point} from "../../common/vec3.js";
+import {Action, dispatch} from "../actions.js";
 import {Collide} from "../components/com_collide.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
@@ -69,7 +70,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                 for (let i = 0; i < game.World.Signature.length; i++) {
                     if (game.World.Signature[i] & Has.Collide) {
                         let collide = game.World.Collide[i];
-                        if (collide.Layers & (Layer.BuildingShell | Layer.BuildingBlock)) {
+                        if (
+                            collide.Layers &
+                            (Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile)
+                        ) {
                             colliders.push(collide);
                         }
                     }
@@ -79,8 +83,14 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                 if (hit) {
                     let other_collider = hit.Collider as Collide;
                     let other_entity = other_collider.Entity;
-                    for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
-                        game.World.ControlFire[fire].Trigger = true;
+                    if (other_collider.Layers & Layer.Missile) {
+                        dispatch(game, Action.Explode, [other_entity]);
+                    } else {
+                        for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
+                            game.World.ControlFire[fire].Trigger = true;
+                            // Just one fire is enough.
+                            break;
+                        }
                     }
                 }
             }

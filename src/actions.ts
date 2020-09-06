@@ -10,6 +10,7 @@ export const enum Action {
     EnterVr,
     ExitVr,
     Wake,
+    Damage,
     Explode,
 }
 
@@ -43,7 +44,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             setTimeout(() => destroy(game.World, building, false));
             break;
         }
-        case Action.Explode: {
+        case Action.Damage: {
             let [missile, other] = payload as [Entity, Entity];
             let other_collide = game.World.Collide[other];
             if (other_collide.Layers & Layer.BuildingBlock) {
@@ -52,7 +53,10 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             } else if (other_collide.Layers & Layer.PlayerHand) {
                 console.log("Player hit");
             }
-
+            // No break; fall through to Explode.
+        }
+        case Action.Explode: {
+            let [missile, other] = payload as [Entity, Entity];
             // Create an explosion.
             let transform = game.World.Transform[missile];
             let position: Vec3 = [0, 0, 0];
