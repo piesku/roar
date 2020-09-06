@@ -1,5 +1,4 @@
-import {Quat} from "../../common/math.js";
-import {element, float, integer} from "../../common/random.js";
+import {float, integer} from "../../common/random.js";
 import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
 import {lifespan} from "../components/com_lifespan.js";
@@ -11,16 +10,9 @@ import {blueprint_star} from "./blu_star.js";
 
 let min_height = 2;
 let max_height = 4;
-let rotations: Array<Quat> = [
-    [0, 0, 0, 1],
-    [0, 0.7071, 0, 0.7071],
-    [0, 1, 0, 0],
-    [0, -0.7071, 0, 0.7071],
-];
 
 export function blueprint_building(game: Game): Blueprint {
     let height = integer(min_height, max_height);
-    let rotation = element(rotations);
     let blocks: Array<Blueprint> = [];
 
     if (float() > 0.2) {
@@ -30,7 +22,6 @@ export function blueprint_building(game: Game): Blueprint {
             blocks.push({
                 ...blueprint_block(game, variant, y === height),
                 Translation: [0, y - 0.5, 0],
-                Rotation: rotation.slice() as Quat,
             });
         }
     } else {
@@ -39,7 +30,6 @@ export function blueprint_building(game: Game): Blueprint {
             blocks.push({
                 ...blueprint_star(game),
                 Translation: [0, y - 0.5, 0],
-                Rotation: rotation.slice() as Quat,
             });
         }
     }

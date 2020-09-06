@@ -1,5 +1,6 @@
 import {get_translation} from "../common/mat4.js";
 import {Vec3} from "../common/math.js";
+import {copy} from "../common/quat.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
@@ -32,11 +33,12 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             let [building] = payload as [Entity, Entity];
             let building_transform = game.World.Transform[building];
 
-            // Set world position and add colliders to each block.
+            // Set world position and rotation, and add colliders to each block.
             for (let block of game.World.Transform[building].Children) {
                 let block_transform = game.World.Transform[block];
                 block_transform.Translation[0] = building_transform.Translation[0];
                 block_transform.Translation[2] = building_transform.Translation[2];
+                copy(block_transform.Rotation, building_transform.Rotation);
                 game.World.Signature[block] |= Has.Collide | Has.RigidBody;
             }
 

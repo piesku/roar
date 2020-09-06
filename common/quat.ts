@@ -9,6 +9,14 @@ export function set(out: Quat, x: number, y: number, z: number, w: number) {
     return out;
 }
 
+export function copy(out: Quat, a: Quat) {
+    out[0] = a[0];
+    out[1] = a[1];
+    out[2] = a[2];
+    out[3] = a[3];
+    return out;
+}
+
 export function normalize(out: Quat, a: Quat) {
     let x = a[0];
     let y = a[1];
