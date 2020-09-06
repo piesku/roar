@@ -30,7 +30,7 @@ export function render_textured_diffuse(
     color: Vec4 = [1, 1, 1, 1],
     texture_scale: Vec2 = [1, 1],
     texture_offset?: () => Vec2,
-    fog_level = 0
+    fog_level = -0.2
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {
