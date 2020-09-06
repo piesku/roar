@@ -19,7 +19,7 @@ export function blueprint_police(game: Game): Blueprint {
         Scale: [0.03, 0.03, 0.03],
         Using: [
             control_move([0, 0, 1], null),
-            aim(2), // The player's base.
+            aim(4), // The player's base.
             move(float(1, 3), float(2, 4)),
             audio_source(true, snd_siren()),
             lifespan(8),

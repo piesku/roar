@@ -33,38 +33,85 @@ export function scene_stage(game: Game) {
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
     });
 
-    // VR Camera.
-    instantiate(game, blueprint_viewer(game, 3));
-
     // Main Light.
     instantiate(game, {
         Translation: [2, 4, 3],
         Using: [light_directional([1, 1, 1], 0.3)],
     });
 
-    // Moon.
-    instantiate(game, blueprint_moon(game));
-
     let grid_size = 16;
     let ground_size = grid_size * 10;
 
-    // Ground.
     instantiate(game, {
-        Translation: [0, -0.5, 0],
-        Scale: [ground_size, 1, ground_size],
-        Using: [
-            collide(false, Layer.Ground, Layer.None, [ground_size, 1, ground_size]),
-            rigid_body(RigidKind.Static),
-        ],
+        Translation: [0, 0, 10],
+        Using: [control_move([0, 0, -1], null), move(0.5, 0)],
         Children: [
+            // VR Camera.
+            blueprint_viewer(game, 3),
+            // Moon.
+            blueprint_moon(game),
+            // Police car spawner.
             {
-                Translation: [0, 0.5, 0],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
+                Children: [
+                    {
+                        Translation: [0, 0, -4],
+                        Using: [
+                            control_spawn(blueprint_police, 14),
+                            control_move(null, [0, 1, 0, 0]),
+                            move(0, 5),
+                        ],
+                    },
+                ],
+            },
+
+            // Helicopter spawner.
+            {
+                Translation: [0, 10, 0],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.5)],
+                Children: [
+                    {
+                        Translation: [0, 0, -10],
+                        Using: [control_spawn(blueprint_helicopter, 22)],
+                    },
+                ],
+            },
+
+            // Missile spawner.
+            {
+                Translation: [0, 5, -50],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
+                Children: [
+                    {
+                        Translation: [0, 0, -25],
+                        Rotation: from_euler([0, 0, 0, 0], -60, 0, 0),
+                        Using: [
+                            control_spawn(blueprint_missile, 6),
+                            control_move(null, [0, 1, 0, 0]),
+                            move(0, 4),
+                        ],
+                    },
+                ],
+            },
+            // Ground.
+            {
+                Translation: [0, -0.5, 0],
+                Scale: [ground_size, 1, ground_size],
                 Using: [
-                    render_textured_diffuse(
-                        game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
-                        game.Textures["noise"]
-                    ),
+                    collide(false, Layer.Ground, Layer.None, [ground_size, 1, ground_size]),
+                    rigid_body(RigidKind.Static),
+                ],
+                Children: [
+                    {
+                        Translation: [0, 0.5, 0],
+                        Using: [
+                            render_textured_diffuse(
+                                game.MaterialTexturedDiffuse,
+                                game.MeshPlane,
+                                game.Textures["noise"]
+                            ),
+                        ],
+                    },
                 ],
             },
         ],
@@ -81,48 +128,4 @@ export function scene_stage(game: Game) {
             });
         }
     }
-
-    // Police car spawner.
-    instantiate(game, {
-        Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
-        Children: [
-            {
-                Translation: [0, 0, -4],
-                Using: [
-                    control_spawn(blueprint_police, 14),
-                    control_move(null, [0, 1, 0, 0]),
-                    move(0, 5),
-                ],
-            },
-        ],
-    });
-
-    // Helicopter spawner.
-    instantiate(game, {
-        Translation: [0, 10, 0],
-        Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.5)],
-        Children: [
-            {
-                Translation: [0, 0, -10],
-                Using: [control_spawn(blueprint_helicopter, 22)],
-            },
-        ],
-    });
-
-    // Missile spawner.
-    instantiate(game, {
-        Translation: [0, 5, -50],
-        Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
-        Children: [
-            {
-                Translation: [0, 0, -25],
-                Rotation: from_euler([0, 0, 0, 0], -60, 0, 0),
-                Using: [
-                    control_spawn(blueprint_missile, 6),
-                    control_move(null, [0, 1, 0, 0]),
-                    move(0, 4),
-                ],
-            },
-        ],
-    });
 }
