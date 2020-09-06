@@ -70,7 +70,7 @@ export function scene_stage(game: Game) {
                         GL_CW,
                         [1, 1, 1, 1],
                         -0.3,
-                        [ground_size / 10, ground_size / 10]
+                        [ground_size / 4, ground_size / 4]
                     ),
                 ],
             },
