@@ -34,12 +34,13 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 break;
             }
 
-            let [x, y, z] = game.World.Transform[building].Translation;
+            let building_transform = game.World.Transform[building];
 
             // Set world position and add colliders to each block.
             for (let block of game.World.Transform[building].Children) {
-                game.World.Transform[block].Translation[0] = x;
-                game.World.Transform[block].Translation[2] = z;
+                let block_transform = game.World.Transform[block];
+                block_transform.Translation[0] = building_transform.Translation[0];
+                block_transform.Translation[2] = building_transform.Translation[2];
                 game.World.Signature[block] |= Has.Collide | Has.RigidBody;
             }
 
