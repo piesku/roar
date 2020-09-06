@@ -51,9 +51,10 @@ export function scene_test1(game: Game) {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
-                        game.Textures["road"],
+                        game.Textures["fire"],
                         GL_CW,
                         [1, 1, 1, 1],
+                        -2,
                         [5, 5]
                     ),
                 ],

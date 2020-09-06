@@ -1,4 +1,5 @@
 import {float} from "../../common/random.js";
+import {GL_CW} from "../../common/webgl.js";
 import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
@@ -27,7 +28,7 @@ export function blueprint_police(game: Game): Blueprint {
             {
                 Translation: [-0.5, 2, 0],
                 Using: [
-                    light_point([1, 0, 0], 1),
+                    light_point([1, 0, 0], 2),
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [1, 1, 0, 1]),
                     toggle(Has.Light | Has.Render, 0.5, true),
                 ],
@@ -35,7 +36,7 @@ export function blueprint_police(game: Game): Blueprint {
             {
                 Translation: [0.5, 2, 0],
                 Using: [
-                    light_point([0, 0, 1], 1),
+                    light_point([0, 0, 1], 2),
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [0, 1, 1, 1]),
                     toggle(Has.Light | Has.Render, 0.5, false),
                 ],
@@ -47,7 +48,10 @@ export function blueprint_police(game: Game): Blueprint {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
-                        game.Textures["police"]
+                        game.Textures["police"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        -2
                     ),
                 ],
             },

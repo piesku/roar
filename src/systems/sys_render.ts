@@ -146,6 +146,7 @@ function draw_textured_diffuse(game: Game, transform: Transform, render: RenderT
     game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
     game.Gl.uniformMatrix4fv(render.Material.Locations.Self, false, transform.Self);
     game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
+    game.Gl.uniform1f(render.Material.Locations.FogLevel, render.FogLevel);
 
     game.Gl.activeTexture(GL_TEXTURE0);
     game.Gl.bindTexture(GL_TEXTURE_2D, render.Texture);
