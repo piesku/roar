@@ -7,7 +7,7 @@ import {copy, transform_point} from "../../common/vec3.js";
 import {Collide} from "../components/com_collide.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
-import {Entity, Game} from "../game.js";
+import {Entity, Game, Layer} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
@@ -69,7 +69,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                 for (let i = 0; i < game.World.Signature.length; i++) {
                     if (game.World.Signature[i] & Has.Collide) {
                         let collide = game.World.Collide[i];
-                        if (collide.Dynamic) {
+                        if (collide.Layers & (Layer.BuildingShell | Layer.BuildingBlock)) {
                             colliders.push(collide);
                         }
                     }
@@ -77,8 +77,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                 let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
                 if (hit) {
-                    let other = (hit.Collider as Collide).Entity;
-                    for (let fire of query_all(game.World, other, Has.ControlFire)) {
+                    let other_collider = hit.Collider as Collide;
+                    let other_entity = other_collider.Entity;
+                    for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
                         game.World.ControlFire[fire].Trigger = true;
                     }
                 }
