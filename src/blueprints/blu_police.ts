@@ -51,8 +51,6 @@ export function blueprint_police(game: Game): Blueprint {
                         game.Textures["police"],
                         GL_CW,
                         [1, 1, 1, 1],
-                        [1, 1],
-                        () => [0, 0],
                         -2
                     ),
                 ],

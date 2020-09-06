@@ -28,9 +28,9 @@ export function render_textured_diffuse(
     texture: WebGLTexture,
     front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
+    fog_level = -0.3,
     texture_scale: Vec2 = [1, 1],
-    texture_offset?: () => Vec2,
-    fog_level = -0.2
+    texture_offset?: () => Vec2
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {

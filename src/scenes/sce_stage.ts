@@ -69,7 +69,8 @@ export function scene_stage(game: Game) {
                         game.Textures["fire"],
                         GL_CW,
                         [1, 1, 1, 1],
-                        [ground_size / 4, ground_size / 4]
+                        -0.3,
+                        [ground_size / 10, ground_size / 10]
                     ),
                 ],
             },
