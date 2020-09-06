@@ -3,6 +3,7 @@ import {cull} from "../components/com_cull.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
+import {BUILDING_LIFESPAN} from "../config.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {Has} from "../world.js";
@@ -23,7 +24,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
                 game.MeshCube,
                 game.Textures["building" + variant]
             ),
-            lifespan(30),
+            lifespan(BUILDING_LIFESPAN),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody,
