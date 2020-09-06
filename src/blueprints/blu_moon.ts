@@ -10,15 +10,16 @@ import {Has} from "../world.js";
 
 export function blueprint_moon(game: Game): Blueprint {
     return {
+        Rotation: from_euler([0, 0, 0, 0], 0, -45, 0),
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.01)],
         Children: [
             {
-                Translation: [0, 10, 10],
+                Translation: [0, 10, -10],
                 Using: [light_point([1, 1, 1], 14)],
             },
             {
-                Translation: [0, 100, 100],
-                Rotation: from_euler([0, 0, 0, 0], -135, 0, 0),
+                Translation: [0, 100, -100],
+                Rotation: from_euler([0, 0, 0, 0], 135, 0, 0),
                 Scale: [20, 20, 20],
                 Using: [
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshPlane, [1, 1, 1, 1]),
