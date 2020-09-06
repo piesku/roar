@@ -179,6 +179,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let rigid_body = game.World.RigidBody[building_entity];
                                 rigid_body.Kind = RigidKind.Kinematic;
                                 get_translation(rigid_body.LastPosition, building_transform.World);
+
+                                // Disable lifespan.
+                                game.World.Signature[building_entity] &= ~Has.Lifespan;
                             }
                         }
                     } else {
@@ -203,6 +206,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let rigid_body = game.World.RigidBody[building_entity];
                             rigid_body.Kind = RigidKind.Dynamic;
                             copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+
+                            // Enable lifespan.
+                            game.World.Signature[building_entity] |= Has.Lifespan;
                         }
                     }
                 }
@@ -298,6 +304,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let rigid_body = game.World.RigidBody[building_entity];
                                 rigid_body.Kind = RigidKind.Kinematic;
                                 get_translation(rigid_body.LastPosition, building_transform.World);
+
+                                // Disable lifespan.
+                                game.World.Signature[building_entity] &= ~Has.Lifespan;
                             }
                         }
                     } else {
@@ -322,6 +331,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let rigid_body = game.World.RigidBody[building_entity];
                             rigid_body.Kind = RigidKind.Dynamic;
                             copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+
+                            // Enable lifespan.
+                            game.World.Signature[building_entity] |= Has.Lifespan;
                         }
                     }
                 }

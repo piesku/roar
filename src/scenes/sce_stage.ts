@@ -55,8 +55,10 @@ export function scene_stage(game: Game) {
         Children: [
             // VR Camera.
             blueprint_viewer(game, 3),
+
             // Moon.
             blueprint_moon(game),
+
             // Police car spawner.
             {
                 Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
@@ -100,6 +102,7 @@ export function scene_stage(game: Game) {
                     },
                 ],
             },
+
             // Building spawner.
             {
                 Translation: [0, 0, BUILDING_SPAWN_Z],
@@ -115,6 +118,7 @@ export function scene_stage(game: Game) {
                     },
                 ],
             },
+
             // Ground.
             {
                 Translation: [0, -0.5, 0],
