@@ -13,8 +13,8 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
         Using: [
             collide(
                 true,
-                Layer.Building,
-                Layer.Ground | Layer.Building | Layer.Player | Layer.Missile
+                Layer.BuildingBlock,
+                Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand | Layer.Missile
             ),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(
@@ -24,6 +24,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
             ),
             cull(Has.Render),
         ],
+        Disable: Has.Collide | Has.RigidBody,
         Children: [blueprint_fire(game)],
     };
 

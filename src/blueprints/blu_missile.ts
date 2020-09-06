@@ -20,7 +20,7 @@ export function blueprint_missile(game: Game): Blueprint {
     return {
         Using: [
             control_move([0, 0, 1], null),
-            collide(true, Layer.Missile, Layer.Ground | Layer.Building | Layer.Player),
+            collide(true, Layer.Missile, Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand),
             damage(),
             aim(4), // the player's headset
             move(float(8, 12), 2),

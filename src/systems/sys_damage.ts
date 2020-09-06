@@ -21,7 +21,7 @@ function update(game: Game, entity: Entity) {
     for (let i = 0; i < collide.Collisions.length; i++) {
         let other = collide.Collisions[i].Other;
         let other_collide = game.World.Collide[other];
-        if (other_collide.Layers & Layer.Building) {
+        if (other_collide.Layers & Layer.BuildingBlock) {
             // Destroy the building.
             destroy(game.World, other);
 
@@ -33,7 +33,7 @@ function update(game: Game, entity: Entity) {
                 Translation: position,
                 ...blueprint_explosion(game),
             });
-        } else if (other_collide.Layers & Layer.Player) {
+        } else if (other_collide.Layers & Layer.PlayerHand) {
             console.log("Player hit");
         }
 

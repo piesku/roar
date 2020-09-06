@@ -13,8 +13,8 @@ export function blueprint_star(game: Game): Blueprint {
         Using: [
             collide(
                 true,
-                Layer.Building,
-                Layer.Ground | Layer.Building | Layer.Player | Layer.Missile
+                Layer.BuildingBlock,
+                Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand | Layer.Missile
             ),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(

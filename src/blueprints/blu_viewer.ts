@@ -77,7 +77,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         // Hand mesh.
                         Scale: [-1, 1, 1],
                         Using: [
-                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                            collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
@@ -90,7 +90,9 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [0.1, 0, 0],
-                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                        Using: [
+                            collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [0.1, 0.1, 0.1]),
+                        ],
                     },
                     {
                         // Grip anchor.
@@ -105,7 +107,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Hand mesh.
                         Using: [
-                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                            collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
@@ -117,7 +119,9 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [-0.1, 0, 0],
-                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                        Using: [
+                            collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [0.1, 0.1, 0.1]),
+                        ],
                     },
                     {
                         // Grip anchor.

@@ -32,6 +32,7 @@ import {sys_resolution} from "./systems/sys_resolution.js";
 import {sys_shake} from "./systems/sys_shake.js";
 import {sys_toggle} from "./systems/sys_toggle.js";
 import {sys_transform} from "./systems/sys_transform.js";
+import {sys_trigger} from "./systems/sys_trigger.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
 import {xr_init} from "./xr.js";
@@ -114,6 +115,7 @@ export class Game {
         sys_kinematic(this, delta);
         sys_collide(this, delta);
         sys_resolution(this, delta);
+        sys_trigger(this, delta);
         sys_transform(this, delta);
 
         if (false) {
@@ -133,8 +135,10 @@ export class Game {
 }
 export const enum Layer {
     None = 0,
-    Player = 1,
-    Ground = 2,
-    Building = 4,
-    Missile = 8,
+    PlayerHand = 1,
+    PlayerGrip = 2,
+    Ground = 4,
+    BuildingShell = 8,
+    BuildingBlock = 16,
+    Missile = 32,
 }
