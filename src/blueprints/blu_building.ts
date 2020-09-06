@@ -52,7 +52,7 @@ export function blueprint_building(game: Game): Blueprint {
                 Layer.BuildingBlock | Layer.PlayerHand | Layer.PlayerGrip | Layer.Missile,
                 [1, height * 2, 1]
             ),
-            lifespan(60),
+            lifespan(30),
             trigger(Action.Wake),
         ],
         Children: blocks,

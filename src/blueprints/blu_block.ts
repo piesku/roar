@@ -23,7 +23,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
                 game.MeshCube,
                 game.Textures["building" + variant]
             ),
-            lifespan(60),
+            lifespan(30),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody,

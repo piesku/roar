@@ -44,7 +44,7 @@ export function scene_stage(game: Game) {
     let ground_size = grid_size * 10;
 
     instantiate(game, {
-        Using: [control_move([0, 0, -1], null), move(0.5, 0)],
+        Using: [control_move([0, 0, -1], null), move(1, 0)],
         Children: [
             // VR Camera.
             blueprint_viewer(game, 3),
@@ -95,13 +95,13 @@ export function scene_stage(game: Game) {
             },
             // Building spawner.
             {
-                Translation: [0, 0, -10],
+                Translation: [0, 0, -20],
                 Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
                 Children: [
                     {
                         Translation: [0, 0, -5],
                         Using: [
-                            control_spawn(blueprint_building, 1),
+                            control_spawn(blueprint_building, 0.5),
                             control_move(null, [0, 1, 0, 0]),
                             move(0, 4),
                         ],

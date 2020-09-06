@@ -23,7 +23,7 @@ export function blueprint_star(game: Game): Blueprint {
                 game.MeshCube,
                 game.Textures["building2"]
             ),
-            lifespan(60),
+            lifespan(30),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody,
