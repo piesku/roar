@@ -18,7 +18,6 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
-import {sys_damage} from "./systems/sys_damage.js";
 import {sys_debug} from "./systems/sys_debug.js";
 import {sys_framerate} from "./systems/sys_framerate.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
@@ -32,6 +31,7 @@ import {sys_resolution} from "./systems/sys_resolution.js";
 import {sys_shake} from "./systems/sys_shake.js";
 import {sys_toggle} from "./systems/sys_toggle.js";
 import {sys_transform} from "./systems/sys_transform.js";
+import {sys_trigger} from "./systems/sys_trigger.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
 import {xr_init} from "./xr.js";
@@ -101,7 +101,6 @@ export class Game {
         sys_control_spawn(this, delta);
 
         // Game logic.
-        sys_damage(this, delta);
         sys_aim(this, delta);
         sys_move(this, delta);
         sys_shake(this, delta);
@@ -114,6 +113,7 @@ export class Game {
         sys_kinematic(this, delta);
         sys_collide(this, delta);
         sys_resolution(this, delta);
+        sys_trigger(this, delta);
         sys_transform(this, delta);
 
         if (false) {
@@ -133,8 +133,10 @@ export class Game {
 }
 export const enum Layer {
     None = 0,
-    Player = 1,
-    Ground = 2,
-    Building = 4,
-    Missile = 8,
+    PlayerHand = 1,
+    PlayerGrip = 2,
+    Ground = 4,
+    BuildingShell = 8,
+    BuildingBlock = 16,
+    Missile = 32,
 }

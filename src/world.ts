@@ -16,6 +16,7 @@ import {RigidBody} from "./components/com_rigid_body.js";
 import {Shake} from "./components/com_shake.js";
 import {Toggle} from "./components/com_toggle.js";
 import {Transform} from "./components/com_transform.js";
+import {Trigger} from "./components/com_trigger.js";
 
 const enum Component {
     Aim,
@@ -28,7 +29,6 @@ const enum Component {
     ControlSpawn,
     ControlXr,
     Cull,
-    Damage,
     EmitParticles,
     Lifespan,
     Light,
@@ -38,6 +38,7 @@ const enum Component {
     Shake,
     Toggle,
     Transform,
+    Trigger,
 }
 
 export const enum Has {
@@ -51,7 +52,6 @@ export const enum Has {
     ControlSpawn = 1 << Component.ControlSpawn,
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
-    Damage = 1 << Component.Damage,
     EmitParticles = 1 << Component.EmitParticles,
     Lifespan = 1 << Component.Lifespan,
     Light = 1 << Component.Light,
@@ -61,6 +61,7 @@ export const enum Has {
     Shake = 1 << Component.Shake,
     Toggle = 1 << Component.Toggle,
     Transform = 1 << Component.Transform,
+    Trigger = 1 << Component.Trigger,
 }
 
 export class World {
@@ -85,4 +86,5 @@ export class World {
     Shake: Array<Shake> = [];
     Toggle: Array<Toggle> = [];
     Transform: Array<Transform> = [];
+    Trigger: Array<Trigger> = [];
 }

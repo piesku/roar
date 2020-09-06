@@ -73,7 +73,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                 // Left hand.
                 Using: [
                     control_xr("left"),
-                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                     rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
@@ -84,7 +84,9 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [0.1, 0, 0],
-                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                        Using: [
+                            collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [0.1, 0.1, 0.1]),
+                        ],
                     },
                     {
                         // Grip anchor.
@@ -96,7 +98,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                 // Right hand.
                 Using: [
                     control_xr("right"),
-                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                     rigid_body(RigidKind.Kinematic),
                 ],
                 Children: [
@@ -107,7 +109,9 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Grip detector.
                         Translation: [-0.1, 0, 0],
-                        Using: [collide(true, Layer.None, Layer.Building, [0.1, 0.1, 0.1])],
+                        Using: [
+                            collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [0.1, 0.1, 0.1]),
+                        ],
                     },
                     {
                         // Grip anchor.

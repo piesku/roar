@@ -1,13 +1,11 @@
-import {Quat} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {element, float, integer, set_seed} from "../../common/random.js";
-import {blueprint_block} from "../blueprints/blu_block.js";
+import {set_seed} from "../../common/random.js";
+import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
 import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
-import {blueprint_star} from "../blueprints/blu_star.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
@@ -72,42 +70,15 @@ export function scene_stage(game: Game) {
         ],
     });
 
-    let min_height = 2;
-    let max_height = 4;
-    let rotations: Array<Quat> = [
-        [0, 0, 0, 1],
-        [0, 0.7071, 0, 0.7071],
-        [0, 1, 0, 0],
-        [0, -0.7071, 0, 0.7071],
-    ];
-
     for (let z = -grid_size / 2; z < grid_size / 2; z++) {
         for (let x = -grid_size / 2; x < grid_size / 2; x++) {
             if (x % 2 === 0 || z % 2 === 0) {
                 continue;
             }
-            let height = integer(min_height, max_height);
-            let variant = integer(1, 4);
-            let rotation = element(rotations);
-            if (float() > 0.2) {
-                // Square tower.
-                for (let y = 1; y <= height; y++) {
-                    instantiate(game, {
-                        ...blueprint_block(game, variant, y === height),
-                        Translation: [x + 0.5, y - 0.5, z - 0.5],
-                        Rotation: rotation.slice() as Quat,
-                    });
-                }
-            } else {
-                // Star tower.
-                for (let y = 1; y <= height; y++) {
-                    instantiate(game, {
-                        ...blueprint_star(game),
-                        Translation: [x + 0.5, y - 0.5, z - 0.5],
-                        Rotation: rotation.slice() as Quat,
-                    });
-                }
-            }
+            instantiate(game, {
+                ...blueprint_building(game),
+                Translation: [x + 0.5, 0, z - 0.5],
+            });
         }
     }
 

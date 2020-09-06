@@ -83,10 +83,14 @@ export function instantiate(
     return entity;
 }
 
-export function destroy(world: World, entity: Entity) {
+export function destroy(world: World, entity: Entity, with_children = true) {
     if (world.Signature[entity] & Has.Transform) {
         for (let child of world.Transform[entity].Children) {
-            destroy(world, child);
+            if (with_children) {
+                destroy(world, child, with_children);
+            } else {
+                world.Transform[child].Parent = undefined;
+            }
         }
     }
     world.Signature[entity] = 0;
