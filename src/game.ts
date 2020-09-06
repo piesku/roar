@@ -3,7 +3,7 @@ import {mat2_colored_unlit} from "../materials/mat2_colored_unlit.js";
 import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_wireframe} from "../materials/mat2_wireframe.js";
-import {mesh_claws} from "../meshes/claws.js";
+import {mesh_claw} from "../meshes/claw.js";
 import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
@@ -62,7 +62,7 @@ export class Game {
     MaterialParticles = mat2_particles(this.Gl);
     MeshCube = mesh_cube(this.Gl);
     MeshPlane = mesh_plane(this.Gl);
-    MeshHand = mesh_claws(this.Gl);
+    MeshClaw = mesh_claw(this.Gl);
     Textures: Record<string, WebGLTexture> = {};
 
     Camera?: Camera;

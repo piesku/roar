@@ -1,4 +1,4 @@
-import {GL_CCW} from "../../common/webgl.js";
+import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {audio_listener} from "../components/com_audio_listener.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {camera_xr} from "../components/com_camera.js";
@@ -6,11 +6,11 @@ import {collide} from "../components/com_collide.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {render_particles} from "../components/com_render_particles.js";
-import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {blueprint_paw} from "./blu_paw.js";
 
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
@@ -71,21 +71,15 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Left hand.
-                Using: [control_xr("left")],
+                Using: [
+                    control_xr("left"),
+                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    rigid_body(RigidKind.Kinematic),
+                ],
                 Children: [
                     {
-                        // Hand mesh.
+                        ...blueprint_paw(game, GL_CCW),
                         Scale: [-1, 1, 1],
-                        Using: [
-                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                            render_textured_diffuse(
-                                game.MaterialTexturedDiffuse,
-                                game.MeshHand,
-                                game.Textures["claws"],
-                                GL_CCW
-                            ),
-                        ],
                     },
                     {
                         // Grip detector.
@@ -100,19 +94,15 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Right hand.
-                Using: [control_xr("right")],
+                Using: [
+                    control_xr("right"),
+                    collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
+                    rigid_body(RigidKind.Kinematic),
+                ],
                 Children: [
                     {
-                        // Hand mesh.
-                        Using: [
-                            collide(true, Layer.Player, Layer.None, [0.1, 0.1, 0.1]),
-                            rigid_body(RigidKind.Kinematic),
-                            render_textured_diffuse(
-                                game.MaterialTexturedDiffuse,
-                                game.MeshHand,
-                                game.Textures["claws"]
-                            ),
-                        ],
+                        ...blueprint_paw(game, GL_CW),
+                        Scale: [1, 1, 1],
                     },
                     {
                         // Grip detector.
