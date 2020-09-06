@@ -43,7 +43,6 @@ export function scene_stage(game: Game) {
     let ground_size = grid_size * 10;
 
     instantiate(game, {
-        Translation: [0, 0, 10],
         Using: [control_move([0, 0, -1], null), move(0.5, 0)],
         Children: [
             // VR Camera.
@@ -93,6 +92,21 @@ export function scene_stage(game: Game) {
                     },
                 ],
             },
+            // Building spawner.
+            {
+                Translation: [0, 0, -10],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
+                Children: [
+                    {
+                        Translation: [0, 0, -5],
+                        Using: [
+                            control_spawn(blueprint_building, 1),
+                            control_move(null, [0, 1, 0, 0]),
+                            move(0, 4),
+                        ],
+                    },
+                ],
+            },
             // Ground.
             {
                 Translation: [0, -0.5, 0],
@@ -116,16 +130,4 @@ export function scene_stage(game: Game) {
             },
         ],
     });
-
-    for (let z = -grid_size / 2; z < grid_size / 2; z++) {
-        for (let x = -grid_size / 2; x < grid_size / 2; x++) {
-            if (x % 2 === 0 || z % 2 === 0) {
-                continue;
-            }
-            instantiate(game, {
-                ...blueprint_building(game),
-                Translation: [x + 0.5, 0, z - 0.5],
-            });
-        }
-    }
 }
