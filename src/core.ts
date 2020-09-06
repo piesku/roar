@@ -41,10 +41,13 @@ export function loop_stop(game: Game) {
     }
 }
 
-export function create(world: World, signature: number = 0) {
+export function create(world: World) {
     for (let i = 0; i < MAX_ENTITIES; i++) {
-        if (!world.Signature[i]) {
-            world.Signature[i] = signature;
+        if (i === world.Signature.length) {
+            world.Signature.push(0);
+            return i;
+        }
+        if (world.Signature[i] === 0) {
             return i;
         }
     }
