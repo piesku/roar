@@ -49,7 +49,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             let other_collide = game.World.Collide[other];
             if (other_collide.Layers & Layer.BuildingBlock) {
                 // Destroy the building.
-                destroy(game.World, other);
+                setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
                 console.log("Player hit");
             }
