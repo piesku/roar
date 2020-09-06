@@ -1,7 +1,6 @@
 import {Quat} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
 import {element, float, integer, set_seed} from "../../common/random.js";
-import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
@@ -66,10 +65,7 @@ export function scene_stage(game: Game) {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
-                        game.Textures["fire"],
-                        GL_CW,
-                        [1, 1, 1, 1],
-                        -0.3
+                        game.Textures["noise"]
                     ),
                 ],
             },
