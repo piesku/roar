@@ -2,7 +2,7 @@ import {create_texture_from} from "../common/texture.js";
 import {dispatch} from "./actions.js";
 import {loop_start} from "./core.js";
 import {Game} from "./game.js";
-import {scene_stage} from "./scenes/sce_stage.js";
+import {scene_grid} from "./scenes/sce_grid.js";
 
 let game = new Game();
 
@@ -17,5 +17,5 @@ for (let i = 0; i < textures.length; i++) {
     game.Textures[textures[i].id] = create_texture_from(game.Gl, textures[i]);
 }
 
-scene_stage(game);
+scene_grid(game);
 loop_start(game);

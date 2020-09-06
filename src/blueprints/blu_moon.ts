@@ -10,7 +10,7 @@ import {Has} from "../world.js";
 
 export function blueprint_moon(game: Game): Blueprint {
     return {
-        Rotation: from_euler([0, 0, 0, 0], 0, -45, 0),
+        Rotation: from_euler([0, 0, 0, 0], 0, -135, 0),
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.01)],
         Children: [
             {

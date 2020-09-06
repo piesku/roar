@@ -13,6 +13,7 @@ import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {shake} from "../components/com_shake.js";
 import {trigger} from "../components/com_trigger.js";
+import {PLAYER_TARGET_HEAD} from "../config.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {snd_missile} from "../sounds/snd_missile.js";
@@ -23,7 +24,7 @@ export function blueprint_missile(game: Game): Blueprint {
             control_move([0, 0, 1], null),
             collide(true, Layer.Missile, Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand),
             trigger(Action.Damage),
-            aim(4), // the player's base
+            aim(PLAYER_TARGET_HEAD),
             move(float(8, 12), 3),
             lifespan(9),
             audio_source(true, snd_missile),

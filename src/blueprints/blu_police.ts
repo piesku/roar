@@ -9,6 +9,7 @@ import {move} from "../components/com_move.js";
 import {render_colored_unlit} from "../components/com_render_colored_unlit.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {toggle} from "../components/com_toggle.js";
+import {PLAYER_TARGET_BASE} from "../config.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
 import {snd_siren} from "../sounds/snd_siren.js";
@@ -19,7 +20,7 @@ export function blueprint_police(game: Game): Blueprint {
         Scale: [0.03, 0.03, 0.03],
         Using: [
             control_move([0, 0, 1], null),
-            aim(4), // The player's base.
+            aim(PLAYER_TARGET_BASE),
             move(float(1, 3), float(2, 4)),
             audio_source(true, snd_siren()),
             lifespan(8),
