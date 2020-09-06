@@ -29,11 +29,6 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
         }
         case Action.Wake: {
             let [building] = payload as [Entity, Entity];
-            if (game.World.Signature[building] === 0) {
-                // The building has already been woken up.
-                break;
-            }
-
             let building_transform = game.World.Transform[building];
 
             // Set world position and add colliders to each block.
@@ -45,7 +40,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             }
 
             // Destroy the outer shell without children.
-            destroy(game.World, building, false);
+            setTimeout(() => destroy(game.World, building, false));
             break;
         }
         case Action.Explode: {
@@ -68,7 +63,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             });
 
             // Destroy the missile.
-            destroy(game.World, missile);
+            setTimeout(() => destroy(game.World, missile));
             break;
         }
     }
