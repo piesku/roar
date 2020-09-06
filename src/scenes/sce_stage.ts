@@ -103,14 +103,14 @@ export function scene_stage(game: Game) {
             // Building spawner.
             {
                 Translation: [0, 0, BUILDING_SPAWN_Z],
-                Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 7)],
                 Children: [
                     {
                         Translation: [0, 0, -5],
                         Using: [
                             control_spawn(blueprint_building, BUILDING_SPAWN_FREQUENCY),
                             control_move(null, [0, 1, 0, 0]),
-                            move(0, 4),
+                            move(0, 3),
                         ],
                     },
                 ],
