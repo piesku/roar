@@ -26,7 +26,7 @@ import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
-export function scene_stage(game: Game) {
+export function scene_run(game: Game) {
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
