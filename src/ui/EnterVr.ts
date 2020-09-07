@@ -7,11 +7,10 @@ export function EnterVr(game: Game) {
         <div
             style="
                 position: absolute;
-                bottom: 1vmin;
-                right: 1vmin;
-                background: #000;
+                bottom: 10vmin;
+                right: 10vmin;
                 color: #fff;
-                font: 13px Arial;
+                font: 24px Arial;
             "
         >
             ${game.XrFrame
@@ -32,10 +31,10 @@ function EnterButton() {
         <button
             onclick="$(${Action.EnterVr})"
             style="
-                padding: 1vmin;
-                background: #000;
-                color: #fff;
+                color: #fc0;
+                background: transparent;
                 border: none;
+                font: 5rem Impact;
             "
         >
             Enter VR
