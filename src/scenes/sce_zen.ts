@@ -90,13 +90,21 @@ export function scene_zen(game: Game) {
 
             // Building spawner.
             {
-                Using: [control_move(null, [0, 1, 0, 0]), move(0, 47), lifespan(2)],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 37), lifespan(1)],
                 Children: [
                     {
                         Translation: [0, 0, -2],
                         Using: [control_move([0, 0, -1], null), move(2, 0)],
                         Children: [
                             {
+                                Using: [
+                                    control_spawn(blueprint_building, 0.05),
+                                    control_move(null, [0, 1, 0, 0]),
+                                    move(0, 3),
+                                ],
+                            },
+                            {
+                                Translation: [1, 0, -1],
                                 Using: [
                                     control_spawn(blueprint_building, 0.1),
                                     control_move(null, [0, 1, 0, 0]),
