@@ -53,8 +53,25 @@ export function blueprint_police(game: Game): Blueprint {
                 ],
             },
             {
-                Translation: [0, 0.75, 0],
-                Scale: [2, 1.5, 5],
+                // Chassis.
+                Translation: [0, 0.5, 0],
+                Scale: [2, 1, 5],
+                Using: [
+                    render_textured_diffuse(
+                        game.MaterialTexturedDiffuse,
+                        game.MeshCube,
+                        game.Textures["police"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        -2
+                    ),
+                ],
+            },
+            {
+                // Top.
+                Translation: [0, 1.25, 0],
+                Rotation: [0.7071, 0, 0, 0.7071],
+                Scale: [2, 2, 0.5],
                 Using: [
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
