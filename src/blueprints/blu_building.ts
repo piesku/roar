@@ -10,7 +10,7 @@ import {blueprint_block} from "./blu_block.js";
 import {blueprint_star} from "./blu_star.js";
 
 export function blueprint_building(game: Game): Blueprint {
-    let height = integer(1, 2) + integer(1, 2);
+    let height = Math.max(integer(0, 3), integer(0, 4));
     let blocks: Array<Blueprint> = [];
 
     if (float() > 0.2) {

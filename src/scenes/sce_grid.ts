@@ -15,6 +15,7 @@ import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
+import {MISSILE_SPAWN_FREQUENCY, MISSILE_SPAWN_Z} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -48,7 +49,7 @@ export function scene_grid(game: Game) {
     // Moon.
     instantiate(game, blueprint_moon(game));
 
-    let grid_size = 11;
+    let grid_size = 9;
     let ground_size = grid_size * 10;
 
     // Ground.
@@ -78,12 +79,9 @@ export function scene_grid(game: Game) {
 
     for (let z = Math.trunc(-grid_size / 2); z < grid_size / 2; z++) {
         for (let x = Math.trunc(-grid_size / 2); x < grid_size / 2; x++) {
-            if (x % 4 === 0 || z % 4 === 0) {
-                continue;
-            }
             instantiate(game, {
                 ...blueprint_building(game),
-                Translation: [x * 1.5, 0, z * 1.5],
+                Translation: [x * 1.5 + Math.trunc(x / 3), 0, z * 1.5 + Math.trunc(z / 2)],
             });
         }
     }
@@ -117,14 +115,14 @@ export function scene_grid(game: Game) {
 
     // Missile spawner.
     instantiate(game, {
-        Translation: [0, 5, -50],
+        Translation: [0, 5, MISSILE_SPAWN_Z],
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
         Children: [
             {
                 Translation: [0, 0, -25],
                 Rotation: from_euler([0, 0, 0, 0], -60, 0, 0),
                 Using: [
-                    control_spawn(blueprint_missile, 6),
+                    control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY),
                     control_move(null, [0, 1, 0, 0]),
                     move(0, 4),
                 ],
