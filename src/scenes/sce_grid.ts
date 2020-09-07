@@ -48,7 +48,7 @@ export function scene_grid(game: Game) {
     // Moon.
     instantiate(game, blueprint_moon(game));
 
-    let grid_size = 16;
+    let grid_size = 11;
     let ground_size = grid_size * 10;
 
     // Ground.
@@ -76,14 +76,14 @@ export function scene_grid(game: Game) {
         ],
     });
 
-    for (let z = -grid_size / 2; z < grid_size / 2; z++) {
-        for (let x = -grid_size / 2; x < grid_size / 2; x++) {
-            if (x % 2 === 0 || z % 2 === 0) {
+    for (let z = Math.trunc(-grid_size / 2); z < grid_size / 2; z++) {
+        for (let x = Math.trunc(-grid_size / 2); x < grid_size / 2; x++) {
+            if (x % 4 === 0 || z % 4 === 0) {
                 continue;
             }
             instantiate(game, {
                 ...blueprint_building(game),
-                Translation: [x + 0.5, 0, z - 0.5],
+                Translation: [x * 1.5, 0, z * 1.5],
             });
         }
     }
