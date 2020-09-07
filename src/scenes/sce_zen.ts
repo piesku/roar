@@ -11,22 +11,17 @@ import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
+import {lifespan} from "../components/com_lifespan.js";
 import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
-import {
-    BUILDING_SPAWN_FREQUENCY,
-    BUILDING_SPAWN_Z,
-    MISSILE_SPAWN_FREQUENCY,
-    MISSILE_SPAWN_Z,
-    PLAYER_SPEED,
-} from "../config.js";
+import {MISSILE_SPAWN_FREQUENCY, MISSILE_SPAWN_Z} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
-export function scene_run(game: Game) {
+export function scene_zen(game: Game) {
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -44,14 +39,11 @@ export function scene_run(game: Game) {
     let ground_size = grid_size * 10;
 
     instantiate(game, {
-        Using: [control_move([0, 0, -1], null), move(PLAYER_SPEED, 0)],
         Children: [
             // VR Camera.
             blueprint_viewer(game, 3),
-
             // Moon.
             blueprint_moon(game),
-
             // Police car spawner.
             {
                 Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
@@ -98,15 +90,19 @@ export function scene_run(game: Game) {
 
             // Building spawner.
             {
-                Translation: [0, 0, BUILDING_SPAWN_Z],
-                Using: [control_move(null, [0, 1, 0, 0]), move(0, 7)],
+                Using: [control_move(null, [0, 1, 0, 0]), move(0, 47), lifespan(2)],
                 Children: [
                     {
-                        Translation: [0, 0, -5],
-                        Using: [
-                            control_spawn(blueprint_building, BUILDING_SPAWN_FREQUENCY),
-                            control_move(null, [0, 1, 0, 0]),
-                            move(0, 3),
+                        Translation: [0, 0, -2],
+                        Using: [control_move([0, 0, -1], null), move(2, 0)],
+                        Children: [
+                            {
+                                Using: [
+                                    control_spawn(blueprint_building, 0.1),
+                                    control_move(null, [0, 1, 0, 0]),
+                                    move(0, 3),
+                                ],
+                            },
                         ],
                     },
                 ],
@@ -143,6 +139,6 @@ export function scene_run(game: Game) {
     instantiate(game, {
         ...blueprint_camera(game),
         Translation: [0, 10, 10],
-        Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
+        Rotation: from_euler([0, 0, 0, 0], 35, 180, 0),
     });
 }
