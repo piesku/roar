@@ -5,6 +5,7 @@ import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
+import {named} from "../components/com_named.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {shake} from "../components/com_shake.js";
@@ -15,6 +16,7 @@ import {blueprint_paw} from "./blu_paw.js";
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
         Scale: [scale, scale, scale],
+        Using: [named("base")],
         Children: [
             {
                 // Headset camera.
@@ -118,6 +120,11 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Scale: [1 / scale, 1 / scale, 1 / scale],
                     },
                 ],
+            },
+            {
+                // Helicopter and missile target.
+                Translation: [0, 1.5, -1],
+                Using: [named("head")],
             },
         ],
     };

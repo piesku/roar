@@ -9,11 +9,11 @@ import {emit_particles} from "../components/com_emit_particles.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
+import {find_first} from "../components/com_named.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {shake} from "../components/com_shake.js";
 import {trigger} from "../components/com_trigger.js";
-import {PLAYER_TARGET_HEAD} from "../config.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {snd_missile} from "../sounds/snd_missile.js";
@@ -24,7 +24,7 @@ export function blueprint_missile(game: Game): Blueprint {
             control_move([0, 0, 1], null),
             collide(true, Layer.Missile, Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand),
             trigger(Action.Damage),
-            aim(PLAYER_TARGET_HEAD),
+            aim(find_first(game.World, "head")),
             move(float(8, 12), 3),
             lifespan(9),
             audio_source(true, snd_missile),

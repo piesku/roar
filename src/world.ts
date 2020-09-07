@@ -11,6 +11,7 @@ import {EmitParticles} from "./components/com_emit_particles.js";
 import {Lifespan} from "./components/com_lifespan.js";
 import {Light} from "./components/com_light.js";
 import {Move} from "./components/com_move.js";
+import {Named} from "./components/com_named.js";
 import {Render} from "./components/com_render.js";
 import {RigidBody} from "./components/com_rigid_body.js";
 import {Shake} from "./components/com_shake.js";
@@ -33,6 +34,7 @@ const enum Component {
     Lifespan,
     Light,
     Move,
+    Named,
     Render,
     RigidBody,
     Shake,
@@ -56,6 +58,7 @@ export const enum Has {
     Lifespan = 1 << Component.Lifespan,
     Light = 1 << Component.Light,
     Move = 1 << Component.Move,
+    Named = 1 << Component.Named,
     Render = 1 << Component.Render,
     RigidBody = 1 << Component.RigidBody,
     Shake = 1 << Component.Shake,
@@ -81,6 +84,7 @@ export class World {
     Lifespan: Array<Lifespan> = [];
     Light: Array<Light> = [];
     Move: Array<Move> = [];
+    Named: Array<Named> = [];
     Render: Array<Render> = [];
     RigidBody: Array<RigidBody> = [];
     Shake: Array<Shake> = [];

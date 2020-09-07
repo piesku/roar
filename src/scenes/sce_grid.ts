@@ -34,8 +34,10 @@ export function scene_grid(game: Game) {
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
     });
 
+    let scale = 3;
+
     // VR Camera.
-    instantiate(game, blueprint_viewer(game, 3));
+    instantiate(game, blueprint_viewer(game, scale));
 
     // Main Light.
     instantiate(game, {
@@ -103,7 +105,7 @@ export function scene_grid(game: Game) {
 
     // Helicopter spawner.
     instantiate(game, {
-        Translation: [0, 10, 0],
+        Translation: [0, 2 * scale, 0],
         Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.5)],
         Children: [
             {
