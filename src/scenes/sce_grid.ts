@@ -15,6 +15,7 @@ import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
+import {shake} from "../components/com_shake.js";
 import {MISSILE_SPAWN_FREQUENCY, MISSILE_SPAWN_Z} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
@@ -121,16 +122,13 @@ export function scene_grid(game: Game) {
 
     // Missile spawner.
     instantiate(game, {
-        Translation: [0, 5, MISSILE_SPAWN_Z],
-        Using: [control_move(null, [0, 1, 0, 0]), move(0, 2)],
+        Translation: [0, 11, MISSILE_SPAWN_Z],
         Children: [
             {
-                Translation: [0, 0, -25],
-                Rotation: from_euler([0, 0, 0, 0], -60, 0, 0),
+                Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
                 Using: [
                     control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY),
-                    control_move(null, [0, 1, 0, 0]),
-                    move(0, 4),
+                    shake(Infinity, 10),
                 ],
             },
         ],
