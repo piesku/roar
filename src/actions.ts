@@ -21,7 +21,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
         case Action.PlayNow: {
             setTimeout(() => scene_grid(game));
-            break;
+            // Fall through to EnterVr.
         }
         case Action.EnterVr: {
             if (game.XrSupported) {
