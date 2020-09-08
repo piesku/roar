@@ -25,7 +25,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             {
                 // Head.
                 Translation: [0, 2, 0],
-                Using: [control_xr("head")],
+                Using: [control_xr("head"), named("head")],
                 Children: [
                     {
                         // The head space has +Z towards the user, so we need to
@@ -73,9 +73,9 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         ],
                     },
                     {
-                        // Helicopter and missile target.
+                        // Helicopter target.
                         Translation: [0, 0, -1],
-                        Using: [named("head")],
+                        Using: [named("front")],
                     },
                 ],
             },
