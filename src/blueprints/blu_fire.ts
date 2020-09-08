@@ -13,6 +13,7 @@ export function blueprint_fire(game: Game): Blueprint {
         Rotation: from_euler([0, 0, 0, 0], -80, 10, 0),
         Children: [
             {
+                Offset: 1000,
                 Using: [
                     control_fire(15),
                     shake(Infinity, 0.5),

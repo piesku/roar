@@ -41,6 +41,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Children: [
                             {
                                 // Flame emitter.
+                                Offset: 1000,
                                 Using: [
                                     shake(Infinity, 0.05),
                                     emit_particles(1, 0.01, 15),
@@ -55,6 +56,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                             },
                             {
                                 // Flame emitter.
+                                Offset: 1000,
                                 Using: [
                                     shake(Infinity, 0.1),
                                     emit_particles(1.5, 0.01, 13),
