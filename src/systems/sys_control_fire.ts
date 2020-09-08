@@ -1,4 +1,4 @@
-import {ease_out_quart} from "../../common/easing.js";
+import {ease_in_quad} from "../../common/easing.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -29,7 +29,7 @@ function update(game: Game, entity: Entity, delta: number) {
     } else {
         let emitter = game.World.EmitParticles[entity];
         let t = control.Remaining / control.Duration;
-        emitter.Frequency = 1 - t;
+        emitter.Frequency = ease_in_quad(1.1 - t);
         control.Remaining -= delta;
     }
 }
