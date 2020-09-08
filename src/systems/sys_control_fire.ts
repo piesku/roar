@@ -1,3 +1,4 @@
+import {ease_out_quart} from "../../common/easing.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 

@@ -2,6 +2,7 @@ import {get_translation} from "../common/mat4.js";
 import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
+import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
 import {scene_grid} from "./scenes/sce_grid.js";
@@ -15,6 +16,7 @@ export const enum Action {
     Wake,
     Damage,
     Explode,
+    Burn,
 }
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
@@ -76,6 +78,24 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
 
             // Destroy the missile.
             setTimeout(() => destroy(game.World, missile));
+            break;
+        }
+        case Action.Burn: {
+            let [flame_entity, other_entity] = payload as [Entity, Entity];
+            let other_collider = game.World.Collide[other_entity];
+
+            if (other_collider.Layers & Layer.Missile) {
+                dispatch(game, Action.Explode, [other_entity]);
+            } else {
+                for (let fire_entity of query_all(game.World, other_entity, Has.ControlFire)) {
+                    game.World.ControlFire[fire_entity].Trigger = true;
+                    // Just one fire is enough.
+                    break;
+                }
+            }
+
+            // Destroy the flame collider.
+            setTimeout(() => destroy(game.World, flame_entity));
             break;
         }
     }

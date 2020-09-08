@@ -3,6 +3,7 @@ import {audio_listener} from "../components/com_audio_listener.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
+import {control_spawn} from "../components/com_control_spawn.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {named} from "../components/com_named.js";
@@ -11,6 +12,8 @@ import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {shake} from "../components/com_shake.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {Has} from "../world.js";
+import {blueprint_flame_collider} from "./blu_flame_collider.js";
 import {blueprint_paw} from "./blu_paw.js";
 
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
@@ -38,7 +41,8 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         // Mouth.
                         Translation: [0, -0.2, 0],
                         Rotation: [0, 1, 0, 0],
-                        Using: [audio_source(false)],
+                        Using: [audio_source(false), control_spawn(blueprint_flame_collider, 0.3)],
+                        Disable: Has.ControlSpawn,
                         Children: [
                             {
                                 // Flame emitter.

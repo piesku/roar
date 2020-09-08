@@ -1,14 +1,11 @@
-import {get_forward, get_rotation, get_translation} from "../../common/mat4.js";
-import {Quat, Vec3} from "../../common/math.js";
+import {get_rotation, get_translation} from "../../common/mat4.js";
+import {Quat} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
 import {conjugate, from_euler, multiply} from "../../common/quat.js";
-import {ray_intersect_aabb} from "../../common/raycast.js";
 import {copy, transform_point} from "../../common/vec3.js";
-import {Action, dispatch} from "../actions.js";
-import {Collide} from "../components/com_collide.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
-import {Entity, Game, Layer} from "../game.js";
+import {Entity, Game} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
@@ -42,6 +39,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
         transform.World = headset.transform.matrix;
         transform.Dirty = true;
 
+        let mouth_entity = transform.Children[1];
+        game.World.Signature[mouth_entity] &= ~Has.ControlSpawn;
+
         for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
             game.World.EmitParticles[emitter].Trigger = false;
         }
@@ -52,46 +52,11 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                let mouth = transform.Children[1];
+                game.World.Signature[mouth_entity] |= Has.ControlSpawn;
+                game.World.AudioSource[mouth_entity].Trigger = snd_breath;
 
-                game.World.AudioSource[mouth].Trigger = snd_breath;
-
-                for (let emitter of query_all(game.World, mouth, Has.EmitParticles)) {
+                for (let emitter of query_all(game.World, mouth_entity, Has.EmitParticles)) {
                     game.World.EmitParticles[emitter].Trigger = true;
-                }
-
-                let mouth_transform = game.World.Transform[mouth];
-                let mouth_position: Vec3 = [0, 0, 0];
-                let mouth_direction: Vec3 = [0, 0, 0];
-                get_translation(mouth_position, mouth_transform.World);
-                get_forward(mouth_direction, mouth_transform.World);
-
-                let colliders: Array<Collide> = [];
-                for (let i = 0; i < game.World.Signature.length; i++) {
-                    if (game.World.Signature[i] & Has.Collide) {
-                        let collide = game.World.Collide[i];
-                        if (
-                            collide.Layers &
-                            (Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile)
-                        ) {
-                            colliders.push(collide);
-                        }
-                    }
-                }
-
-                let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
-                if (hit) {
-                    let other_collider = hit.Collider as Collide;
-                    let other_entity = other_collider.Entity;
-                    if (other_collider.Layers & Layer.Missile) {
-                        dispatch(game, Action.Explode, [other_entity]);
-                    } else {
-                        for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
-                            game.World.ControlFire[fire].Trigger = true;
-                            // Just one fire is enough.
-                            break;
-                        }
-                    }
                 }
             }
         }
