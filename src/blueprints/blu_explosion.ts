@@ -26,6 +26,8 @@ export function blueprint_explosion(game: Game): Blueprint {
                     shake(Infinity, 0.5),
                     emit_particles(1, 0, 0.2, true),
                     render_particles(game.Textures["fire"], [1, 1, 1, 0.5], 100, [1, 1, 1, 0], 10),
+                    light_point([1, 0.5, 0], 3),
+                    toggle(Has.Light, 0.3, true),
                 ],
             },
         ],

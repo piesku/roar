@@ -11,11 +11,13 @@ import {EmitParticles} from "./components/com_emit_particles.js";
 import {Lifespan} from "./components/com_lifespan.js";
 import {Light} from "./components/com_light.js";
 import {Move} from "./components/com_move.js";
+import {Named} from "./components/com_named.js";
 import {Render} from "./components/com_render.js";
 import {RigidBody} from "./components/com_rigid_body.js";
 import {Shake} from "./components/com_shake.js";
 import {Toggle} from "./components/com_toggle.js";
 import {Transform} from "./components/com_transform.js";
+import {Trigger} from "./components/com_trigger.js";
 
 const enum Component {
     Aim,
@@ -28,16 +30,17 @@ const enum Component {
     ControlSpawn,
     ControlXr,
     Cull,
-    Damage,
     EmitParticles,
     Lifespan,
     Light,
     Move,
+    Named,
     Render,
     RigidBody,
     Shake,
     Toggle,
     Transform,
+    Trigger,
 }
 
 export const enum Has {
@@ -51,16 +54,17 @@ export const enum Has {
     ControlSpawn = 1 << Component.ControlSpawn,
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
-    Damage = 1 << Component.Damage,
     EmitParticles = 1 << Component.EmitParticles,
     Lifespan = 1 << Component.Lifespan,
     Light = 1 << Component.Light,
     Move = 1 << Component.Move,
+    Named = 1 << Component.Named,
     Render = 1 << Component.Render,
     RigidBody = 1 << Component.RigidBody,
     Shake = 1 << Component.Shake,
     Toggle = 1 << Component.Toggle,
     Transform = 1 << Component.Transform,
+    Trigger = 1 << Component.Trigger,
 }
 
 export class World {
@@ -80,9 +84,11 @@ export class World {
     Lifespan: Array<Lifespan> = [];
     Light: Array<Light> = [];
     Move: Array<Move> = [];
+    Named: Array<Named> = [];
     Render: Array<Render> = [];
     RigidBody: Array<RigidBody> = [];
     Shake: Array<Shake> = [];
     Toggle: Array<Toggle> = [];
     Transform: Array<Transform> = [];
+    Trigger: Array<Trigger> = [];
 }

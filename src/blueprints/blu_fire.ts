@@ -14,13 +14,12 @@ export function blueprint_fire(game: Game): Blueprint {
         Children: [
             {
                 Using: [
-                    control_fire(60),
+                    control_fire(15),
                     shake(Infinity, 0.5),
                     emit_particles(5, 0.05, 1, true),
                     render_particles(game.Textures["fire"], [1, 0.5, 0, 0.2], 50, [1, 0, 0, 0], 10),
                     cull(Has.Shake | Has.EmitParticles | Has.Render),
                 ],
-                Disable: Has.Transform,
             },
         ],
     };

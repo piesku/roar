@@ -24,13 +24,20 @@ function update(game: Game, entity: Entity) {
     get_up(up, transform.World);
 
     let listener = game.Audio.listener;
-    listener.positionX.value = position[0];
-    listener.positionY.value = position[1];
-    listener.positionZ.value = position[2];
-    listener.forwardX.value = forward[0];
-    listener.forwardY.value = forward[1];
-    listener.forwardZ.value = forward[2];
-    listener.upX.value = up[0];
-    listener.upY.value = up[1];
-    listener.upZ.value = up[2];
+    if (listener.positionX) {
+        // The new AudioListener API.
+        listener.positionX.value = position[0];
+        listener.positionY.value = position[1];
+        listener.positionZ.value = position[2];
+        listener.forwardX.value = forward[0];
+        listener.forwardY.value = forward[1];
+        listener.forwardZ.value = forward[2];
+        listener.upX.value = up[0];
+        listener.upY.value = up[1];
+        listener.upZ.value = up[2];
+    } else {
+        // Firefox.
+        listener.setPosition(...position);
+        listener.setOrientation(...forward, ...up);
+    }
 }

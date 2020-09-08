@@ -49,8 +49,8 @@ function ExitButton() {
             onclick="$(${Action.ExitVr})"
             style="
                 padding: 1vmin;
-                background: #000;
                 color: #fff;
+                background: #000;
                 border: none;
             "
         >

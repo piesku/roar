@@ -4,10 +4,11 @@ import {map_range} from "../../common/number.js";
 import {conjugate, from_euler, multiply} from "../../common/quat.js";
 import {ray_intersect_aabb} from "../../common/raycast.js";
 import {copy, transform_point} from "../../common/vec3.js";
+import {Action, dispatch} from "../actions.js";
 import {Collide} from "../components/com_collide.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
-import {Entity, Game} from "../game.js";
+import {Entity, Game, Layer} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
@@ -69,7 +70,10 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                 for (let i = 0; i < game.World.Signature.length; i++) {
                     if (game.World.Signature[i] & Has.Collide) {
                         let collide = game.World.Collide[i];
-                        if (collide.Dynamic) {
+                        if (
+                            collide.Layers &
+                            (Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile)
+                        ) {
                             colliders.push(collide);
                         }
                     }
@@ -77,9 +81,16 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                 let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
                 if (hit) {
-                    let other = (hit.Collider as Collide).Entity;
-                    for (let fire of query_all(game.World, other, Has.ControlFire)) {
-                        game.World.ControlFire[fire].Trigger = true;
+                    let other_collider = hit.Collider as Collide;
+                    let other_entity = other_collider.Entity;
+                    if (other_collider.Layers & Layer.Missile) {
+                        dispatch(game, Action.Explode, [other_entity]);
+                    } else {
+                        for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
+                            game.World.ControlFire[fire].Trigger = true;
+                            // Just one fire is enough.
+                            break;
+                        }
                     }
                 }
             }
@@ -168,6 +179,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let rigid_body = game.World.RigidBody[building_entity];
                                 rigid_body.Kind = RigidKind.Kinematic;
                                 get_translation(rigid_body.LastPosition, building_transform.World);
+
+                                // Disable lifespan.
+                                game.World.Signature[building_entity] &= ~Has.Lifespan;
                             }
                         }
                     } else {
@@ -192,6 +206,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let rigid_body = game.World.RigidBody[building_entity];
                             rigid_body.Kind = RigidKind.Dynamic;
                             copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+
+                            // Enable lifespan.
+                            game.World.Signature[building_entity] |= Has.Lifespan;
                         }
                     }
                 }
@@ -287,6 +304,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                                 let rigid_body = game.World.RigidBody[building_entity];
                                 rigid_body.Kind = RigidKind.Kinematic;
                                 get_translation(rigid_body.LastPosition, building_transform.World);
+
+                                // Disable lifespan.
+                                game.World.Signature[building_entity] &= ~Has.Lifespan;
                             }
                         }
                     } else {
@@ -311,6 +331,9 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             let rigid_body = game.World.RigidBody[building_entity];
                             rigid_body.Kind = RigidKind.Dynamic;
                             copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+
+                            // Enable lifespan.
+                            game.World.Signature[building_entity] |= Has.Lifespan;
                         }
                     }
                 }

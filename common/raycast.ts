@@ -18,7 +18,7 @@ export function ray_intersect_aabb(
     let nearest_i = null;
     for (let i = 0; i < colliders.length; i++) {
         let t = intersection_time(origin, direction, colliders[i]);
-        if (t < nearest_t) {
+        if (t > 0 && t < nearest_t) {
             nearest_t = t;
             nearest_i = i;
         }

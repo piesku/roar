@@ -2,7 +2,7 @@ import {GL_CULL_FACE, GL_DEPTH_TEST, GL_ONE, GL_SRC_ALPHA} from "../common/webgl
 import {mat2_colored_unlit} from "../materials/mat2_colored_unlit.js";
 import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
-import {mesh_claws} from "../meshes/claws.js";
+import {mesh_claw} from "../meshes/claw.js";
 import {mesh_cube} from "../meshes/cube.js";
 import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
@@ -17,7 +17,6 @@ import {sys_control_move} from "./systems/sys_control_move.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
-import {sys_damage} from "./systems/sys_damage.js";
 import {sys_kinematic} from "./systems/sys_kinematic.js";
 import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
@@ -29,6 +28,7 @@ import {sys_resolution} from "./systems/sys_resolution.js";
 import {sys_shake} from "./systems/sys_shake.js";
 import {sys_toggle} from "./systems/sys_toggle.js";
 import {sys_transform} from "./systems/sys_transform.js";
+import {sys_trigger} from "./systems/sys_trigger.js";
 import {sys_ui} from "./systems/sys_ui.js";
 import {World} from "./world.js";
 import {xr_init} from "./xr.js";
@@ -58,13 +58,15 @@ export class Game {
     MaterialParticles = mat2_particles(this.Gl);
     MeshCube = mesh_cube(this.Gl);
     MeshPlane = mesh_plane(this.Gl);
-    MeshHand = mesh_claws(this.Gl);
+    MeshClaw = mesh_claw(this.Gl);
     Textures: Record<string, WebGLTexture> = {};
 
     Camera?: Camera;
     // The rendering pipeline supports 8 lights.
     LightPositions = new Float32Array(4 * 8);
     LightDetails = new Float32Array(4 * 8);
+
+    CurrentScene?: Function;
 
     constructor() {
         document.addEventListener("visibilitychange", () =>
@@ -95,7 +97,6 @@ export class Game {
         sys_control_spawn(this, delta);
 
         // Game logic.
-        sys_damage(this, delta);
         sys_aim(this, delta);
         sys_move(this, delta);
         sys_shake(this, delta);
@@ -108,6 +109,7 @@ export class Game {
         sys_kinematic(this, delta);
         sys_collide(this, delta);
         sys_resolution(this, delta);
+        sys_trigger(this, delta);
         sys_transform(this, delta);
 
         // Rendering.
@@ -122,8 +124,10 @@ export class Game {
 }
 export const enum Layer {
     None = 0,
-    Player = 1,
-    Ground = 2,
-    Building = 4,
-    Missile = 8,
+    PlayerHand = 1,
+    PlayerGrip = 2,
+    Ground = 4,
+    BuildingShell = 8,
+    BuildingBlock = 16,
+    Missile = 32,
 }

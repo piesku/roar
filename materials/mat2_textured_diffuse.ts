@@ -29,6 +29,7 @@ let fragment = `#version 300 es\n
     const int MAX_LIGHTS = 8;
 
     uniform vec4 color;
+    uniform float fog_level;
     uniform sampler2D sampler;
     uniform vec2 texscale;
     uniform float texoffset;
@@ -80,6 +81,7 @@ let fragment = `#version 300 es\n
         }
 
         frag_color = vec4(rgb, color.a) * texture(sampler, vert_texcoord * texscale);
+        frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(2.0, 0.0, vert_pos.y - fog_level));
     }
 `;
 
@@ -93,6 +95,7 @@ export function mat2_textured_diffuse(gl: WebGL2RenderingContext): Material<Text
             World: gl.getUniformLocation(program, "world")!,
             Self: gl.getUniformLocation(program, "self")!,
             Color: gl.getUniformLocation(program, "color")!,
+            FogLevel: gl.getUniformLocation(program, "fog_level")!,
             Sampler: gl.getUniformLocation(program, "sampler")!,
             TexScale: gl.getUniformLocation(program, "texscale")!,
             TexOffset: gl.getUniformLocation(program, "texoffset")!,
