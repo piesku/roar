@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=0" />
 <title>ROAR</title>
 <link rel="stylesheet" href="game.css" />
+<link rel="stylesheet" href="debug.css" />
 <canvas id="scene"></canvas>
 <canvas id="billboard"></canvas>
 <main></main>
@@ -14,4 +15,11 @@
 <img src="../textures/police.webp" id="police" />
 <img src="../textures/missile2.webp" id="missile" />
 <img src="../textures/noise2.webp" id="noise" />
+
+<div id="debug">
+    <div>update: <span id="update"></span></div>
+    <div>delta: <span id="delta"></span></div>
+    <div>fps: <span id="fps"></span></div>
+</div>
+
 <script src="game.terser.js"></script>
