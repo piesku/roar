@@ -30,26 +30,16 @@ export function blueprint_police(game: Game): Blueprint {
                 Translation: [-0.5, 2, 0],
                 Using: [
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [1, 1, 0, 1]),
-                    toggle(Has.Render, 0.5, true),
-                ],
-                Children: [
-                    {
-                        Translation: [0, 5, 0],
-                        Using: [light_point([1, 0, 0], 2), toggle(Has.Light, 0.5, true)],
-                    },
+                    light_point([1, 0, 0], 2),
+                    toggle(Has.Render | Has.Light, 0.5, true),
                 ],
             },
             {
                 Translation: [0.5, 2, 0],
                 Using: [
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [0, 1, 1, 1]),
-                    toggle(Has.Render, 0.5, false),
-                ],
-                Children: [
-                    {
-                        Translation: [0, 5, 0],
-                        Using: [light_point([0, 0, 1], 2), toggle(Has.Light, 0.5, false)],
-                    },
+                    light_point([0, 0, 1], 2),
+                    toggle(Has.Render | Has.Light, 0.5, false),
                 ],
             },
             {
