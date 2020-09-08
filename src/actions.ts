@@ -4,10 +4,12 @@ import {copy} from "../common/quat.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
+import {scene_grid} from "./scenes/sce_grid.js";
 import {Has} from "./world.js";
 import {xr_enter} from "./xr.js";
 
 export const enum Action {
+    PlayNow,
     EnterVr,
     ExitVr,
     Wake,
@@ -17,6 +19,10 @@ export const enum Action {
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
+        case Action.PlayNow: {
+            setTimeout(() => scene_grid(game));
+            break;
+        }
         case Action.EnterVr: {
             if (game.XrSupported) {
                 xr_enter(game);

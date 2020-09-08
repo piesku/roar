@@ -73,6 +73,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Left hand.
+                Translation: [-0.5, 2, 0],
                 Using: [
                     control_xr("left"),
                     collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
@@ -98,6 +99,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Right hand.
+                Translation: [0.5, 2, 0],
                 Using: [
                     control_xr("right"),
                     collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),

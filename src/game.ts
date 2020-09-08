@@ -70,6 +70,8 @@ export class Game {
     LightPositions = new Float32Array(4 * 8);
     LightDetails = new Float32Array(4 * 8);
 
+    CurrentScene?: Function;
+
     constructor() {
         document.addEventListener("visibilitychange", () =>
             document.hidden ? loop_stop(this) : loop_start(this)

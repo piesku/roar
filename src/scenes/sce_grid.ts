@@ -21,6 +21,7 @@ import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
 export function scene_grid(game: Game) {
+    game.CurrentScene = scene_grid;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -28,11 +29,16 @@ export function scene_grid(game: Game) {
 
     set_seed(Date.now());
 
-    // Camera.
+    // Camera rig.
     instantiate(game, {
-        ...blueprint_camera(game),
-        Translation: [0, 10, 10],
-        Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
+        Using: [control_move(null, [0, 1, 0, 0]), move(0, 0.02)],
+        Children: [
+            {
+                ...blueprint_camera(game),
+                Translation: [0, 10, 15],
+                Rotation: from_euler([0, 0, 0, 0], 35, 180, 0),
+            },
+        ],
     });
 
     let scale = 3;

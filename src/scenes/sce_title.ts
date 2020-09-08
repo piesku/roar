@@ -11,6 +11,7 @@ import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
 import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
+import {named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
@@ -19,12 +20,20 @@ import {Game, Layer} from "../game.js";
 import {Has, World} from "../world.js";
 
 export function scene_title(game: Game) {
+    game.CurrentScene = scene_title;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
 
     set_seed(Date.now());
+
+    // Camera.
+    instantiate(game, {
+        ...blueprint_camera(game),
+        Translation: [-2, 0.1, 2],
+        Rotation: from_euler([0, 0, 0, 0], -15, 105, 0),
+    });
 
     // Main Light.
     instantiate(game, {
@@ -34,13 +43,14 @@ export function scene_title(game: Game) {
 
     // Ground.
     instantiate(game, {
-        Translation: [0, -0.5, 0],
+        Translation: [0, -0.5, 1],
         Scale: [10, 1, 10],
         Using: [collide(true, Layer.Ground, Layer.None, [10, 1, 10]), rigid_body(RigidKind.Static)],
         Children: [
             {
                 Translation: [0, 0.5, 0],
                 Using: [
+                    named("base"),
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
@@ -52,13 +62,6 @@ export function scene_title(game: Game) {
                 ],
             },
         ],
-    });
-
-    // Camera.
-    instantiate(game, {
-        ...blueprint_camera(game),
-        Translation: [-2, 0.1, 2],
-        Rotation: from_euler([0, 0, 0, 0], -15, 105, 0),
     });
 
     instantiate(game, {
