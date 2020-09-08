@@ -24,6 +24,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             },
             {
                 // Head.
+                Translation: [0, 2, 0],
                 Using: [control_xr("head")],
                 Children: [
                     {
@@ -70,6 +71,11 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 ],
                             },
                         ],
+                    },
+                    {
+                        // Helicopter and missile target.
+                        Translation: [0, 0, -1],
+                        Using: [named("head")],
                     },
                 ],
             },
@@ -124,11 +130,6 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Scale: [1 / scale, 1 / scale, 1 / scale],
                     },
                 ],
-            },
-            {
-                // Helicopter and missile target.
-                Translation: [0, 1.5, -1],
-                Using: [named("head")],
             },
         ],
     };
