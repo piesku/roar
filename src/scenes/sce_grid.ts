@@ -1,5 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
+import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
@@ -73,7 +74,10 @@ export function scene_grid(game: Game) {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
-                        game.Textures["noise"]
+                        game.Textures["noise"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        -0.5
                     ),
                 ],
             },

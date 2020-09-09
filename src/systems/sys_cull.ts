@@ -33,7 +33,7 @@ function update(game: Game, entity: Entity) {
     if (
         Math.abs(position[0]) > 1.1 ||
         Math.abs(position[1]) > 1.1 ||
-        Math.abs(position[2]) > 0.95
+        Math.abs(position[2]) > camera.CullZ
     ) {
         game.World.Signature[entity] &= ~cull.Mask;
     } else {

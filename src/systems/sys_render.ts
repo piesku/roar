@@ -142,6 +142,7 @@ function use_textured_diffuse(
     game.Gl.useProgram(material.Program);
     game.Gl.uniformMatrix4fv(material.Locations.Pv, false, eye.Pv);
     game.Gl.uniform3fv(material.Locations.EyePosition, eye.Position);
+    game.Gl.uniform1f(material.Locations.FogDistance, eye.FogDistance);
     game.Gl.uniform4fv(material.Locations.LightPositions, game.LightPositions);
     game.Gl.uniform4fv(material.Locations.LightDetails, game.LightDetails);
 }

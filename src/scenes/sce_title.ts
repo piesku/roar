@@ -1,6 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
-import {GL_CCW} from "../../common/webgl.js";
+import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
@@ -54,7 +54,10 @@ export function scene_title(game: Game) {
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
-                        game.Textures["noise"]
+                        game.Textures["noise"],
+                        GL_CW,
+                        [1, 1, 1, 1],
+                        -0.5
                     ),
                 ],
             },

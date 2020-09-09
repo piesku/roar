@@ -1,4 +1,4 @@
-import {create, get_translation, multiply, perspective} from "../../common/mat4.js";
+import {create, get_translation, invert, multiply, perspective} from "../../common/mat4.js";
 import {Vec3} from "../../common/math.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {Entity, Game} from "../game.js";
@@ -64,45 +64,23 @@ function update_vr(game: Game, entity: Entity, camera: CameraXr) {
     let pose = game.XrFrame!.getViewerPose(game.XrSpace);
 
     for (let viewpoint of pose.views) {
-        let pv = create();
-
-        // Compute PV, where V is the inverse of eye's World (We) matrix, which is
-        // unknown. Instead, we have view.transform.inverse.matrix, which are eyes'
-        // inverted local matrices (Le), relative to the camera's transform's space,
-        // and the camera entity's World and Self.
-
-        // Definitions:
-        //     M^ denotes an inverse of M.
-        //     Le: eye's matrix in camera's space
-        //     We: eye's matrix in world space
-        //     Wc: camera's matrix in world space
-        //     Sc: camera's self matrix (world -> camera space)
-
-        // Given that:
-        //     (AB)^ == B^ * A^
-        //     view.transform.inverse.matrix == Le^
-
-        // Compute PV as:
-        //     PV = P * V
-        //     PV = P * We^
-        //     PV = P * (Wc * Le)^
-        //     PV = P * Le^ * Wc^
-        //     PV = P * view.transform.inverse.matrix * Sc
-
-        // Or, using multiply()'s two-operand multiplication:
-        //     PV = P * view.transform.inverse.matrix
-        //     PV = PV * Sc
-        multiply(pv, viewpoint.projectionMatrix, viewpoint.transform.inverse.matrix);
-        multiply(pv, pv, transform.Self);
-
+        // Compute the eye's world matrix.
         multiply(eye, transform.World, viewpoint.transform.matrix);
+
         let position: Vec3 = [0, 0, 0];
         get_translation(position, eye);
+
+        // Compute the view matrix.
+        invert(eye, eye);
+        // Compute the PV matrix.
+        let pv = create();
+        multiply(pv, viewpoint.projectionMatrix, eye);
 
         camera.Eyes.push({
             Viewpoint: viewpoint,
             Pv: pv,
             Position: position,
+            FogDistance: camera.FogDistance,
         });
     }
 }

@@ -12,6 +12,7 @@ export const enum CameraKind {
 export interface CameraEye {
     Pv: Mat4;
     Position: Vec3;
+    FogDistance: number;
 }
 
 export interface CameraPerspective extends CameraEye {
@@ -20,6 +21,7 @@ export interface CameraPerspective extends CameraEye {
     Near: number;
     Far: number;
     Projection: Mat4;
+    CullZ: number;
 }
 
 export function camera_persp(fovy: number, near: number, far: number) {
@@ -33,6 +35,8 @@ export function camera_persp(fovy: number, near: number, far: number) {
             Projection: create(),
             Pv: create(),
             Position: [0, 0, 0],
+            FogDistance: 25,
+            CullZ: 1,
         };
     };
 }
@@ -44,6 +48,8 @@ export interface XrEye extends CameraEye {
 export interface CameraXr {
     Kind: CameraKind.Xr;
     Eyes: Array<XrEye>;
+    FogDistance: number;
+    CullZ: number;
 }
 
 export function camera_xr() {
@@ -52,6 +58,8 @@ export function camera_xr() {
         game.World.Camera[entity] = {
             Kind: CameraKind.Xr,
             Eyes: [],
+            FogDistance: 10,
+            CullZ: 0.95,
         };
     };
 }
