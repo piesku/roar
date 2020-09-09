@@ -36,9 +36,13 @@ function update(game: Game, entity: Entity) {
 
     if (control.Controller === "motion") {
         let move = game.World.Move[entity];
-        let head_entity = transform.Children[1];
+
+        let bob_entity = transform.Children[0];
+        let bob_transform = game.World.Transform[bob_entity];
+        let head_entity = bob_transform.Children[1];
         let head_transform = game.World.Transform[head_entity];
 
+        // Walking in the direction of looking.
         let left = game.XrInputs["left"];
         if (left?.gamepad) {
             let axis_strafe = left.gamepad.axes[2];
@@ -72,6 +76,18 @@ function update(game: Game, entity: Entity) {
                 direction[1] = 0;
                 move.Directions.push(direction);
             }
+        }
+
+        // Bobbing while walking.
+        if (move.Directions.length > 0) {
+            let bobbing_amplitude = 0.03;
+            let bobbing_frequency = 5;
+            let bobbing =
+                (Math.sin(bobbing_frequency * transform.Translation[0]) +
+                    Math.sin(bobbing_frequency * transform.Translation[2])) *
+                bobbing_amplitude;
+            transform.Translation[1] = bobbing;
+            transform.Dirty = true;
         }
     }
 
