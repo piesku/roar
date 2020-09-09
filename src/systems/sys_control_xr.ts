@@ -16,46 +16,68 @@ export function sys_control_xr(game: Game, delta: number) {
         return;
     }
 
-    let inputs: Record<string, XRInputSource> = {};
+    game.XrInputs = {};
     for (let input of game.XrFrame.session.inputSources) {
         if (input.gripSpace) {
-            inputs[input.handedness] = input;
+            game.XrInputs[input.handedness] = input;
         }
     }
 
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, inputs);
+            update(game, i);
         }
     }
 }
 
-function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource>) {
+function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlXr[entity];
 
-    if (control.Controller === "head") {
-        let headset = game.XrFrame!.getViewerPose(game.XrSpace);
-        transform.World = headset.transform.matrix;
-        transform.Dirty = true;
+    if (control.Controller === "motion") {
+        let move = game.World.Move[entity];
 
-        let mouth_entity = transform.Children[1];
-        game.World.Signature[mouth_entity] &= ~Has.ControlSpawn;
+        let left = game.XrInputs["left"];
+        if (left?.gamepad) {
+            let axis_strafe = left.gamepad.axes[2];
+            if (axis_strafe) {
+                move.Directions.push([axis_strafe, 0, 0]);
+            }
+            let axis_forward = left.gamepad.axes[3];
+            if (axis_forward) {
+                move.Directions.push([0, 0, axis_forward]);
+            }
+        }
+        let right = game.XrInputs["right"];
+        if (right?.gamepad) {
+            let axis_strafe = right.gamepad.axes[2];
+            if (axis_strafe) {
+                move.Directions.push([axis_strafe, 0, 0]);
+            }
+            let axis_forward = right.gamepad.axes[3];
+            if (axis_forward) {
+                move.Directions.push([0, 0, axis_forward]);
+            }
+        }
+    }
+
+    if (control.Controller === "breath") {
+        game.World.Signature[entity] &= ~Has.ControlSpawn;
 
         for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
             game.World.EmitParticles[emitter].Trigger = false;
         }
 
-        let left = inputs["left"];
-        let right = inputs["right"];
+        let left = game.XrInputs["left"];
+        let right = game.XrInputs["right"];
         if (left?.gamepad && right?.gamepad) {
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                game.World.Signature[mouth_entity] |= Has.ControlSpawn;
-                game.World.AudioSource[mouth_entity].Trigger = snd_breath;
+                game.World.Signature[entity] |= Has.ControlSpawn;
+                game.World.AudioSource[entity].Trigger = snd_breath;
 
-                for (let emitter of query_all(game.World, mouth_entity, Has.EmitParticles)) {
+                for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
                     game.World.EmitParticles[emitter].Trigger = true;
                 }
             }
@@ -64,7 +86,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
     }
 
     if (control.Controller === "left") {
-        let input = inputs["left"];
+        let input = game.XrInputs["left"];
         if (input) {
             if (input.gamepad) {
                 let squeeze = input.gamepad.buttons[1];
@@ -178,18 +200,12 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                     }
                 }
             }
-
-            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
-            if (pose) {
-                transform.World = pose.transform.matrix;
-                transform.Dirty = true;
-            }
         }
         return;
     }
 
     if (control.Controller === "right") {
-        let input = inputs["right"];
+        let input = game.XrInputs["right"];
         if (input) {
             if (input.gamepad) {
                 let squeeze = input.gamepad.buttons[1];
@@ -302,12 +318,6 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                         }
                     }
                 }
-            }
-
-            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
-            if (pose) {
-                transform.World = pose.transform.matrix;
-                transform.Dirty = true;
             }
         }
         return;

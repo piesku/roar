@@ -15,6 +15,7 @@ import {sys_camera} from "./systems/sys_camera.js";
 import {sys_collide} from "./systems/sys_collide.js";
 import {sys_control_fire} from "./systems/sys_control_fire.js";
 import {sys_control_move} from "./systems/sys_control_move.js";
+import {sys_control_pose} from "./systems/sys_control_pose.js";
 import {sys_control_spawn} from "./systems/sys_control_spawn.js";
 import {sys_control_xr} from "./systems/sys_control_xr.js";
 import {sys_cull} from "./systems/sys_cull.js";
@@ -55,6 +56,7 @@ export class Game {
     XrSpace?: XRReferenceSpace;
     // XrFrame can be used to check whether we're presenting to a VR display.
     XrFrame?: XRFrame;
+    XrInputs: Record<string, XRInputSource> = {};
 
     MaterialWireframe = mat2_wireframe(this.Gl);
     MaterialTexturedDiffuse = mat2_textured_diffuse(this.Gl);
@@ -110,6 +112,7 @@ export class Game {
         sys_toggle(this, delta);
 
         // Physics and collisions.
+        sys_control_pose(this, delta);
         sys_physics(this, delta);
         sys_transform(this, delta);
         sys_kinematic(this, delta);

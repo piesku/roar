@@ -1,7 +1,7 @@
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
-type Controller = "head" | "left" | "right";
+type Controller = "motion" | "breath" | "left" | "right";
 
 export interface ControlXr {
     Controller: Controller;

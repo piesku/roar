@@ -3,9 +3,11 @@ import {audio_listener} from "../components/com_audio_listener.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
+import {control_pose} from "../components/com_control_pose.js";
 import {control_spawn} from "../components/com_control_spawn.js";
 import {control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
+import {move} from "../components/com_move.js";
 import {named} from "../components/com_named.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
@@ -19,7 +21,7 @@ import {blueprint_paw} from "./blu_paw.js";
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
         Scale: [scale, scale, scale],
-        Using: [named("base")],
+        Using: [control_xr("motion"), move(1, 0), named("base")],
         Children: [
             {
                 // Headset camera.
@@ -28,7 +30,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
             {
                 // Head.
                 Translation: [0, 2, 0],
-                Using: [control_xr("head"), named("head")],
+                Using: [control_pose("head"), named("head")],
                 Children: [
                     {
                         // The head space has +Z towards the user, so we need to
@@ -41,7 +43,11 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         // Mouth.
                         Translation: [0, -0.2, 0],
                         Rotation: [0, 1, 0, 0],
-                        Using: [audio_source(false), control_spawn(blueprint_flame_collider, 0.3)],
+                        Using: [
+                            control_xr("breath"),
+                            audio_source(false),
+                            control_spawn(blueprint_flame_collider, 0.3),
+                        ],
                         Disable: Has.ControlSpawn,
                         Children: [
                             {
@@ -87,6 +93,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                 // Left hand.
                 Translation: [-0.5, 2, 0],
                 Using: [
+                    control_pose("left"),
                     control_xr("left"),
                     collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                     rigid_body(RigidKind.Kinematic),
@@ -113,6 +120,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                 // Right hand.
                 Translation: [0.5, 2, 0],
                 Using: [
+                    control_pose("right"),
                     control_xr("right"),
                     collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                     rigid_body(RigidKind.Kinematic),
