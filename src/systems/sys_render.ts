@@ -115,7 +115,9 @@ function render(game: Game, eye: CameraEye, phase: RenderPhase) {
                     break;
                 case RenderKind.Particles:
                     let emitter = game.World.EmitParticles[i];
-                    draw_particles(game, render, emitter);
+                    if (emitter.Instances.length > 0) {
+                        draw_particles(game, render, emitter);
+                    }
                     break;
             }
         }
