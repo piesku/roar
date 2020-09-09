@@ -1,5 +1,5 @@
 import {create, get_translation, invert, multiply, perspective} from "../../common/mat4.js";
-import {Vec3} from "../../common/math.js";
+import {Mat4} from "../../common/math.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
@@ -50,37 +50,38 @@ function update_perspective(game: Game, entity: Entity, camera: CameraPerspectiv
         }
     }
 
+    camera.View = transform.Self.slice() as Mat4;
     multiply(camera.Pv, camera.Projection, transform.Self);
     get_translation(camera.Position, transform.World);
 }
 
-let eye = create();
-
 function update_vr(game: Game, entity: Entity, camera: CameraXr) {
     game.Camera = camera;
-    camera.Eyes = [];
 
     let transform = game.World.Transform[entity];
     let pose = game.XrFrame!.getViewerPose(game.XrSpace);
 
     for (let viewpoint of pose.views) {
-        // Compute the eye's world matrix.
-        multiply(eye, transform.World, viewpoint.transform.matrix);
+        if (!camera.Eyes[viewpoint.eye]) {
+            camera.Eyes[viewpoint.eye] = {
+                Viewpoint: viewpoint,
+                View: create(),
+                Pv: create(),
+                Position: [0, 0, 0],
+                FogDistance: camera.FogDistance,
+            };
+        }
 
-        let position: Vec3 = [0, 0, 0];
-        get_translation(position, eye);
+        let eye = camera.Eyes[viewpoint.eye];
+        eye.Viewpoint = viewpoint;
+
+        // Compute the eye's world matrix.
+        multiply(eye.View, transform.World, viewpoint.transform.matrix);
+        get_translation(eye.Position, eye.View);
 
         // Compute the view matrix.
-        invert(eye, eye);
+        invert(eye.View, eye.View);
         // Compute the PV matrix.
-        let pv = create();
-        multiply(pv, viewpoint.projectionMatrix, eye);
-
-        camera.Eyes.push({
-            Viewpoint: viewpoint,
-            Pv: pv,
-            Position: position,
-            FogDistance: camera.FogDistance,
-        });
+        multiply(eye.Pv, viewpoint.projectionMatrix, eye.View);
     }
 }

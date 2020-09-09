@@ -58,7 +58,8 @@ function render_vr(game: Game, camera: CameraXr) {
     game.Gl.bindFramebuffer(GL_FRAMEBUFFER, layer.framebuffer);
     game.Gl.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (let eye of camera.Eyes) {
+    for (let name in camera.Eyes) {
+        let eye = camera.Eyes[name];
         let viewport = layer.getViewport(eye.Viewpoint);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
         render(game, eye, RenderPhase.Opaque);
