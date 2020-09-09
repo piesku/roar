@@ -30,7 +30,11 @@ function update(game: Game, entity: Entity) {
         transform_point(position, position, camera.Pv);
     }
 
-    if (Math.abs(position[0]) > 1.1 || Math.abs(position[1]) > 1.1 || Math.abs(position[2]) > 1.1) {
+    if (
+        Math.abs(position[0]) > 1.1 ||
+        Math.abs(position[1]) > 1.1 ||
+        Math.abs(position[2]) > 0.95
+    ) {
         game.World.Signature[entity] &= ~cull.Mask;
     } else {
         game.World.Signature[entity] |= cull.Mask;

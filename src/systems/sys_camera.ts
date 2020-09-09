@@ -1,4 +1,5 @@
-import {create, multiply, perspective} from "../../common/mat4.js";
+import {create, get_translation, multiply, perspective} from "../../common/mat4.js";
+import {Vec3} from "../../common/math.js";
 import {CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
@@ -50,7 +51,10 @@ function update_perspective(game: Game, entity: Entity, camera: CameraPerspectiv
     }
 
     multiply(camera.Pv, camera.Projection, transform.Self);
+    get_translation(camera.Position, transform.World);
 }
+
+let eye = create();
 
 function update_vr(game: Game, entity: Entity, camera: CameraXr) {
     game.Camera = camera;
@@ -59,7 +63,7 @@ function update_vr(game: Game, entity: Entity, camera: CameraXr) {
     let transform = game.World.Transform[entity];
     let pose = game.XrFrame!.getViewerPose(game.XrSpace);
 
-    for (let view of pose.views) {
+    for (let viewpoint of pose.views) {
         let pv = create();
 
         // Compute PV, where V is the inverse of eye's World (We) matrix, which is
@@ -88,12 +92,17 @@ function update_vr(game: Game, entity: Entity, camera: CameraXr) {
         // Or, using multiply()'s two-operand multiplication:
         //     PV = P * view.transform.inverse.matrix
         //     PV = PV * Sc
-        multiply(pv, view.projectionMatrix, view.transform.inverse.matrix);
+        multiply(pv, viewpoint.projectionMatrix, viewpoint.transform.inverse.matrix);
         multiply(pv, pv, transform.Self);
 
+        multiply(eye, transform.World, viewpoint.transform.matrix);
+        let position: Vec3 = [0, 0, 0];
+        get_translation(position, eye);
+
         camera.Eyes.push({
-            View: view,
+            Viewpoint: viewpoint,
             Pv: pv,
+            Position: position,
         });
     }
 }

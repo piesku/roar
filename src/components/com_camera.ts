@@ -1,5 +1,5 @@
 import {create} from "../../common/mat4.js";
-import {Mat4} from "../../common/math.js";
+import {Mat4, Vec3} from "../../common/math.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -9,13 +9,17 @@ export const enum CameraKind {
     Xr,
 }
 
-export interface CameraPerspective {
+export interface CameraEye {
+    Pv: Mat4;
+    Position: Vec3;
+}
+
+export interface CameraPerspective extends CameraEye {
     Kind: CameraKind.Perspective;
     FovY: number;
     Near: number;
     Far: number;
     Projection: Mat4;
-    Pv: Mat4;
 }
 
 export function camera_persp(fovy: number, near: number, far: number) {
@@ -28,18 +32,18 @@ export function camera_persp(fovy: number, near: number, far: number) {
             Far: far,
             Projection: create(),
             Pv: create(),
+            Position: [0, 0, 0],
         };
     };
 }
 
-export interface CameraEye {
-    View: XRView;
-    Pv: Mat4;
+export interface XrEye extends CameraEye {
+    Viewpoint: XRView;
 }
 
 export interface CameraXr {
     Kind: CameraKind.Xr;
-    Eyes: Array<CameraEye>;
+    Eyes: Array<XrEye>;
 }
 
 export function camera_xr() {

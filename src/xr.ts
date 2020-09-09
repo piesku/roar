@@ -14,6 +14,7 @@ export async function xr_enter(game: Game) {
 
     session.updateRenderState({
         baseLayer: new XRWebGLLayer(session, game.Gl),
+        depthFar: 100,
     });
 
     loop_stop(game);
