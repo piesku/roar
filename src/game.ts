@@ -25,6 +25,7 @@ import {sys_lifespan} from "./systems/sys_lifespan.js";
 import {sys_light} from "./systems/sys_light.js";
 import {sys_move} from "./systems/sys_move.js";
 import {sys_particles} from "./systems/sys_particles.js";
+import {sys_physics_damage} from "./systems/sys_physics_damage.js";
 import {sys_physics_integrate} from "./systems/sys_physics_integrate.js";
 import {sys_physics_kinematic} from "./systems/sys_physics_kinematic.js";
 import {sys_physics_resolve} from "./systems/sys_physics_resolve.js";
@@ -118,6 +119,7 @@ export class Game {
         sys_physics_kinematic(this, delta);
         sys_collide(this, delta);
         sys_physics_resolve(this, delta);
+        sys_physics_damage(this, delta);
         sys_trigger(this, delta);
         sys_transform(this, delta);
 
