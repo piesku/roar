@@ -1,8 +1,8 @@
 import {get_rotation, get_translation} from "../../common/mat4.js";
-import {Quat} from "../../common/math.js";
+import {Quat, Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
 import {conjugate, from_euler, multiply} from "../../common/quat.js";
-import {copy, transform_point} from "../../common/vec3.js";
+import {copy, transform_direction, transform_point} from "../../common/vec3.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
@@ -36,27 +36,41 @@ function update(game: Game, entity: Entity) {
 
     if (control.Controller === "motion") {
         let move = game.World.Move[entity];
+        let head_entity = transform.Children[1];
+        let head_transform = game.World.Transform[head_entity];
 
         let left = game.XrInputs["left"];
         if (left?.gamepad) {
             let axis_strafe = left.gamepad.axes[2];
             if (axis_strafe) {
-                move.Directions.push([axis_strafe, 0, 0]);
+                let direction: Vec3 = [axis_strafe, 0, 0];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
             }
             let axis_forward = left.gamepad.axes[3];
             if (axis_forward) {
-                move.Directions.push([0, 0, axis_forward]);
+                let direction: Vec3 = [0, 0, axis_forward];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
             }
         }
         let right = game.XrInputs["right"];
         if (right?.gamepad) {
             let axis_strafe = right.gamepad.axes[2];
             if (axis_strafe) {
-                move.Directions.push([axis_strafe, 0, 0]);
+                let direction: Vec3 = [axis_strafe, 0, 0];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
             }
             let axis_forward = right.gamepad.axes[3];
             if (axis_forward) {
-                move.Directions.push([0, 0, axis_forward]);
+                let direction: Vec3 = [0, 0, axis_forward];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
             }
         }
     }
