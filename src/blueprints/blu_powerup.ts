@@ -28,7 +28,6 @@ export function blueprint_powerup(game: Game): Blueprint {
                 ],
             },
             {
-                Offset: 1000,
                 Translation: [0, 0, 0.5],
                 Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
                 Using: [

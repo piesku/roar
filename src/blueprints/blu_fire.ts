@@ -10,7 +10,6 @@ import {Has} from "../world.js";
 
 export function blueprint_fire(game: Game): Blueprint {
     return {
-        Offset: 1000,
         Rotation: from_euler([0, 0, 0, 0], -80, 10, 0),
         Scale: [0.5, 0.5, 0.5],
         Using: [
