@@ -4,6 +4,7 @@ import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
+import {blueprint_launch} from "../blueprints/blu_launch.js";
 import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
@@ -15,8 +16,7 @@ import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
-import {shake} from "../components/com_shake.js";
-import {MISSILE_SPAWN_FREQUENCY, MISSILE_SPAWN_Z} from "../config.js";
+import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -122,14 +122,17 @@ export function scene_grid(game: Game) {
 
     // Missile spawner.
     instantiate(game, {
-        Translation: [0, 11, MISSILE_SPAWN_Z],
+        Using: [control_move(null, [0, 1, 0, 0]), move(0, 4)],
         Children: [
             {
+                Translation: [0, 1, -50],
                 Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
-                Using: [
-                    control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY),
-                    shake(Infinity, 10),
-                ],
+                Using: [control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY)],
+            },
+            {
+                Translation: [0, 1, -50],
+                Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
+                Using: [control_spawn(blueprint_launch, MISSILE_SPAWN_FREQUENCY)],
             },
         ],
     });
