@@ -22,14 +22,20 @@ function update(game: Game, entity: Entity, delta: number) {
         control.Trigger = false;
     }
 
-    if (control.Remaining < 0) {
-        // Put the fire out.
-        game.World.Signature[entity] &= ~Has.Transform;
-        control.Remaining = 0;
-    } else {
+    if (control.Remaining > 0) {
         let emitter = game.World.EmitParticles[entity];
         let t = control.Remaining / control.Duration;
         emitter.Frequency = ease_in_quad(1.1 - t);
         control.Remaining -= delta;
+
+        // Damage the building.
+        let transform = game.World.Transform[entity];
+        if (transform.Parent) {
+            let lifespan = game.World.Lifespan[transform.Parent];
+            lifespan.Age += delta;
+        }
+    } else {
+        // Put the fire out.
+        game.World.Signature[entity] &= ~Has.Transform;
     }
 }

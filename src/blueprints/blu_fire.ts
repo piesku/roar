@@ -10,18 +10,15 @@ import {Has} from "../world.js";
 
 export function blueprint_fire(game: Game): Blueprint {
     return {
+        Offset: 1000,
         Rotation: from_euler([0, 0, 0, 0], -80, 10, 0),
-        Children: [
-            {
-                Offset: 1000,
-                Using: [
-                    control_fire(15),
-                    shake(Infinity, 0.5),
-                    emit_particles(5, 0.05, 1, true),
-                    render_particles(game.Textures["fire"], [1, 0.5, 0, 0.2], 50, [1, 0, 0, 0], 10),
-                    cull(Has.Shake | Has.EmitParticles | Has.Render),
-                ],
-            },
+        Scale: [0.5, 0.5, 0.5],
+        Using: [
+            control_fire(15),
+            shake(Infinity, 0.5),
+            emit_particles(5, 0.05, 1, true),
+            render_particles(game.Textures["fire"], [1, 0.5, 0, 0.2], 50, [1, 0, 0, 0], 10),
+            cull(Has.Shake | Has.EmitParticles | Has.Render),
         ],
     };
 }
