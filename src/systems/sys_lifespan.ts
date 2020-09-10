@@ -1,3 +1,4 @@
+import {dispatch} from "../actions.js";
 import {destroy} from "../core.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
@@ -16,6 +17,9 @@ function update(game: Game, entity: Entity, delta: number) {
     let lifespan = game.World.Lifespan[entity];
     lifespan.Age += delta;
     if (lifespan.Age > lifespan.Max) {
-        destroy(game.World, entity);
+        setTimeout(() => destroy(game.World, entity));
+        if (lifespan.Action) {
+            dispatch(game, lifespan.Action, entity);
+        }
     }
 }

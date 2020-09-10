@@ -1,3 +1,4 @@
+import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
 import {cull} from "../components/com_cull.js";
 import {lifespan} from "../components/com_lifespan.js";
@@ -24,7 +25,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
                 game.MeshCube,
                 game.Textures["building" + variant]
             ),
-            lifespan(BUILDING_LIFESPAN),
+            lifespan(BUILDING_LIFESPAN, Action.Collapse),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody,

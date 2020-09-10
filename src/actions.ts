@@ -1,6 +1,7 @@
 import {get_translation} from "../common/mat4.js";
 import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
+import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
@@ -17,6 +18,7 @@ export const enum Action {
     Damage,
     Explode,
     Burn,
+    Collapse,
 }
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
@@ -96,6 +98,20 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
 
             // Destroy the flame collider.
             setTimeout(() => destroy(game.World, flame_entity));
+            break;
+        }
+        case Action.Collapse: {
+            let building = payload as Entity;
+
+            // Create the collapse smoke.
+            let transform = game.World.Transform[building];
+            let position: Vec3 = [0, 0, 0];
+            get_translation(position, transform.World);
+            instantiate(game, {
+                Translation: position,
+                ...blueprint_collapse(game),
+            });
+
             break;
         }
     }

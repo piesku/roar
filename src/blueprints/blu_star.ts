@@ -1,4 +1,5 @@
 import {from_euler} from "../../common/quat.js";
+import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
 import {cull} from "../components/com_cull.js";
 import {lifespan} from "../components/com_lifespan.js";
@@ -24,7 +25,7 @@ export function blueprint_star(game: Game): Blueprint {
                 game.MeshCube,
                 game.Textures["building2"]
             ),
-            lifespan(BUILDING_LIFESPAN),
+            lifespan(BUILDING_LIFESPAN, Action.Collapse),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody,
