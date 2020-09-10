@@ -2,7 +2,9 @@ import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
 import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
+import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
+import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_paw} from "../blueprints/blu_paw.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
@@ -38,7 +40,9 @@ export function scene_title(game: Game) {
     // Main Light.
     instantiate(game, {
         Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 0.3)],
+        // The helicopter needs an entity named head in the scene.
+        // Has.Aim is disabled so it won't use it.
+        Using: [light_directional([1, 1, 1], 0.3), named("head")],
     });
 
     // Ground.
@@ -88,6 +92,22 @@ export function scene_title(game: Game) {
         Translation: [3, 2, 1],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
         Scale: [-5, 5, 5],
+    });
+
+    instantiate(game, {
+        Translation: [1, 0.25, 1.5],
+        Using: [control_move([0, 0.5, 1], null), move(0.3, 0)],
+        Children: [
+            {
+                ...blueprint_cage(game),
+                Rotation: from_euler([0, 0, 0, 0], 0, -90, 0),
+            },
+            {
+                ...blueprint_helicopter(game),
+                Translation: [-1, 1, 0.2],
+                Disable: Has.Move | Has.Lifespan,
+            },
+        ],
     });
 
     instantiate(game, blueprint_moon(game));
