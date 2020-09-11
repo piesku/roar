@@ -50,7 +50,7 @@ export class Game {
     Ui = document.querySelector("main")!;
     Canvas = document.querySelector("canvas")!;
     Gl = this.Canvas.getContext("webgl2", {xrCompatible: true})! as WebGL2RenderingContext;
-    Audio = new (window["AudioContext"] || window.webkitAudioContext)();
+    Audio = new AudioContext();
 
     XrSupported = false;
     XrSession?: XRSession;
