@@ -110,7 +110,7 @@ export function scene_title(game: Game) {
         ],
     });
 
-    instantiate(game, blueprint_moon(game));
+    instantiate(game, blueprint_moon());
 
     instantiate(
         game,

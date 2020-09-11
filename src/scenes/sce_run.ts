@@ -50,7 +50,7 @@ export function scene_run(game: Game) {
             blueprint_viewer(game, 3),
 
             // Moon.
-            blueprint_moon(game),
+            blueprint_moon(),
 
             // Police car spawner.
             {

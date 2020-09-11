@@ -44,7 +44,7 @@ export function scene_zen(game: Game) {
             // VR Camera.
             blueprint_viewer(game, 3),
             // Moon.
-            blueprint_moon(game),
+            blueprint_moon(),
             // Police car spawner.
             {
                 Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
