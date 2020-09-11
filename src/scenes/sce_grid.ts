@@ -1,7 +1,9 @@
+import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {set_seed} from "../../common/random.js";
+import {element, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
+import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
 import {blueprint_launch} from "../blueprints/blu_launch.js";
@@ -84,14 +86,30 @@ export function scene_grid(game: Game) {
         ],
     });
 
+    let possible_baby_positions: Array<Vec3> = [];
     for (let z = Math.trunc(-grid_size / 2); z < grid_size / 2; z++) {
         for (let x = Math.trunc(-grid_size / 2); x < grid_size / 2; x++) {
+            let height = Math.max(integer(0, 3), integer(0, 4));
+            let translation: Vec3 = [
+                x * 1.5 + Math.trunc(x / 3),
+                height - 0.75,
+                z * 1.5 + Math.trunc(z / 2),
+            ];
             instantiate(game, {
-                ...blueprint_building(game),
-                Translation: [x * 1.5 + Math.trunc(x / 3), 0, z * 1.5 + Math.trunc(z / 2)],
+                ...blueprint_building(game, height),
+                Translation: [translation[0], 0, translation[2]],
             });
+            if (height > 0 && Math.abs(x) > 2 && Math.abs(z) > 2) {
+                possible_baby_positions.push(translation);
+            }
         }
     }
+
+    // Baby Godzilla.
+    instantiate(game, {
+        ...blueprint_cage(game),
+        Translation: element(possible_baby_positions),
+    });
 
     // Police car spawner.
     instantiate(game, {
