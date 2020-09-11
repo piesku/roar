@@ -1,7 +1,7 @@
 import {html} from "../../common/html.js";
 import {Action} from "../actions.js";
 
-export function Title() {
+export function StageClear() {
     return html`
         <div
             style="
@@ -10,9 +10,10 @@ export function Title() {
                 right: 10vmin;
             "
         >
-            <div onclick="$(${Action.GoToStage})">
+            <div onclick="$(${Action.GoToTitle})">
                 <b>ROAAAR!</b>
-                <i>(Find baby-zilla)</i>
+                <i>(You've found it!</i>
+                <i>Play again)</i>
             </div>
         </div>
     `;

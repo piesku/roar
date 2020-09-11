@@ -8,12 +8,21 @@ import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
 import {scene_grid} from "./scenes/sce_grid.js";
+import {scene_title} from "./scenes/sce_title.js";
 import {snd_growl} from "./sounds/snd_growl.js";
 import {Has} from "./world.js";
 import {xr_enter} from "./xr.js";
 
+export const enum StageKind {
+    Title,
+    Playing,
+    Clear,
+    Failed,
+}
+
 export const enum Action {
-    PlayNow,
+    GoToTitle,
+    GoToStage,
     EnterVr,
     ExitVr,
     Wake,
@@ -26,7 +35,11 @@ export const enum Action {
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
-        case Action.PlayNow: {
+        case Action.GoToTitle: {
+            setTimeout(() => scene_title(game));
+            break;
+        }
+        case Action.GoToStage: {
             setTimeout(() => scene_grid(game));
             // Fall through to EnterVr.
         }
@@ -66,7 +79,12 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
-                console.log("Player hit");
+                setTimeout(() => {
+                    if (game.CurrentStage === StageKind.Playing) {
+                        game.CurrentStage = StageKind.Failed;
+                        dispatch(game, Action.ExitVr, undefined);
+                    }
+                }, 3000);
             }
             // No break; fall through to Explode.
         }
@@ -130,7 +148,10 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 mouth_audio.Trigger = snd_growl(false);
 
                 setTimeout(() => {
-                    dispatch(game, Action.ExitVr, undefined);
+                    if (game.CurrentStage === StageKind.Playing) {
+                        game.CurrentStage = StageKind.Failed;
+                        dispatch(game, Action.ExitVr, undefined);
+                    }
                 }, 5000);
             }
             break;

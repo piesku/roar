@@ -22,7 +22,6 @@ import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
 export function scene_zen(game: Game) {
-    game.CurrentScene = scene_zen;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;

@@ -2,6 +2,7 @@ html,
 body {
     overflow: hidden;
     margin: 0;
+    color: #fc0;
 }
 canvas,
 main {
@@ -13,5 +14,13 @@ main {
 img {
     display: none;
 }
-button {
+div[onclick] {
+    cursor: pointer;
+}
+b {
+    font: italic bold 5rem fantasy;
+}
+i {
+    display: block;
+    font: italic small-caps bold 2rem cursive;
 }
