@@ -33,8 +33,6 @@ let fragment = `#version 300 es\n
     uniform float fog_distance;
     uniform float fog_level;
     uniform sampler2D sampler;
-    uniform vec2 texscale;
-    uniform float texoffset;
     uniform vec4 light_positions[MAX_LIGHTS];
     uniform vec4 light_details[MAX_LIGHTS];
 
@@ -82,7 +80,7 @@ let fragment = `#version 300 es\n
             }
         }
 
-        vec4 tex_color = texture(sampler, vert_texcoord * texscale);
+        vec4 tex_color = texture(sampler, vert_texcoord);
         if (tex_color.a == 0.0) {
             discard;
         } else {
@@ -110,8 +108,6 @@ export function mat2_textured_diffuse(gl: WebGL2RenderingContext): Material<Text
             FogDistance: gl.getUniformLocation(program, "fog_distance")!,
             FogLevel: gl.getUniformLocation(program, "fog_level")!,
             Sampler: gl.getUniformLocation(program, "sampler")!,
-            TexScale: gl.getUniformLocation(program, "texscale")!,
-            TexOffset: gl.getUniformLocation(program, "texoffset")!,
             LightPositions: gl.getUniformLocation(program, "light_positions")!,
             LightDetails: gl.getUniformLocation(program, "light_details")!,
             VertexPosition: gl.getAttribLocation(program, "position")!,

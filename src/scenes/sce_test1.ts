@@ -54,8 +54,7 @@ export function scene_test1(game: Game) {
                         game.Textures["fire"],
                         GL_CW,
                         [1, 1, 1, 1],
-                        -2,
-                        [5, 5]
+                        -2
                     ),
                 ],
             },

@@ -153,19 +153,12 @@ function use_textured_diffuse(
 function draw_textured_diffuse(game: Game, transform: Transform, render: RenderTexturedDiffuse) {
     game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
     game.Gl.uniformMatrix4fv(render.Material.Locations.Self, false, transform.Self);
-    game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
-    game.Gl.uniform1f(render.Material.Locations.FogLevel, render.FogLevel);
 
     game.Gl.activeTexture(GL_TEXTURE0);
     game.Gl.bindTexture(GL_TEXTURE_2D, render.Texture);
     game.Gl.uniform1i(render.Material.Locations.Sampler, 0);
-    game.Gl.uniform2fv(render.Material.Locations.TexScale, render.TexScale);
-
-    if (render.TexOffset) {
-        game.Gl.uniform2fv(render.Material.Locations.TexOffset, render.TexOffset());
-    } else {
-        game.Gl.uniform2fv(render.Material.Locations.TexOffset, [0, 0]);
-    }
+    game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
+    game.Gl.uniform1f(render.Material.Locations.FogLevel, render.FogLevel);
 
     game.Gl.bindVertexArray(render.Vao);
     game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
