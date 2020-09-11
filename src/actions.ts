@@ -52,7 +52,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 block_transform.Translation[0] = building_transform.Translation[0];
                 block_transform.Translation[2] = building_transform.Translation[2];
                 copy(block_transform.Rotation, building_transform.Rotation);
-                game.World.Signature[block] |= Has.Collide | Has.RigidBody;
+                game.World.Signature[block] |= Has.Collide | Has.RigidBody | Has.Lifespan;
             }
 
             // Destroy the outer shell without children.
