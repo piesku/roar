@@ -52,8 +52,8 @@ export function scene_test1(game: Game) {
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
                         game.Textures["fire"],
-                        GL_CW,
                         [1, 1, 1, 1],
+                        GL_CW,
                         -2
                     ),
                 ],

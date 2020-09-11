@@ -53,8 +53,8 @@ export function scene_test5(game: Game) {
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
                         game.Textures["noise"],
-                        GL_CW,
                         [1, 1, 1, 1],
+                        GL_CW,
                         -0.5
                     ),
                 ],

@@ -133,8 +133,8 @@ export function scene_zen(game: Game) {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshPlane,
                                 game.Textures["noise"],
-                                GL_CW,
                                 [0, 0.1, 0.2, 1],
+                                GL_CW,
                                 -0.5
                             ),
                         ],

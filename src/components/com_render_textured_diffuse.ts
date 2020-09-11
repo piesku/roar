@@ -24,8 +24,8 @@ export function render_textured_diffuse(
     material: Material<TexturedDiffuseLayout>,
     mesh: Mesh,
     texture: WebGLTexture,
-    front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
+    front_face: GLenum = GL_CW,
     fog_level = -0.3
 ) {
     return (game: Game, entity: Entity) => {

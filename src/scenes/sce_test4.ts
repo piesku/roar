@@ -1,6 +1,5 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
-import {GL_CW} from "../../common/webgl.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {control_move} from "../components/com_control_move.js";
 import {emit_particles} from "../components/com_emit_particles.js";
@@ -47,7 +46,6 @@ export function scene_test4(game: Game) {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["fire"],
-                        GL_CW,
                         [0, 1, 0.5, 1]
                     ),
                 ],
@@ -76,7 +74,6 @@ export function scene_test4(game: Game) {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["fire"],
-                        GL_CW,
                         [1, 0.5, 0, 1]
                     ),
                 ],

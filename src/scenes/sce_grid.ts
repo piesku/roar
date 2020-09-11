@@ -77,8 +77,8 @@ export function scene_grid(game: Game) {
                         game.MaterialTexturedDiffuse,
                         game.MeshPlane,
                         game.Textures["noise"],
-                        GL_CW,
                         [1, 1, 1, 1],
+                        GL_CW,
                         -0.5
                     ),
                 ],

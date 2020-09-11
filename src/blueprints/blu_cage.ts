@@ -32,6 +32,7 @@ export function blueprint_cage(game: Game): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["cage"],
+                        [1, 1, 1, 1],
                         GL_CCW
                     ),
                 ],
