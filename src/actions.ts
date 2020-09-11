@@ -3,10 +3,12 @@ import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
+import {find_first} from "./components/com_named.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
 import {scene_grid} from "./scenes/sce_grid.js";
+import {snd_growl} from "./sounds/snd_growl.js";
 import {Has} from "./world.js";
 import {xr_enter} from "./xr.js";
 
@@ -123,13 +125,9 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 game.World.Signature[cage_entity] &= ~Has.Trigger;
                 game.World.Collide[cage_entity].Dynamic = true;
 
-                // Destroy all buildings.
-                for (let i = 0; i < game.World.Signature.length; i++) {
-                    if (game.World.Signature[i] & Has.Lifespan) {
-                        let lifespan = game.World.Lifespan[i];
-                        lifespan.Age = lifespan.Max;
-                    }
-                }
+                let mouth_entity = find_first(game.World, "mouth");
+                let mouth_audio = game.World.AudioSource[mouth_entity];
+                mouth_audio.Trigger = snd_growl(false);
 
                 setTimeout(() => {
                     dispatch(game, Action.ExitVr, undefined);

@@ -1,7 +1,7 @@
 import {Entity, Game} from "../game.js";
 import {Has, World} from "../world.js";
 
-type Name = "base" | "head" | "front";
+type Name = "base" | "head" | "front" | "mouth";
 
 export interface Named {
     Name: Name;

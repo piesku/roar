@@ -1,11 +1,13 @@
 import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {Action} from "../actions.js";
+import {audio_source} from "../components/com_audio_source.js";
 import {collide} from "../components/com_collide.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {trigger} from "../components/com_trigger.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {snd_growl} from "../sounds/snd_growl.js";
 import {blueprint_paw} from "./blu_paw.js";
 
 export function blueprint_cage(game: Game): Blueprint {
@@ -19,6 +21,7 @@ export function blueprint_cage(game: Game): Blueprint {
                 game.MeshCube,
                 game.Textures["cage"]
             ),
+            audio_source(true, snd_growl(true)),
             // Grabbable builds have lifespan, imitate them.
             lifespan(Infinity),
         ],

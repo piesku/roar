@@ -47,6 +47,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 Translation: [0, -0.2, 0],
                                 Rotation: [0, 1, 0, 0],
                                 Using: [
+                                    named("mouth"),
                                     control_xr("breath"),
                                     audio_source(false),
                                     control_spawn(blueprint_flame_collider, 0.3),
