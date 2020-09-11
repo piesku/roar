@@ -28,6 +28,8 @@ function update(game: Game, entity: Entity) {
                 let damage =
                     dot(one, rigid_body.VelocityResolved) + dot(one, other_body.VelocityResolved);
                 if (damage > 1) {
+                    // Buildings start with Has.Lifespan disabled.
+                    game.World.Signature[entity] |= Has.Lifespan;
                     let lifespan = game.World.Lifespan[entity];
                     lifespan.Age += damage;
                 }

@@ -28,7 +28,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
             lifespan(BUILDING_LIFESPAN, Action.Collapse),
             cull(Has.Render),
         ],
-        Disable: Has.Collide | Has.RigidBody,
+        Disable: Has.Collide | Has.RigidBody | Has.Lifespan,
         Children: [blueprint_fire(game)],
     };
 

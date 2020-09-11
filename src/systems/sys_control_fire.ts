@@ -31,6 +31,7 @@ function update(game: Game, entity: Entity, delta: number) {
         // Damage the building.
         let transform = game.World.Transform[entity];
         if (transform.Parent) {
+            // Has.Lifespan might be disabled but the component data is still there.
             let lifespan = game.World.Lifespan[transform.Parent];
             lifespan.Age += delta;
         }

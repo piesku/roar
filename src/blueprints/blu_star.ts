@@ -28,7 +28,7 @@ export function blueprint_star(game: Game): Blueprint {
             lifespan(BUILDING_LIFESPAN, Action.Collapse),
             cull(Has.Render),
         ],
-        Disable: Has.Collide | Has.RigidBody,
+        Disable: Has.Collide | Has.RigidBody | Has.Lifespan,
         Children: [
             {
                 Translation: [0, -0.1, 0],
