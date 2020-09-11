@@ -87,12 +87,12 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                     game.World.RigidBody[shell].Kind = RigidKind.Dynamic;
                 }
 
-                setTimeout(() => {
-                    if (game.CurrentStage === StageKind.Playing) {
-                        game.CurrentStage = StageKind.Failed;
+                if (game.CurrentStage === StageKind.Playing) {
+                    game.CurrentStage = StageKind.Failed;
+                    setTimeout(() => {
                         dispatch(game, Action.ExitVr, undefined);
-                    }
-                }, 3000);
+                    }, 1000);
+                }
             }
             // No break; fall through to Explode.
         }
@@ -157,15 +157,15 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
 
                 for (let block of find_all(game.World, "block")) {
                     game.World.Signature[block] |= Has.Lifespan;
-                    game.World.Lifespan[block].Remaining = Math.random() * 5;
+                    game.World.Lifespan[block].Remaining = Math.random() * 2;
                 }
 
-                setTimeout(() => {
-                    if (game.CurrentStage === StageKind.Playing) {
-                        game.CurrentStage = StageKind.Clear;
+                if (game.CurrentStage === StageKind.Playing) {
+                    game.CurrentStage = StageKind.Clear;
+                    setTimeout(() => {
                         dispatch(game, Action.ExitVr, undefined);
-                    }
-                }, 5000);
+                    }, 5000);
+                }
             }
             break;
         }
