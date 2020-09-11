@@ -47,23 +47,19 @@ export function scene_title(game: Game) {
 
     // Ground.
     instantiate(game, {
-        Translation: [0, -0.5, 1],
-        Scale: [10, 1, 10],
-        Using: [collide(true, Layer.Ground, Layer.None, [10, 1, 10]), rigid_body(RigidKind.Static)],
-        Children: [
-            {
-                Using: [
-                    named("base"),
-                    render_textured_diffuse(
-                        game.MaterialTexturedDiffuse,
-                        game.MeshCube,
-                        game.Textures["noise"],
-                        [1, 1, 1, 1],
-                        GL_CW,
-                        -0.5
-                    ),
-                ],
-            },
+        Translation: [0, -0.5, 0],
+        Scale: [99, 1, 99],
+        Using: [
+            collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
+            rigid_body(RigidKind.Static),
+            render_textured_diffuse(
+                game.MaterialTexturedDiffuse,
+                game.MeshCube,
+                game.Textures["noise"],
+                [1, 1, 1, 1],
+                GL_CW,
+                -0.5
+            ),
         ],
     });
 
@@ -115,7 +111,7 @@ export function scene_title(game: Game) {
         game,
         // Police car spawner.
         {
-            Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
+            Using: [named("base"), control_move(null, [0, 1, 0, 0]), move(0, 1)],
             Children: [
                 {
                     Translation: [0, 0, -4],

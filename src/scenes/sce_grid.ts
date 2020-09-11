@@ -59,29 +59,22 @@ export function scene_grid(game: Game) {
     instantiate(game, blueprint_moon());
 
     let grid_size = 9;
-    let ground_size = grid_size * 10;
 
     // Ground.
     instantiate(game, {
         Translation: [0, -0.5, 0],
-        Scale: [ground_size, 1, ground_size],
+        Scale: [99, 1, 99],
         Using: [
-            collide(false, Layer.Ground, Layer.None, [ground_size, 1, ground_size]),
+            collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
-        ],
-        Children: [
-            {
-                Using: [
-                    render_textured_diffuse(
-                        game.MaterialTexturedDiffuse,
-                        game.MeshCube,
-                        game.Textures["noise"],
-                        [1, 1, 1, 1],
-                        GL_CW,
-                        -0.5
-                    ),
-                ],
-            },
+            render_textured_diffuse(
+                game.MaterialTexturedDiffuse,
+                game.MeshCube,
+                game.Textures["noise"],
+                [1, 1, 1, 1],
+                GL_CW,
+                -0.5
+            ),
         ],
     });
 
