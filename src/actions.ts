@@ -155,9 +155,14 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 let mouth_audio = game.World.AudioSource[mouth_entity];
                 mouth_audio.Trigger = snd_growl(false);
 
+                for (let block of find_all(game.World, "block")) {
+                    game.World.Signature[block] |= Has.Lifespan;
+                    game.World.Lifespan[block].Remaining = Math.random() * 5;
+                }
+
                 setTimeout(() => {
                     if (game.CurrentStage === StageKind.Playing) {
-                        game.CurrentStage = StageKind.Failed;
+                        game.CurrentStage = StageKind.Clear;
                         dispatch(game, Action.ExitVr, undefined);
                     }
                 }, 5000);
