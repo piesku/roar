@@ -3,17 +3,15 @@ import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
 export interface Lifespan {
-    Max: number;
-    Age: number;
+    Remaining: number;
     Action?: Action;
 }
 
-export function lifespan(max = Infinity, action?: Action) {
+export function lifespan(remaining: number, action?: Action) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.Lifespan;
         game.World.Lifespan[entity] = {
-            Max: max,
-            Age: 0,
+            Remaining: remaining,
             Action: action,
         };
     };

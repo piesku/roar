@@ -15,8 +15,8 @@ export function sys_lifespan(game: Game, delta: number) {
 
 function update(game: Game, entity: Entity, delta: number) {
     let lifespan = game.World.Lifespan[entity];
-    lifespan.Age += delta;
-    if (lifespan.Age > lifespan.Max) {
+    lifespan.Remaining -= delta;
+    if (lifespan.Remaining < 0) {
         setTimeout(() => destroy(game.World, entity));
         if (lifespan.Action) {
             dispatch(game, lifespan.Action, entity);

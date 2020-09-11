@@ -33,7 +33,7 @@ function update(game: Game, entity: Entity, delta: number) {
         if (transform.Parent) {
             // Has.Lifespan might be disabled but the component data is still there.
             let parent_lifespan = game.World.Lifespan[transform.Parent];
-            parent_lifespan.Age += delta;
+            parent_lifespan.Remaining -= delta;
         }
     } else {
         // Put the fire out.
