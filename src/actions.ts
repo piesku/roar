@@ -3,7 +3,8 @@ import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
-import {find_first} from "./components/com_named.js";
+import {find_all, find_first} from "./components/com_named.js";
+import {RigidKind} from "./components/com_rigid_body.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
@@ -79,6 +80,13 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
+                let ground = find_first(game.World, "ground");
+                game.World.Signature[ground] &= ~Has.Collide;
+
+                for (let shell of find_all(game.World, "shell")) {
+                    game.World.RigidBody[shell].Kind = RigidKind.Dynamic;
+                }
+
                 setTimeout(() => {
                     if (game.CurrentStage === StageKind.Playing) {
                         game.CurrentStage = StageKind.Failed;

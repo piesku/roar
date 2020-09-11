@@ -51,6 +51,7 @@ export function scene_title(game: Game) {
         Translation: [0, -0.5, 0],
         Scale: [99, 1, 99],
         Using: [
+            named("ground"),
             collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
             render_textured_diffuse(
