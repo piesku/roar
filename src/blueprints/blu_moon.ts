@@ -15,13 +15,10 @@ export function blueprint_moon(game: Game): Blueprint {
         Children: [
             {
                 Translation: [0, 10, -10],
-                Using: [light_point([1, 1, 1], 14)],
-            },
-            {
-                Translation: [0, 100, -100],
                 Rotation: from_euler([0, 0, 0, 0], 135, 0, 0),
-                Scale: [20, 20, 20],
+                Scale: [2, 2, 2],
                 Using: [
+                    light_point([1, 1, 1], 14),
                     render_colored_unlit(game.MaterialColoredUnlit, game.MeshPlane, [1, 1, 1, 1]),
                     cull(Has.Render),
                 ],

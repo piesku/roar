@@ -42,13 +42,13 @@ export function loop_stop(game: Game) {
     }
 }
 
-export function create(world: World, offset = 0) {
-    for (let i = offset; i < MAX_ENTITIES; i++) {
-        if (i >= world.Signature.length) {
-            world.Signature[i] = 0;
+export function create(world: World) {
+    for (let i = 0; i < MAX_ENTITIES; i++) {
+        if (i === world.Signature.length) {
+            world.Signature.push(0);
             return i;
         }
-        if (!world.Signature[i]) {
+        if (world.Signature[i] === 0) {
             return i;
         }
     }
@@ -57,7 +57,6 @@ export function create(world: World, offset = 0) {
 
 type Mixin = (game: Game, entity: Entity) => void;
 export interface Blueprint {
-    Offset?: number;
     Translation?: Vec3;
     Rotation?: Quat;
     Scale?: Vec3;
@@ -68,9 +67,9 @@ export interface Blueprint {
 
 export function instantiate(
     game: Game,
-    {Offset = 0, Translation, Rotation, Scale, Using = [], Disable = 0, Children = []}: Blueprint
+    {Translation, Rotation, Scale, Using = [], Disable = 0, Children = []}: Blueprint
 ) {
-    let entity = create(game.World, Offset);
+    let entity = create(game.World);
     transform(Translation, Rotation, Scale)(game, entity);
     for (let mixin of Using) {
         mixin(game, entity);

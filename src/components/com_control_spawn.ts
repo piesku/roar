@@ -12,6 +12,12 @@ export interface ControlSpawn {
     SinceLast: number;
 }
 
+/**
+ * Spawn blueprints at random intervals with the average interval of `frequency`.
+ *
+ * @param creator The function returning the blueprint to spawn.
+ * @param frequency The average frequency of spawning.
+ */
 export function control_spawn(creator: Creator, frequency: number) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.ControlSpawn;

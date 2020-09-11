@@ -7,7 +7,7 @@ export function blueprint_camera(game: Game): Blueprint {
         Children: [
             {
                 Rotation: [0, 1, 0, 0],
-                Using: [camera_persp(1, 0.1, 1000)],
+                Using: [camera_persp(1, 0.1, 75)],
             },
         ],
     };

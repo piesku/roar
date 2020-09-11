@@ -15,22 +15,30 @@ export function sys_cull(game: Game, delta: number) {
     }
 }
 
-let position: Vec3 = [0, 0, 0];
+let world_pos: Vec3 = [0, 0, 0];
+let ndc_pos: Vec3 = [0, 0, 0];
+let view_pos: Vec3 = [0, 0, 0];
 
 function update(game: Game, entity: Entity) {
     let cull = game.World.Cull[entity];
     let transform = game.World.Transform[entity];
-    get_translation(position, transform.World);
+    get_translation(world_pos, transform.World);
 
     let camera = game.Camera!;
     if (camera.Kind === CameraKind.Xr) {
         // Just check against the left eye.
-        transform_point(position, position, camera.Eyes[0].Pv);
+        transform_point(ndc_pos, world_pos, camera.Eyes["left"].Pv);
+        transform_point(view_pos, world_pos, camera.Eyes["left"].View);
     } else {
-        transform_point(position, position, camera.Pv);
+        transform_point(ndc_pos, world_pos, camera.Pv);
+        transform_point(view_pos, world_pos, camera.View);
     }
 
-    if (Math.abs(position[0]) > 1.1 || Math.abs(position[1]) > 1.1 || Math.abs(position[2]) > 1.1) {
+    if (
+        Math.abs(ndc_pos[0]) > 1.1 ||
+        Math.abs(ndc_pos[1]) > 1.1 ||
+        Math.abs(view_pos[2]) > camera.CullDistance
+    ) {
         game.World.Signature[entity] &= ~cull.Mask;
     } else {
         game.World.Signature[entity] |= cull.Mask;

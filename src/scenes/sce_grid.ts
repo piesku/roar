@@ -1,9 +1,12 @@
+import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {set_seed} from "../../common/random.js";
+import {element, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
+import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_helicopter} from "../blueprints/blu_helicopter.js";
+import {blueprint_launch} from "../blueprints/blu_launch.js";
 import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
@@ -15,8 +18,7 @@ import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
-import {shake} from "../components/com_shake.js";
-import {MISSILE_SPAWN_FREQUENCY, MISSILE_SPAWN_Z} from "../config.js";
+import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
@@ -76,7 +78,7 @@ export function scene_grid(game: Game) {
                         game.MeshPlane,
                         game.Textures["noise"],
                         GL_CW,
-                        [0, 0.1, 0.2, 1],
+                        [1, 1, 1, 1],
                         -0.5
                     ),
                 ],
@@ -84,14 +86,30 @@ export function scene_grid(game: Game) {
         ],
     });
 
+    let possible_baby_positions: Array<Vec3> = [];
     for (let z = Math.trunc(-grid_size / 2); z < grid_size / 2; z++) {
         for (let x = Math.trunc(-grid_size / 2); x < grid_size / 2; x++) {
+            let height = Math.max(integer(0, 3), integer(0, 4));
+            let translation: Vec3 = [
+                x * 1.5 + Math.trunc(x / 3),
+                height - 0.75,
+                z * 1.5 + Math.trunc(z / 2),
+            ];
             instantiate(game, {
-                ...blueprint_building(game),
-                Translation: [x * 1.5 + Math.trunc(x / 3), 0, z * 1.5 + Math.trunc(z / 2)],
+                ...blueprint_building(game, height),
+                Translation: [translation[0], 0, translation[2]],
             });
+            if (height > 0 && Math.abs(x) > 2 && Math.abs(z) > 2) {
+                possible_baby_positions.push(translation);
+            }
         }
     }
+
+    // Baby Godzilla.
+    instantiate(game, {
+        ...blueprint_cage(game),
+        Translation: element(possible_baby_positions),
+    });
 
     // Police car spawner.
     instantiate(game, {
@@ -122,14 +140,17 @@ export function scene_grid(game: Game) {
 
     // Missile spawner.
     instantiate(game, {
-        Translation: [0, 11, MISSILE_SPAWN_Z],
+        Using: [control_move(null, [0, 1, 0, 0]), move(0, 4)],
         Children: [
             {
+                Translation: [0, 1, -50],
                 Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
-                Using: [
-                    control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY),
-                    shake(Infinity, 10),
-                ],
+                Using: [control_spawn(blueprint_missile, MISSILE_SPAWN_FREQUENCY)],
+            },
+            {
+                Translation: [0, 1, -50],
+                Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
+                Using: [control_spawn(blueprint_launch, MISSILE_SPAWN_FREQUENCY)],
             },
         ],
     });

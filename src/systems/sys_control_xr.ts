@@ -1,14 +1,11 @@
-import {get_forward, get_rotation, get_translation} from "../../common/mat4.js";
+import {get_rotation, get_translation} from "../../common/mat4.js";
 import {Quat, Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
 import {conjugate, from_euler, multiply} from "../../common/quat.js";
-import {ray_intersect_aabb} from "../../common/raycast.js";
-import {copy, transform_point} from "../../common/vec3.js";
-import {Action, dispatch} from "../actions.js";
-import {Collide} from "../components/com_collide.js";
+import {copy, transform_direction, transform_point} from "../../common/vec3.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
-import {Entity, Game, Layer} from "../game.js";
+import {Entity, Game} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
@@ -19,79 +16,99 @@ export function sys_control_xr(game: Game, delta: number) {
         return;
     }
 
-    let inputs: Record<string, XRInputSource> = {};
+    game.XrInputs = {};
     for (let input of game.XrFrame.session.inputSources) {
         if (input.gripSpace) {
-            inputs[input.handedness] = input;
+            game.XrInputs[input.handedness] = input;
         }
     }
 
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
-            update(game, i, inputs);
+            update(game, i);
         }
     }
 }
 
-function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource>) {
+function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlXr[entity];
 
-    if (control.Controller === "head") {
-        let headset = game.XrFrame!.getViewerPose(game.XrSpace);
-        transform.World = headset.transform.matrix;
-        transform.Dirty = true;
+    if (control.Controller === "motion") {
+        let move = game.World.Move[entity];
+
+        let bob_entity = transform.Children[0];
+        let bob_transform = game.World.Transform[bob_entity];
+        let head_entity = bob_transform.Children[1];
+        let head_transform = game.World.Transform[head_entity];
+
+        // Walking in the direction of looking.
+        let left = game.XrInputs["left"];
+        if (left?.gamepad) {
+            let axis_strafe = left.gamepad.axes[2];
+            if (axis_strafe) {
+                let direction: Vec3 = [axis_strafe, 0, 0];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
+            }
+            let axis_forward = left.gamepad.axes[3];
+            if (axis_forward) {
+                let direction: Vec3 = [0, 0, axis_forward];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
+            }
+        }
+        let right = game.XrInputs["right"];
+        if (right?.gamepad) {
+            let axis_strafe = right.gamepad.axes[2];
+            if (axis_strafe) {
+                let direction: Vec3 = [axis_strafe, 0, 0];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
+            }
+            let axis_forward = right.gamepad.axes[3];
+            if (axis_forward) {
+                let direction: Vec3 = [0, 0, axis_forward];
+                transform_direction(direction, direction, head_transform.World);
+                direction[1] = 0;
+                move.Directions.push(direction);
+            }
+        }
+
+        // Bobbing while walking.
+        if (move.Directions.length > 0) {
+            let bobbing_amplitude = 0.03;
+            let bobbing_frequency = 5;
+            let bobbing =
+                (Math.sin(bobbing_frequency * transform.Translation[0]) +
+                    Math.sin(bobbing_frequency * transform.Translation[2])) *
+                bobbing_amplitude;
+            transform.Translation[1] = bobbing;
+            transform.Dirty = true;
+        }
+    }
+
+    if (control.Controller === "breath") {
+        game.World.Signature[entity] &= ~Has.ControlSpawn;
 
         for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
             game.World.EmitParticles[emitter].Trigger = false;
         }
 
-        let left = inputs["left"];
-        let right = inputs["right"];
+        let left = game.XrInputs["left"];
+        let right = game.XrInputs["right"];
         if (left?.gamepad && right?.gamepad) {
             let trigger_left = left.gamepad.buttons[0];
             let trigger_right = right.gamepad.buttons[0];
             if (trigger_left?.pressed && trigger_right?.pressed) {
-                let mouth = transform.Children[1];
+                game.World.Signature[entity] |= Has.ControlSpawn;
+                game.World.AudioSource[entity].Trigger = snd_breath;
 
-                game.World.AudioSource[mouth].Trigger = snd_breath;
-
-                for (let emitter of query_all(game.World, mouth, Has.EmitParticles)) {
+                for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
                     game.World.EmitParticles[emitter].Trigger = true;
-                }
-
-                let mouth_transform = game.World.Transform[mouth];
-                let mouth_position: Vec3 = [0, 0, 0];
-                let mouth_direction: Vec3 = [0, 0, 0];
-                get_translation(mouth_position, mouth_transform.World);
-                get_forward(mouth_direction, mouth_transform.World);
-
-                let colliders: Array<Collide> = [];
-                for (let i = 0; i < game.World.Signature.length; i++) {
-                    if (game.World.Signature[i] & Has.Collide) {
-                        let collide = game.World.Collide[i];
-                        if (
-                            collide.Layers &
-                            (Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile)
-                        ) {
-                            colliders.push(collide);
-                        }
-                    }
-                }
-
-                let hit = ray_intersect_aabb(colliders, mouth_position, mouth_direction);
-                if (hit) {
-                    let other_collider = hit.Collider as Collide;
-                    let other_entity = other_collider.Entity;
-                    if (other_collider.Layers & Layer.Missile) {
-                        dispatch(game, Action.Explode, [other_entity]);
-                    } else {
-                        for (let fire of query_all(game.World, other_entity, Has.ControlFire)) {
-                            game.World.ControlFire[fire].Trigger = true;
-                            // Just one fire is enough.
-                            break;
-                        }
-                    }
                 }
             }
         }
@@ -99,7 +116,7 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
     }
 
     if (control.Controller === "left") {
-        let input = inputs["left"];
+        let input = game.XrInputs["left"];
         if (input) {
             if (input.gamepad) {
                 let squeeze = input.gamepad.buttons[1];
@@ -213,18 +230,12 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                     }
                 }
             }
-
-            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
-            if (pose) {
-                transform.World = pose.transform.matrix;
-                transform.Dirty = true;
-            }
         }
         return;
     }
 
     if (control.Controller === "right") {
-        let input = inputs["right"];
+        let input = game.XrInputs["right"];
         if (input) {
             if (input.gamepad) {
                 let squeeze = input.gamepad.buttons[1];
@@ -300,10 +311,15 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
 
                                 building_transform.Dirty = true;
 
-                                // Switch to a kinematic rigid body.
-                                let rigid_body = game.World.RigidBody[building_entity];
-                                rigid_body.Kind = RigidKind.Kinematic;
-                                get_translation(rigid_body.LastPosition, building_transform.World);
+                                if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                    // Switch to a kinematic rigid body.
+                                    let rigid_body = game.World.RigidBody[building_entity];
+                                    rigid_body.Kind = RigidKind.Kinematic;
+                                    get_translation(
+                                        rigid_body.LastPosition,
+                                        building_transform.World
+                                    );
+                                }
 
                                 // Disable lifespan.
                                 game.World.Signature[building_entity] &= ~Has.Lifespan;
@@ -327,22 +343,18 @@ function update(game: Game, entity: Entity, inputs: Record<string, XRInputSource
                             get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
-                            // Switch back to a dynamic rigid body.
-                            let rigid_body = game.World.RigidBody[building_entity];
-                            rigid_body.Kind = RigidKind.Dynamic;
-                            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                            if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                // Switch back to a dynamic rigid body.
+                                let rigid_body = game.World.RigidBody[building_entity];
+                                rigid_body.Kind = RigidKind.Dynamic;
+                                copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                            }
 
                             // Enable lifespan.
                             game.World.Signature[building_entity] |= Has.Lifespan;
                         }
                     }
                 }
-            }
-
-            let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
-            if (pose) {
-                transform.World = pose.transform.matrix;
-                transform.Dirty = true;
             }
         }
         return;

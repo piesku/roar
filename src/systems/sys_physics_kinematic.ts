@@ -7,7 +7,7 @@ import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.RigidBody;
 
-export function sys_kinematic(game: Game, delta: number) {
+export function sys_physics_kinematic(game: Game, delta: number) {
     for (let i = 0; i < game.World.Signature.length; i++) {
         if ((game.World.Signature[i] & QUERY) === QUERY) {
             update(game, i, delta);

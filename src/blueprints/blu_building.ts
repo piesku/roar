@@ -1,16 +1,16 @@
 import {float, integer} from "../../common/random.js";
 import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
-import {lifespan} from "../components/com_lifespan.js";
 import {trigger} from "../components/com_trigger.js";
-import {BUILDING_LIFESPAN} from "../config.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
 import {blueprint_block} from "./blu_block.js";
 import {blueprint_star} from "./blu_star.js";
 
-export function blueprint_building(game: Game): Blueprint {
-    let height = Math.max(integer(0, 3), integer(0, 4));
+export function blueprint_building(game: Game, height?: number): Blueprint {
+    if (height === undefined) {
+        height = Math.max(integer(0, 3), integer(0, 4));
+    }
     let blocks: Array<Blueprint> = [];
 
     if (float() > 0.2) {
@@ -40,7 +40,6 @@ export function blueprint_building(game: Game): Blueprint {
                 Layer.BuildingBlock | Layer.PlayerHand | Layer.PlayerGrip | Layer.Missile,
                 [1, height * 2, 1]
             ),
-            lifespan(BUILDING_LIFESPAN),
             trigger(Action.Wake),
         ],
         Children: blocks,

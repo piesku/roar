@@ -4,6 +4,7 @@ import {Camera} from "./components/com_camera.js";
 import {Collide} from "./components/com_collide.js";
 import {ControlFire} from "./components/com_control_fire.js";
 import {ControlMove} from "./components/com_control_move.js";
+import {ControlPose} from "./components/com_control_pose.js";
 import {ControlSpawn} from "./components/com_control_spawn.js";
 import {ControlXr} from "./components/com_control_xr.js";
 import {Cull} from "./components/com_cull.js";
@@ -26,7 +27,8 @@ const enum Component {
     Camera,
     Collide,
     ControlFire,
-    ControlRotate,
+    ControlMove,
+    ControlPose,
     ControlSpawn,
     ControlXr,
     Cull,
@@ -50,7 +52,8 @@ export const enum Has {
     Camera = 1 << Component.Camera,
     Collide = 1 << Component.Collide,
     ControlFire = 1 << Component.ControlFire,
-    ControlMove = 1 << Component.ControlRotate,
+    ControlMove = 1 << Component.ControlMove,
+    ControlPose = 1 << Component.ControlPose,
     ControlSpawn = 1 << Component.ControlSpawn,
     ControlXr = 1 << Component.ControlXr,
     Cull = 1 << Component.Cull,
@@ -77,6 +80,7 @@ export class World {
     Collide: Array<Collide> = [];
     ControlFire: Array<ControlFire> = [];
     ControlMove: Array<ControlMove> = [];
+    ControlPose: Array<ControlPose> = [];
     ControlSpawn: Array<ControlSpawn> = [];
     ControlXr: Array<ControlXr> = [];
     Cull: Array<Cull> = [];

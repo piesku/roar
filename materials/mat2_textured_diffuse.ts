@@ -29,6 +29,8 @@ let fragment = `#version 300 es\n
     const int MAX_LIGHTS = 8;
 
     uniform vec4 color;
+    uniform vec3 eye_pos;
+    uniform float fog_distance;
     uniform float fog_level;
     uniform sampler2D sampler;
     uniform vec2 texscale;
@@ -80,8 +82,17 @@ let fragment = `#version 300 es\n
             }
         }
 
-        frag_color = vec4(rgb, color.a) * texture(sampler, vert_texcoord * texscale);
-        frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(2.0, 0.0, vert_pos.y - fog_level));
+        vec4 tex_color = texture(sampler, vert_texcoord * texscale);
+        if (tex_color.a == 0.0) {
+            discard;
+        } else {
+            frag_color = vec4(rgb, color.a) * tex_color;
+            frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(2.0, 0.0, vert_pos.y - fog_level));
+
+            float eye_distance = length(eye_pos - vert_pos.xyz);
+            float fog_amount = clamp(0.0, 1.0, eye_distance / fog_distance);
+            frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(0.0, 1.0, fog_amount));
+        }
     }
 `;
 
@@ -95,6 +106,8 @@ export function mat2_textured_diffuse(gl: WebGL2RenderingContext): Material<Text
             World: gl.getUniformLocation(program, "world")!,
             Self: gl.getUniformLocation(program, "self")!,
             Color: gl.getUniformLocation(program, "color")!,
+            EyePosition: gl.getUniformLocation(program, "eye_pos")!,
+            FogDistance: gl.getUniformLocation(program, "fog_distance")!,
             FogLevel: gl.getUniformLocation(program, "fog_level")!,
             Sampler: gl.getUniformLocation(program, "sampler")!,
             TexScale: gl.getUniformLocation(program, "texscale")!,
