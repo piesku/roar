@@ -71,11 +71,10 @@ export function scene_grid(game: Game) {
         ],
         Children: [
             {
-                Translation: [0, 0.5, 0],
                 Using: [
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
+                        game.MeshCube,
                         game.Textures["noise"],
                         [1, 1, 1, 1],
                         GL_CW,

@@ -127,11 +127,10 @@ export function scene_zen(game: Game) {
                 ],
                 Children: [
                     {
-                        Translation: [0, 0.5, 0],
                         Using: [
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
-                                game.MeshPlane,
+                                game.MeshCube,
                                 game.Textures["noise"],
                                 [0, 0.1, 0.2, 1],
                                 GL_CW,

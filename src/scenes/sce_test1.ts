@@ -46,11 +46,10 @@ export function scene_test1(game: Game) {
         ],
         Children: [
             {
-                Translation: [0, 0.5, 0],
                 Using: [
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
+                        game.MeshCube,
                         game.Textures["fire"],
                         [1, 1, 1, 1],
                         GL_CW,

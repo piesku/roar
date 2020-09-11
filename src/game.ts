@@ -5,7 +5,6 @@ import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mat2_wireframe} from "../materials/mat2_wireframe.js";
 import {mesh_claw} from "../meshes/claw.js";
 import {mesh_cube} from "../meshes/cube.js";
-import {mesh_plane} from "../meshes/plane.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop} from "./core.js";
 import {sys_aim} from "./systems/sys_aim.js";
@@ -64,7 +63,6 @@ export class Game {
     MaterialColoredUnlit = mat2_colored_unlit(this.Gl);
     MaterialParticles = mat2_particles(this.Gl);
     MeshCube = mesh_cube(this.Gl);
-    MeshPlane = mesh_plane(this.Gl);
     MeshClaw = mesh_claw(this.Gl);
     Textures: Record<string, WebGLTexture> = {};
 

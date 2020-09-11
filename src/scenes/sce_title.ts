@@ -52,12 +52,11 @@ export function scene_title(game: Game) {
         Using: [collide(true, Layer.Ground, Layer.None, [10, 1, 10]), rigid_body(RigidKind.Static)],
         Children: [
             {
-                Translation: [0, 0.5, 0],
                 Using: [
                     named("base"),
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
+                        game.MeshCube,
                         game.Textures["noise"],
                         [1, 1, 1, 1],
                         GL_CW,
