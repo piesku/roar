@@ -146,4 +146,5 @@ export const enum Layer {
     BuildingShell = 8,
     BuildingBlock = 16,
     Missile = 32,
+    Cage = 64,
 }

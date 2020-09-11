@@ -108,11 +108,12 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 // Grip detector.
                                 Translation: [0.1, 0, 0],
                                 Using: [
-                                    collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [
-                                        0.1,
-                                        0.1,
-                                        0.1,
-                                    ]),
+                                    collide(
+                                        true,
+                                        Layer.PlayerGrip,
+                                        Layer.BuildingBlock | Layer.Cage,
+                                        [0.1, 0.1, 0.1]
+                                    ),
                                 ],
                             },
                             {
@@ -139,11 +140,12 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 // Grip detector.
                                 Translation: [-0.1, 0, 0],
                                 Using: [
-                                    collide(true, Layer.PlayerGrip, Layer.BuildingBlock, [
-                                        0.1,
-                                        0.1,
-                                        0.1,
-                                    ]),
+                                    collide(
+                                        true,
+                                        Layer.PlayerGrip,
+                                        Layer.BuildingBlock | Layer.Cage,
+                                        [0.1, 0.1, 0.1]
+                                    ),
                                 ],
                             },
                             {

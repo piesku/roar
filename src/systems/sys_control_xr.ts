@@ -311,10 +311,15 @@ function update(game: Game, entity: Entity) {
 
                                 building_transform.Dirty = true;
 
-                                // Switch to a kinematic rigid body.
-                                let rigid_body = game.World.RigidBody[building_entity];
-                                rigid_body.Kind = RigidKind.Kinematic;
-                                get_translation(rigid_body.LastPosition, building_transform.World);
+                                if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                    // Switch to a kinematic rigid body.
+                                    let rigid_body = game.World.RigidBody[building_entity];
+                                    rigid_body.Kind = RigidKind.Kinematic;
+                                    get_translation(
+                                        rigid_body.LastPosition,
+                                        building_transform.World
+                                    );
+                                }
 
                                 // Disable lifespan.
                                 game.World.Signature[building_entity] &= ~Has.Lifespan;
@@ -338,10 +343,12 @@ function update(game: Game, entity: Entity) {
                             get_rotation(building_transform.Rotation, building_transform.World);
                             building_transform.Dirty = true;
 
-                            // Switch back to a dynamic rigid body.
-                            let rigid_body = game.World.RigidBody[building_entity];
-                            rigid_body.Kind = RigidKind.Dynamic;
-                            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                            if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                // Switch back to a dynamic rigid body.
+                                let rigid_body = game.World.RigidBody[building_entity];
+                                rigid_body.Kind = RigidKind.Dynamic;
+                                copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                            }
 
                             // Enable lifespan.
                             game.World.Signature[building_entity] |= Has.Lifespan;

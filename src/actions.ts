@@ -19,6 +19,7 @@ export const enum Action {
     Explode,
     Burn,
     Collapse,
+    CageFound,
 }
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
@@ -112,6 +113,28 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 ...blueprint_collapse(game),
             });
 
+            break;
+        }
+        case Action.CageFound: {
+            let [cage_entity] = payload as [Entity, Entity];
+            let cage_transform = game.World.Transform[cage_entity];
+            if (cage_transform.Parent) {
+                // The player has grabbed the cage.
+                game.World.Signature[cage_entity] &= ~Has.Trigger;
+                game.World.Collide[cage_entity].Dynamic = true;
+
+                // Destroy all buildings.
+                for (let i = 0; i < game.World.Signature.length; i++) {
+                    if (game.World.Signature[i] & Has.Lifespan) {
+                        let lifespan = game.World.Lifespan[i];
+                        lifespan.Age = lifespan.Max;
+                    }
+                }
+
+                setTimeout(() => {
+                    dispatch(game, Action.ExitVr, undefined);
+                }, 5000);
+            }
             break;
         }
     }
