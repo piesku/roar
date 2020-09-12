@@ -9,3 +9,5 @@ A WebXR submission to js13kGames 2020, based on Goodluck.
 - AABB colliders do not take the scale and rotation into account. Their size is always defined in world units.
 
 - Remove `LightDirectional`.
+
+- (Only on the `release` branch) Remove `RenderKind` and `RenderPhase` and use `Render.Material` to distinguish between rendering phases.
