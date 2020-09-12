@@ -1,7 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
 import {GL_CCW, GL_CW} from "../../common/webgl.js";
-import {StageKind} from "../actions.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -22,7 +21,6 @@ import {Game, Layer} from "../game.js";
 import {Has, World} from "../world.js";
 
 export function scene_title(game: Game) {
-    game.CurrentStage = StageKind.Title;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;

@@ -2,7 +2,6 @@ html,
 body {
     overflow: hidden;
     margin: 0;
-    color: #fc0;
 }
 canvas,
 main {
@@ -10,22 +9,18 @@ main {
     width: 100vw;
     height: 100vh;
     user-select: none;
-}
-img {
-    display: none;
-}
-div[onclick] {
-    cursor: pointer;
+    font: italic bold 10vmin Arial;
+    color: #fc0;
 }
 button[onclick] {
     cursor: pointer;
     padding: 1vmin;
+    background: transparent;
     border: none;
+    font: italic bold 10vmin Arial;
+    color: #fc0;
 }
-b {
-    font: italic bold 5rem fantasy;
-}
-i {
-    display: block;
-    font: italic small-caps bold 2rem cursive;
+
+img {
+    display: none;
 }

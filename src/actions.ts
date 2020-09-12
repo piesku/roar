@@ -36,11 +36,8 @@ export const enum Action {
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
-        case Action.GoToTitle: {
-            setTimeout(() => scene_title(game));
-            break;
-        }
         case Action.GoToStage: {
+            game.CurrentStage = StageKind.Playing;
             setTimeout(() => scene_grid(game));
             // Fall through to EnterVr.
         }
@@ -49,6 +46,10 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 xr_enter(game);
             }
             break;
+        }
+        case Action.GoToTitle: {
+            setTimeout(() => scene_title(game));
+            // Fall through to ExitVr.
         }
         case Action.ExitVr: {
             if (game.XrFrame) {
@@ -90,7 +91,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 if (game.CurrentStage === StageKind.Playing) {
                     game.CurrentStage = StageKind.Failed;
                     setTimeout(() => {
-                        dispatch(game, Action.ExitVr, undefined);
+                        dispatch(game, Action.GoToTitle, undefined);
                     }, 1000);
                 }
             }
@@ -163,7 +164,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 if (game.CurrentStage === StageKind.Playing) {
                     game.CurrentStage = StageKind.Clear;
                     setTimeout(() => {
-                        dispatch(game, Action.ExitVr, undefined);
+                        dispatch(game, Action.GoToTitle, undefined);
                     }, 5000);
                 }
             }

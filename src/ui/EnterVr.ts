@@ -30,6 +30,7 @@ function EnterButton() {
             style="
                 background: #000;
                 color: #fff;
+                font: 13px Arial;
             "
         >
             Enter VR
@@ -42,8 +43,9 @@ function ExitButton() {
         <button
             onclick="$(${Action.ExitVr})"
             style="
-                color: #fff;
                 background: #000;
+                color: #fff;
+                font: 13px Arial;
             "
         >
             Exit VR
