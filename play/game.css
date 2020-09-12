@@ -12,13 +12,9 @@ main {
     font: italic bold 10vmin Arial;
     color: #fc0;
 }
-button[onclick] {
+[onclick] {
     cursor: pointer;
     padding: 1vmin;
-    background: transparent;
-    border: none;
-    font: italic bold 10vmin Arial;
-    color: #fc0;
 }
 
 img {

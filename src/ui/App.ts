@@ -29,8 +29,8 @@ export function App(game: Game) {
             "
         >
             ${game.CurrentStage === StageKind.Title
-                ? `<button onclick="$(${Action.GoToStage})">Play now</button>`
-                : `<button onclick="$(${Action.GoToStage})">Play again</button>`}
+                ? `<div onclick="$(${Action.GoToStage})">Play now</div>`
+                : `<div onclick="$(${Action.GoToStage})">Play again</div>`}
         </div>
     `;
 }

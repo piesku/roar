@@ -25,7 +25,7 @@ export function EnterVr(game: Game) {
 
 function EnterButton() {
     return html`
-        <button
+        <div
             onclick="$(${Action.EnterVr})"
             style="
                 background: #000;
@@ -34,13 +34,13 @@ function EnterButton() {
             "
         >
             Enter VR
-        </button>
+        </div>
     `;
 }
 
 function ExitButton() {
     return html`
-        <button
+        <div
             onclick="$(${Action.ExitVr})"
             style="
                 background: #000;
@@ -49,6 +49,6 @@ function ExitButton() {
             "
         >
             Exit VR
-        </button>
+        </div>
     `;
 }
