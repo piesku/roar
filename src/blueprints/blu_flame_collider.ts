@@ -19,9 +19,6 @@ export function blueprint_flame_collider(game: Game): Blueprint {
             ]),
             trigger(Action.Burn),
             lifespan(1),
-
-            // A debug cube.
-            // render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [1, 1, 1, 1]),
         ],
     };
 }
