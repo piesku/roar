@@ -8,7 +8,7 @@ import {control_spawn} from "../components/com_control_spawn.js";
 import {ControlXrKind, control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {move} from "../components/com_move.js";
-import {named} from "../components/com_named.js";
+import {Name, named} from "../components/com_named.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {shake} from "../components/com_shake.js";
@@ -21,7 +21,7 @@ import {blueprint_paw} from "./blu_paw.js";
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
         Scale: [scale, scale, scale],
-        Using: [control_xr(ControlXrKind.Motion), move(2, 0), named("base")],
+        Using: [control_xr(ControlXrKind.Motion), move(2, 0), named(Name.Base)],
         Children: [
             {
                 // An intermediate entity for walk bobbing.
@@ -33,7 +33,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Head.
                         Translation: [0, 2, 0],
-                        Using: [control_pose(ControlPoseKind.Head), named("head")],
+                        Using: [control_pose(ControlPoseKind.Head), named(Name.Head)],
                         Children: [
                             {
                                 // The head space has +Z towards the user, so we need to
@@ -47,7 +47,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 Translation: [0, -0.2, 0],
                                 Rotation: [0, 1, 0, 0],
                                 Using: [
-                                    named("mouth"),
+                                    named(Name.Mouth),
                                     control_xr(ControlXrKind.Breath),
                                     audio_source(false),
                                     control_spawn(blueprint_flame_collider, 0.3),
@@ -87,7 +87,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                             {
                                 // Helicopter target.
                                 Translation: [0, 0, -1],
-                                Using: [named("front")],
+                                Using: [named(Name.Front)],
                             },
                         ],
                     },

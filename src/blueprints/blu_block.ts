@@ -2,7 +2,7 @@ import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
 import {cull} from "../components/com_cull.js";
 import {lifespan} from "../components/com_lifespan.js";
-import {named} from "../components/com_named.js";
+import {Name, named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {BUILDING_LIFESPAN} from "../config.js";
@@ -15,7 +15,7 @@ import {blueprint_roof} from "./blu_roof.js";
 export function blueprint_block(game: Game, variant: number, has_roof: boolean): Blueprint {
     let block: Blueprint = {
         Using: [
-            named("block"),
+            named(Name.Block),
             collide(
                 true,
                 Layer.BuildingBlock,

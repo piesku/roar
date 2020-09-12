@@ -3,7 +3,7 @@ import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
-import {find_all, find_first} from "./components/com_named.js";
+import {find_all, find_first, Name} from "./components/com_named.js";
 import {RigidKind} from "./components/com_rigid_body.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
@@ -81,10 +81,10 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
-                let ground = find_first(game.World, "ground");
+                let ground = find_first(game.World, Name.Ground);
                 game.World.Signature[ground] &= ~Has.Collide;
 
-                for (let shell of find_all(game.World, "shell")) {
+                for (let shell of find_all(game.World, Name.Shell)) {
                     game.World.RigidBody[shell].Kind = RigidKind.Dynamic;
                 }
 
@@ -152,11 +152,11 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 game.World.Signature[cage_entity] &= ~Has.Trigger;
                 game.World.Collide[cage_entity].Dynamic = true;
 
-                let mouth_entity = find_first(game.World, "mouth");
+                let mouth_entity = find_first(game.World, Name.Mouth);
                 let mouth_audio = game.World.AudioSource[mouth_entity];
                 mouth_audio.Trigger = snd_growl(false);
 
-                for (let block of find_all(game.World, "block")) {
+                for (let block of find_all(game.World, Name.Block)) {
                     game.World.Signature[block] |= Has.Lifespan;
                     game.World.Lifespan[block].Remaining = Math.random() * 2;
                 }
