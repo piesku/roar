@@ -13,7 +13,12 @@ game.rollup.js: ../$(EXAMPLE)/index.js
 	@npx rollup --format iife $< --silent > $@
 	@echo "Done"
 
-game.sed.js: game.rollup.js
+game.inline.js: game.rollup.js
+	@echo -n "Inlining some functions... "
+	@node inline.cjs $< > $@
+	@echo "Done"
+
+game.sed.js: game.inline.js
 	@echo -n "Running replacements... "
 	@sed  -f sed.txt  $< > $@
 	@echo "Done"
