@@ -25,7 +25,7 @@ export function blueprint_cage(game: Game): Blueprint {
         ],
         Children: [
             {
-                Using: [shake(Infinity, 0.02), toggle(Has.Shake, 1, true)],
+                Using: [shake(Infinity, 0.02), toggle(Has.Shake, 1, false)],
                 Children: [
                     {
                         Using: [
@@ -43,7 +43,8 @@ export function blueprint_cage(game: Game): Blueprint {
                                 game.MeshCube,
                                 game.Textures["cage"],
                                 [1, 1, 1, 1],
-                                GL_CCW
+                                GL_CCW,
+                                -2
                             ),
                         ],
                     },

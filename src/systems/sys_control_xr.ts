@@ -1,7 +1,7 @@
 import {get_rotation, get_translation} from "../../common/mat4.js";
 import {Quat, Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
-import {conjugate, from_euler, multiply} from "../../common/quat.js";
+import {conjugate, from_axis, multiply} from "../../common/quat.js";
 import {copy, transform_direction, transform_point} from "../../common/vec3.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
@@ -10,6 +10,7 @@ import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
 
 const QUERY = Has.Transform | Has.ControlXr;
+const AXIS_Y: Vec3 = [0, 1, 0];
 
 export function sys_control_xr(game: Game, delta: number) {
     if (!game.XrFrame) {
@@ -130,7 +131,7 @@ function update(game: Game, entity: Entity) {
                     // Open or close the hand.
                     let hand_transform = game.World.Transform[hand_entity];
                     hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                    from_euler(hand_transform.Rotation, 0, -45 * squeeze.value, 0);
+                    from_axis(hand_transform.Rotation, AXIS_Y, -squeeze.value);
                     hand_transform.Dirty = true;
 
                     let grip_anchor_transform = game.World.Transform[grip_anchor_entity];
@@ -249,7 +250,7 @@ function update(game: Game, entity: Entity) {
                     // Open or close the hand.
                     let hand_transform = game.World.Transform[hand_entity];
                     hand_transform.Scale[2] = map_range(squeeze.value, 0, 1, 1, 0.5);
-                    from_euler(hand_transform.Rotation, 0, 45 * squeeze.value, 0);
+                    from_axis(hand_transform.Rotation, AXIS_Y, squeeze.value);
                     hand_transform.Dirty = true;
 
                     let grip_anchor_transform = game.World.Transform[grip_anchor_entity];

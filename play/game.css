@@ -17,6 +17,11 @@ img {
 div[onclick] {
     cursor: pointer;
 }
+button[onclick] {
+    cursor: pointer;
+    padding: 1vmin;
+    border: none;
+}
 b {
     font: italic bold 5rem fantasy;
 }
