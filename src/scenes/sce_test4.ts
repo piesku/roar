@@ -3,7 +3,6 @@ import {set_seed} from "../../common/random.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {control_move} from "../components/com_control_move.js";
 import {emit_particles} from "../components/com_emit_particles.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_particles} from "../components/com_render_particles.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
@@ -25,12 +24,6 @@ export function scene_test4(game: Game) {
         ...blueprint_camera(game),
         Translation: [0, 10, 10],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
-    });
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 1)],
     });
 
     // Health

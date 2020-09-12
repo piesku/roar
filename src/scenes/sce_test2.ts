@@ -3,7 +3,6 @@ import {set_seed} from "../../common/random.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {audio_source} from "../components/com_audio_source.js";
-import {light_directional} from "../components/com_light.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {instantiate} from "../core.js";
 import {Game} from "../game.js";
@@ -27,12 +26,6 @@ export function scene_test2(game: Game) {
 
     // VR Camera.
     instantiate(game, blueprint_viewer(game, 1));
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 1)],
-    });
 
     instantiate(game, {
         Translation: [0, 0, -2],

@@ -33,6 +33,7 @@ let fragment = `#version 300 es\n
     uniform float fog_distance;
     uniform float fog_level;
     uniform sampler2D sampler;
+    // [x, y, z, w: kind]
     uniform vec4 light_positions[MAX_LIGHTS];
     uniform vec4 light_details[MAX_LIGHTS];
 
@@ -61,17 +62,11 @@ let fragment = `#version 300 es\n
             vec3 light_color = light_details[i].rgb;
             float light_intensity = light_details[i].a;
 
-            vec3 light_normal;
-            if (light_positions[i].w == 1.0) {
-                // Directional light.
-                light_normal = light_positions[i].xyz;
-            } else {
-                vec3 light_dir = light_positions[i].xyz - vert_pos.xyz;
-                float light_dist = length(light_dir);
-                light_normal = light_dir / light_dist;
-                // Distance attenuation.
-                light_intensity /= (light_dist * light_dist);
-            }
+            vec3 light_dir = light_positions[i].xyz - vert_pos.xyz;
+            float light_dist = length(light_dir);
+            vec3 light_normal = light_dir / light_dist;
+            // Distance attenuation.
+            light_intensity /= (light_dist * light_dist);
 
             float diffuse_factor = dot(frag_normal, light_normal);
             if (diffuse_factor > 0.0) {

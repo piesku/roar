@@ -12,7 +12,6 @@ import {blueprint_police} from "../blueprints/blu_police.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
@@ -36,14 +35,6 @@ export function scene_title(game: Game) {
         ...blueprint_camera(game),
         Translation: [-2, 0.1, 2],
         Rotation: from_euler([0, 0, 0, 0], -15, 105, 0),
-    });
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        // The helicopter needs an entity named head in the scene.
-        // Has.Aim is disabled so it won't use it.
-        Using: [light_directional([1, 1, 1], 0.3), named("head")],
     });
 
     // Ground.
@@ -86,6 +77,9 @@ export function scene_title(game: Game) {
 
     instantiate(game, {
         ...blueprint_paw(game, GL_CCW),
+        // The helicopter needs an entity named head in the scene.
+        // Has.Aim is disabled so it won't use it.
+        Using: [named("head")],
         Translation: [3, 2, 1],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
         Scale: [-5, 5, 5],

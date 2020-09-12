@@ -12,7 +12,6 @@ import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
 import {lifespan} from "../components/com_lifespan.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
@@ -28,12 +27,6 @@ export function scene_zen(game: Game) {
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
 
     set_seed(Date.now());
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 0.3)],
-    });
 
     let grid_size = 16;
     let ground_size = grid_size * 10;

@@ -15,7 +15,6 @@ import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
@@ -50,12 +49,6 @@ export function scene_grid(game: Game) {
 
     // VR Camera.
     instantiate(game, blueprint_viewer(game, scale));
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 0.3)],
-    });
 
     // Moon.
     instantiate(game, blueprint_moon());
