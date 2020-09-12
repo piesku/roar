@@ -1,8 +1,8 @@
-import {Material} from "../../common/material.js";
 import {
     GL_ARRAY_BUFFER,
     GL_BLEND,
     GL_COLOR_BUFFER_BIT,
+    GL_CW,
     GL_DEPTH_BUFFER_BIT,
     GL_DEPTH_TEST,
     GL_FLOAT,
@@ -11,8 +11,6 @@ import {
     GL_TEXTURE_2D,
     GL_UNSIGNED_SHORT,
 } from "../../common/webgl.js";
-import {ParticlesLayout} from "../../materials/layout_particles.js";
-import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {CameraEye, CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {EmitParticles} from "../components/com_emit_particles.js";
 import {DATA_PER_PARTICLE, RenderParticles} from "../components/com_render_particles.js";
@@ -39,17 +37,11 @@ function render_screen(game: Game, camera: CameraPerspective) {
         game.Gl.viewport(0, 0, game.ViewportWidth, game.ViewportHeight);
     }
 
-    use_textured_diffuse(game, game.MaterialTexturedDiffuse, camera);
-    render(game, game.MaterialTexturedDiffuse);
+    render_textured_diffuse(game, camera);
 
     // For best results, we should sort translucent entities by their distance
     // to the camera first. For our use-case skipping sorting is good enough.
-    game.Gl.disable(GL_DEPTH_TEST);
-    game.Gl.enable(GL_BLEND);
-    use_particles(game, game.MaterialParticles, camera);
-    render(game, game.MaterialParticles);
-    game.Gl.disable(GL_BLEND);
-    game.Gl.enable(GL_DEPTH_TEST);
+    render_particles(game, camera);
 }
 
 function render_vr(game: Game, camera: CameraXr) {
@@ -61,19 +53,21 @@ function render_vr(game: Game, camera: CameraXr) {
         let eye = camera.Eyes[name];
         let viewport = layer.getViewport(eye.Viewpoint);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        use_textured_diffuse(game, game.MaterialTexturedDiffuse, eye);
-        render(game, game.MaterialTexturedDiffuse);
-
-        game.Gl.disable(GL_DEPTH_TEST);
-        game.Gl.enable(GL_BLEND);
-        use_particles(game, game.MaterialParticles, eye);
-        render(game, game.MaterialParticles);
-        game.Gl.disable(GL_BLEND);
-        game.Gl.enable(GL_DEPTH_TEST);
+        render_textured_diffuse(game, eye);
+        render_particles(game, eye);
     }
 }
 
-function render(game: Game, current_material: Material<TexturedDiffuseLayout | ParticlesLayout>) {
+function render_textured_diffuse(game: Game, eye: CameraEye) {
+    let material = game.MaterialTexturedDiffuse;
+
+    game.Gl.useProgram(material.Program);
+    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, eye.Pv);
+    game.Gl.uniform3fv(material.Locations.EyePosition, eye.Position);
+    game.Gl.uniform1f(material.Locations.FogDistance, eye.FogDistance);
+    game.Gl.uniform4fv(material.Locations.LightPositions, game.LightPositions);
+    game.Gl.uniform4fv(material.Locations.LightDetails, game.LightDetails);
+
     let current_front_face = null;
 
     for (let i = 0; i < game.World.Signature.length; i++) {
@@ -86,34 +80,38 @@ function render(game: Game, current_material: Material<TexturedDiffuseLayout | P
                 game.Gl.frontFace(render.FrontFace);
             }
 
-            if (render.Material === current_material) {
-                switch (render.Material) {
-                    case game.MaterialTexturedDiffuse:
-                        draw_textured_diffuse(game, transform, render as RenderTexturedDiffuse);
-                        break;
-                    case game.MaterialParticles:
-                        let emitter = game.World.EmitParticles[i];
-                        if (emitter.Instances.length > 0) {
-                            draw_particles(game, render as RenderParticles, emitter);
-                        }
-                        break;
-                }
+            if (render.Material === material) {
+                draw_textured_diffuse(game, transform, render as RenderTexturedDiffuse);
             }
         }
     }
 }
 
-function use_textured_diffuse(
-    game: Game,
-    material: Material<TexturedDiffuseLayout>,
-    eye: CameraEye
-) {
+function render_particles(game: Game, eye: CameraEye) {
+    let material = game.MaterialParticles;
+
+    game.Gl.disable(GL_DEPTH_TEST);
+    game.Gl.enable(GL_BLEND);
+    game.Gl.frontFace(GL_CW);
+
     game.Gl.useProgram(material.Program);
     game.Gl.uniformMatrix4fv(material.Locations.Pv, false, eye.Pv);
-    game.Gl.uniform3fv(material.Locations.EyePosition, eye.Position);
-    game.Gl.uniform1f(material.Locations.FogDistance, eye.FogDistance);
-    game.Gl.uniform4fv(material.Locations.LightPositions, game.LightPositions);
-    game.Gl.uniform4fv(material.Locations.LightDetails, game.LightDetails);
+
+    for (let i = 0; i < game.World.Signature.length; i++) {
+        if ((game.World.Signature[i] & QUERY) === QUERY) {
+            let render = game.World.Render[i];
+
+            if (render.Material === material) {
+                let emitter = game.World.EmitParticles[i];
+                if (emitter.Instances.length > 0) {
+                    draw_particles(game, render as RenderParticles, emitter);
+                }
+            }
+        }
+    }
+
+    game.Gl.disable(GL_BLEND);
+    game.Gl.enable(GL_DEPTH_TEST);
 }
 
 function draw_textured_diffuse(game: Game, transform: Transform, render: RenderTexturedDiffuse) {
@@ -129,11 +127,6 @@ function draw_textured_diffuse(game: Game, transform: Transform, render: RenderT
     game.Gl.bindVertexArray(render.Vao);
     game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
     game.Gl.bindVertexArray(null);
-}
-
-function use_particles(game: Game, material: Material<ParticlesLayout>, eye: CameraEye) {
-    game.Gl.useProgram(material.Program);
-    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, eye.Pv);
 }
 
 function draw_particles(game: Game, render: RenderParticles, emitter: EmitParticles) {
