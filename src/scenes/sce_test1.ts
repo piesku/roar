@@ -5,7 +5,6 @@ import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
-import {light_directional} from "../components/com_light.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {instantiate} from "../core.js";
@@ -30,12 +29,6 @@ export function scene_test1(game: Game) {
     // VR Camera.
     instantiate(game, blueprint_viewer(game, 3));
 
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 1)],
-    });
-
     // Ground.
     instantiate(game, {
         Translation: [0, -0.5, 0],
@@ -46,16 +39,14 @@ export function scene_test1(game: Game) {
         ],
         Children: [
             {
-                Translation: [0, 0.5, 0],
                 Using: [
                     render_textured_diffuse(
                         game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
+                        game.MeshCube,
                         game.Textures["fire"],
-                        GL_CW,
                         [1, 1, 1, 1],
-                        -2,
-                        [5, 5]
+                        GL_CW,
+                        -2
                     ),
                 ],
             },

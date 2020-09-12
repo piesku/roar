@@ -5,7 +5,6 @@ import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {instantiate} from "../core.js";
 import {Game} from "../game.js";
@@ -28,12 +27,6 @@ export function scene_test3(game: Game) {
 
     // VR Camera.
     instantiate(game, blueprint_viewer(game, 1));
-
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 1)],
-    });
 
     // Missile spawner.
     instantiate(game, {

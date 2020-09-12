@@ -2,6 +2,7 @@ import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
 import {element, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
+import {StageKind} from "../actions.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -14,8 +15,8 @@ import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
+import {named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
@@ -24,7 +25,7 @@ import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
 export function scene_grid(game: Game) {
-    game.CurrentScene = scene_grid;
+    game.CurrentStage = StageKind.Playing;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -49,40 +50,27 @@ export function scene_grid(game: Game) {
     // VR Camera.
     instantiate(game, blueprint_viewer(game, scale));
 
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 0.3)],
-    });
-
     // Moon.
-    instantiate(game, blueprint_moon(game));
+    instantiate(game, blueprint_moon());
 
     let grid_size = 9;
-    let ground_size = grid_size * 10;
 
     // Ground.
     instantiate(game, {
         Translation: [0, -0.5, 0],
-        Scale: [ground_size, 1, ground_size],
+        Scale: [99, 1, 99],
         Using: [
-            collide(false, Layer.Ground, Layer.None, [ground_size, 1, ground_size]),
+            named("ground"),
+            collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
-        ],
-        Children: [
-            {
-                Translation: [0, 0.5, 0],
-                Using: [
-                    render_textured_diffuse(
-                        game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
-                        game.Textures["noise"],
-                        GL_CW,
-                        [1, 1, 1, 1],
-                        -0.5
-                    ),
-                ],
-            },
+            render_textured_diffuse(
+                game.MaterialTexturedDiffuse,
+                game.MeshCube,
+                game.Textures["noise"],
+                [1, 1, 1, 1],
+                GL_CW,
+                -0.5
+            ),
         ],
     });
 

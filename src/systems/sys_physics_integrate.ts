@@ -22,9 +22,7 @@ function update(game: Game, entity: Entity, delta: number) {
     if (rigid_body.Kind === RigidKind.Dynamic) {
         copy(rigid_body.VelocityIntegrated, rigid_body.VelocityResolved);
 
-        // Compute change to velocity, including the gravity.
-        scale(rigid_body.Acceleration, rigid_body.Acceleration, delta);
-        add(rigid_body.VelocityIntegrated, rigid_body.VelocityIntegrated, rigid_body.Acceleration);
+        // Compute change to velocity due to the gravity.
         rigid_body.VelocityIntegrated[1] += GRAVITY * delta;
 
         // Apply velocity to position.
@@ -32,8 +30,5 @@ function update(game: Game, entity: Entity, delta: number) {
         scale(vel_delta, rigid_body.VelocityIntegrated, delta);
         add(transform.Translation, transform.Translation, vel_delta);
         transform.Dirty = true;
-
-        // Reset force/acceleration.
-        scale(rigid_body.Acceleration, rigid_body.Acceleration, 0);
     }
 }

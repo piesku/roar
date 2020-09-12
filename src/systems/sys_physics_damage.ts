@@ -31,7 +31,7 @@ function update(game: Game, entity: Entity) {
                     // Buildings start with Has.Lifespan disabled but
                     // BuildingShells enable it when they wake up.
                     let lifespan = game.World.Lifespan[entity];
-                    lifespan.Age += damage;
+                    lifespan.Remaining -= damage;
                 }
             }
         }

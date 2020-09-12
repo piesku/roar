@@ -1,7 +1,5 @@
 import {get_translation} from "../../common/mat4.js";
 import {Vec3} from "../../common/math.js";
-import {normalize} from "../../common/vec3.js";
-import {LightKind} from "../components/com_light.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -26,12 +24,6 @@ function update(game: Game, entity: Entity, idx: number) {
     let transform = game.World.Transform[entity];
 
     get_translation(world_pos, transform.World);
-    if (light.Kind === LightKind.Directional) {
-        // For directional lights, their normalized position in the world
-        // describes the light's normal.
-        normalize(world_pos, world_pos);
-    }
-
     game.LightPositions[4 * idx + 0] = world_pos[0];
     game.LightPositions[4 * idx + 1] = world_pos[1];
     game.LightPositions[4 * idx + 2] = world_pos[2];

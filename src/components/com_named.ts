@@ -2,7 +2,7 @@ import {Err} from "../errors.js";
 import {Entity, Game} from "../game.js";
 import {Has, World} from "../world.js";
 
-type Name = "base" | "head" | "front" | "mouth";
+type Name = "base" | "head" | "front" | "mouth" | "ground" | "shell" | "block";
 
 export interface Named {
     Name: Name;
@@ -17,11 +17,17 @@ export function named(name: Name) {
     };
 }
 
-export function find_first(world: World, name: Name) {
+export function* find_all(world: World, name: Name) {
     for (let i = 0; i < world.Signature.length; i++) {
         if (world.Signature[i] & Has.Named && world.Named[i].Name === name) {
-            return i;
+            yield i;
         }
+    }
+}
+
+export function find_first(world: World, name: Name) {
+    for (let entity of find_all(world, name)) {
+        return entity;
     }
     return Err.NamedEntityNotFound;
 }

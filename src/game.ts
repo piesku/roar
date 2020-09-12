@@ -4,7 +4,7 @@ import {mat2_particles} from "../materials/mat2_particles.js";
 import {mat2_textured_diffuse} from "../materials/mat2_textured_diffuse.js";
 import {mesh_claw} from "../meshes/claw.js";
 import {mesh_cube} from "../meshes/cube.js";
-import {mesh_plane} from "../meshes/plane.js";
+import {StageKind} from "./actions.js";
 import {Camera} from "./components/com_camera.js";
 import {loop_start, loop_stop} from "./core.js";
 import {sys_aim} from "./systems/sys_aim.js";
@@ -47,7 +47,7 @@ export class Game {
     Ui = document.querySelector("main")!;
     Canvas = document.querySelector("canvas")!;
     Gl = this.Canvas.getContext("webgl2", {xrCompatible: true})! as WebGL2RenderingContext;
-    Audio = new (window["AudioContext"] || window.webkitAudioContext)();
+    Audio = new AudioContext();
 
     XrSupported = false;
     XrSession?: XRSession;
@@ -60,7 +60,6 @@ export class Game {
     MaterialColoredUnlit = mat2_colored_unlit(this.Gl);
     MaterialParticles = mat2_particles(this.Gl);
     MeshCube = mesh_cube(this.Gl);
-    MeshPlane = mesh_plane(this.Gl);
     MeshClaw = mesh_claw(this.Gl);
     Textures: Record<string, WebGLTexture> = {};
 
@@ -69,7 +68,7 @@ export class Game {
     LightPositions = new Float32Array(4 * 8);
     LightDetails = new Float32Array(4 * 8);
 
-    CurrentScene?: Function;
+    CurrentStage?: StageKind;
 
     constructor() {
         document.addEventListener("visibilitychange", () =>

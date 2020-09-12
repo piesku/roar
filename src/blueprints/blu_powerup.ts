@@ -1,5 +1,4 @@
 import {from_euler} from "../../common/quat.js";
-import {GL_CW} from "../../common/webgl.js";
 import {control_move} from "../components/com_control_move.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {move} from "../components/com_move.js";
@@ -22,7 +21,6 @@ export function blueprint_powerup(game: Game): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["fire"],
-                        GL_CW,
                         [1, 0.5, 0, 1]
                     ),
                 ],

@@ -1,6 +1,7 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
 import {GL_CCW, GL_CW} from "../../common/webgl.js";
+import {StageKind} from "../actions.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -11,7 +12,6 @@ import {blueprint_police} from "../blueprints/blu_police.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
@@ -22,7 +22,7 @@ import {Game, Layer} from "../game.js";
 import {Has, World} from "../world.js";
 
 export function scene_title(game: Game) {
-    game.CurrentScene = scene_title;
+    game.CurrentStage = StageKind.Title;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -37,34 +37,22 @@ export function scene_title(game: Game) {
         Rotation: from_euler([0, 0, 0, 0], -15, 105, 0),
     });
 
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        // The helicopter needs an entity named head in the scene.
-        // Has.Aim is disabled so it won't use it.
-        Using: [light_directional([1, 1, 1], 0.3), named("head")],
-    });
-
     // Ground.
     instantiate(game, {
-        Translation: [0, -0.5, 1],
-        Scale: [10, 1, 10],
-        Using: [collide(true, Layer.Ground, Layer.None, [10, 1, 10]), rigid_body(RigidKind.Static)],
-        Children: [
-            {
-                Translation: [0, 0.5, 0],
-                Using: [
-                    named("base"),
-                    render_textured_diffuse(
-                        game.MaterialTexturedDiffuse,
-                        game.MeshPlane,
-                        game.Textures["noise"],
-                        GL_CW,
-                        [1, 1, 1, 1],
-                        -0.5
-                    ),
-                ],
-            },
+        Translation: [0, -0.5, 0],
+        Scale: [99, 1, 99],
+        Using: [
+            named("ground"),
+            collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
+            rigid_body(RigidKind.Static),
+            render_textured_diffuse(
+                game.MaterialTexturedDiffuse,
+                game.MeshCube,
+                game.Textures["noise"],
+                [1, 1, 1, 1],
+                GL_CW,
+                -0.5
+            ),
         ],
     });
 
@@ -89,6 +77,9 @@ export function scene_title(game: Game) {
 
     instantiate(game, {
         ...blueprint_paw(game, GL_CCW),
+        // The helicopter needs an entity named head in the scene.
+        // Has.Aim is disabled so it won't use it.
+        Using: [named("head")],
         Translation: [3, 2, 1],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
         Scale: [-5, 5, 5],
@@ -110,13 +101,13 @@ export function scene_title(game: Game) {
         ],
     });
 
-    instantiate(game, blueprint_moon(game));
+    instantiate(game, blueprint_moon());
 
     instantiate(
         game,
         // Police car spawner.
         {
-            Using: [control_move(null, [0, 1, 0, 0]), move(0, 1)],
+            Using: [named("base"), control_move(null, [0, 1, 0, 0]), move(0, 1)],
             Children: [
                 {
                     Translation: [0, 0, -4],

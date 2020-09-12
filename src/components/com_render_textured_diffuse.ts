@@ -1,5 +1,5 @@
 import {Material, Mesh} from "../../common/material.js";
-import {Vec2, Vec4} from "../../common/math.js";
+import {Vec4} from "../../common/math.js";
 import {GL_ARRAY_BUFFER, GL_CW, GL_ELEMENT_ARRAY_BUFFER, GL_FLOAT} from "../../common/webgl.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {Entity, Game} from "../game.js";
@@ -16,8 +16,6 @@ export interface RenderTexturedDiffuse {
     Color: Vec4;
     FogLevel: number;
     Texture: WebGLTexture;
-    TexScale: Vec2;
-    TexOffset?: () => Vec2;
 }
 
 let vaos: WeakMap<Mesh, WebGLVertexArrayObject> = new WeakMap();
@@ -26,11 +24,9 @@ export function render_textured_diffuse(
     material: Material<TexturedDiffuseLayout>,
     mesh: Mesh,
     texture: WebGLTexture,
-    front_face: GLenum = GL_CW,
     color: Vec4 = [1, 1, 1, 1],
-    fog_level = -0.3,
-    texture_scale: Vec2 = [1, 1],
-    texture_offset?: () => Vec2
+    front_face: GLenum = GL_CW,
+    fog_level = -0.3
 ) {
     return (game: Game, entity: Entity) => {
         if (!vaos.has(mesh)) {
@@ -81,8 +77,6 @@ export function render_textured_diffuse(
             Color: color,
             FogLevel: fog_level,
             Texture: texture,
-            TexScale: texture_scale,
-            TexOffset: texture_offset,
         };
     };
 }

@@ -16,8 +16,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["noise"],
-                        front_face,
-                        [0.1, 0.15, 0.2, 1]
+                        [0.1, 0.15, 0.2, 1],
+                        front_face
                     ),
                     cull(Has.Render),
                 ],
@@ -32,8 +32,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshClaw,
                         game.Textures["noise"],
-                        front_face,
-                        [1, 1, 0, 1]
+                        [1, 1, 0, 1],
+                        front_face
                     ),
                     cull(Has.Render),
                 ],
@@ -51,8 +51,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshCube,
                                 game.Textures["noise"],
-                                front_face,
-                                [0.1, 0.15, 0.2, 1]
+                                [0.1, 0.15, 0.2, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -67,8 +67,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshClaw,
                                 game.Textures["noise"],
-                                front_face,
-                                [1, 1, 0, 1]
+                                [1, 1, 0, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -88,8 +88,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshCube,
                                 game.Textures["noise"],
-                                front_face,
-                                [0.1, 0.15, 0.2, 1]
+                                [0.1, 0.15, 0.2, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -104,8 +104,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshClaw,
                                 game.Textures["noise"],
-                                front_face,
-                                [1, 1, 0, 1]
+                                [1, 1, 0, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -125,8 +125,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshCube,
                                 game.Textures["noise"],
-                                front_face,
-                                [0.1, 0.15, 0.2, 1]
+                                [0.1, 0.15, 0.2, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -141,8 +141,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshClaw,
                                 game.Textures["noise"],
-                                front_face,
-                                [1, 1, 0, 1]
+                                [1, 1, 0, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -162,8 +162,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshCube,
                                 game.Textures["noise"],
-                                front_face,
-                                [0.1, 0.15, 0.2, 1]
+                                [0.1, 0.15, 0.2, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],
@@ -178,8 +178,8 @@ export function blueprint_paw(game: Game, front_face: GLenum): Blueprint {
                                 game.MaterialTexturedDiffuse,
                                 game.MeshClaw,
                                 game.Textures["noise"],
-                                front_face,
-                                [1, 1, 0, 1]
+                                [1, 1, 0, 1],
+                                front_face
                             ),
                             cull(Has.Render),
                         ],

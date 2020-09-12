@@ -51,8 +51,8 @@ export function blueprint_police(game: Game): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["police"],
-                        GL_CW,
                         [1, 1, 1, 1],
+                        GL_CW,
                         -2
                     ),
                 ],
@@ -67,8 +67,8 @@ export function blueprint_police(game: Game): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["police"],
-                        GL_CW,
                         [1, 1, 1, 1],
+                        GL_CW,
                         -2
                     ),
                 ],

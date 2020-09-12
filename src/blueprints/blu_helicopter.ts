@@ -1,6 +1,5 @@
 import {from_euler} from "../../common/quat.js";
 import {float} from "../../common/random.js";
-import {GL_CW} from "../../common/webgl.js";
 import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {control_move} from "../components/com_control_move.js";
@@ -51,7 +50,6 @@ export function blueprint_helicopter(game: Game): Blueprint {
                         game.MaterialTexturedDiffuse,
                         game.MeshCube,
                         game.Textures["noise"],
-                        GL_CW,
                         [0.1, 0.1, 0.1, 1]
                     ),
                 ],

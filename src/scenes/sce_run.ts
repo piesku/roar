@@ -11,7 +11,6 @@ import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {light_directional} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
@@ -34,12 +33,6 @@ export function scene_run(game: Game) {
 
     set_seed(Date.now());
 
-    // Main Light.
-    instantiate(game, {
-        Translation: [2, 4, 3],
-        Using: [light_directional([1, 1, 1], 0.3)],
-    });
-
     let grid_size = 16;
     let ground_size = grid_size * 10;
 
@@ -50,7 +43,7 @@ export function scene_run(game: Game) {
             blueprint_viewer(game, 3),
 
             // Moon.
-            blueprint_moon(game),
+            blueprint_moon(),
 
             // Police car spawner.
             {
@@ -122,14 +115,13 @@ export function scene_run(game: Game) {
                 ],
                 Children: [
                     {
-                        Translation: [0, 0.5, 0],
                         Using: [
                             render_textured_diffuse(
                                 game.MaterialTexturedDiffuse,
-                                game.MeshPlane,
+                                game.MeshCube,
                                 game.Textures["noise"],
-                                GL_CW,
                                 [0, 0.1, 0.2, 1],
+                                GL_CW,
                                 -0.5
                             ),
                         ],

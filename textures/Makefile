@@ -5,4 +5,4 @@ all: $(WEBPS)
 
 %.webp: %.png
 	@echo "$< → $@"
-	@cwebp -short -lossless -q 100 $< -o $@
+	@cwebp -short -z 9 $< -o $@

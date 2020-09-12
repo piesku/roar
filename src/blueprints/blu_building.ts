@@ -1,6 +1,8 @@
 import {float, integer} from "../../common/random.js";
 import {Action} from "../actions.js";
 import {collide} from "../components/com_collide.js";
+import {named} from "../components/com_named.js";
+import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {trigger} from "../components/com_trigger.js";
 import {Blueprint} from "../core.js";
 import {Game, Layer} from "../game.js";
@@ -34,12 +36,14 @@ export function blueprint_building(game: Game, height?: number): Blueprint {
 
     return {
         Using: [
+            named("shell"),
             collide(
                 false,
                 Layer.BuildingShell,
                 Layer.BuildingBlock | Layer.PlayerHand | Layer.PlayerGrip | Layer.Missile,
                 [1, height * 2, 1]
             ),
+            rigid_body(RigidKind.Static),
             trigger(Action.Wake),
         ],
         Children: blocks,

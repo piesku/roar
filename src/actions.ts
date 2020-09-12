@@ -3,17 +3,27 @@ import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
-import {find_first} from "./components/com_named.js";
+import {find_all, find_first} from "./components/com_named.js";
+import {RigidKind} from "./components/com_rigid_body.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
 import {Entity, Game, Layer} from "./game.js";
 import {scene_grid} from "./scenes/sce_grid.js";
+import {scene_title} from "./scenes/sce_title.js";
 import {snd_growl} from "./sounds/snd_growl.js";
 import {Has} from "./world.js";
 import {xr_enter} from "./xr.js";
 
+export const enum StageKind {
+    Title,
+    Playing,
+    Clear,
+    Failed,
+}
+
 export const enum Action {
-    PlayNow,
+    GoToTitle,
+    GoToStage,
     EnterVr,
     ExitVr,
     Wake,
@@ -26,7 +36,11 @@ export const enum Action {
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
-        case Action.PlayNow: {
+        case Action.GoToTitle: {
+            setTimeout(() => scene_title(game));
+            break;
+        }
+        case Action.GoToStage: {
             setTimeout(() => scene_grid(game));
             // Fall through to EnterVr.
         }
@@ -66,7 +80,19 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
-                console.log("Player hit");
+                let ground = find_first(game.World, "ground");
+                game.World.Signature[ground] &= ~Has.Collide;
+
+                for (let shell of find_all(game.World, "shell")) {
+                    game.World.RigidBody[shell].Kind = RigidKind.Dynamic;
+                }
+
+                if (game.CurrentStage === StageKind.Playing) {
+                    game.CurrentStage = StageKind.Failed;
+                    setTimeout(() => {
+                        dispatch(game, Action.ExitVr, undefined);
+                    }, 1000);
+                }
             }
             // No break; fall through to Explode.
         }
@@ -129,9 +155,17 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 let mouth_audio = game.World.AudioSource[mouth_entity];
                 mouth_audio.Trigger = snd_growl(false);
 
-                setTimeout(() => {
-                    dispatch(game, Action.ExitVr, undefined);
-                }, 5000);
+                for (let block of find_all(game.World, "block")) {
+                    game.World.Signature[block] |= Has.Lifespan;
+                    game.World.Lifespan[block].Remaining = Math.random() * 2;
+                }
+
+                if (game.CurrentStage === StageKind.Playing) {
+                    game.CurrentStage = StageKind.Clear;
+                    setTimeout(() => {
+                        dispatch(game, Action.ExitVr, undefined);
+                    }, 5000);
+                }
             }
             break;
         }
