@@ -11,13 +11,11 @@ import {
     GL_TEXTURE_2D,
     GL_UNSIGNED_SHORT,
 } from "../../common/webgl.js";
-import {ColoredUnlitLayout} from "../../materials/layout_colored_unlit.js";
 import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {CameraEye, CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {EmitParticles} from "../components/com_emit_particles.js";
 import {RenderKind, RenderPhase} from "../components/com_render.js";
-import {RenderColoredUnlit} from "../components/com_render_colored_unlit.js";
 import {DATA_PER_PARTICLE, RenderParticles} from "../components/com_render_particles.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
 import {Transform} from "../components/com_transform.js";
@@ -89,9 +87,6 @@ function render(game: Game, eye: CameraEye, phase: RenderPhase) {
             if (render.Material !== current_material) {
                 current_material = render.Material;
                 switch (render.Kind) {
-                    case RenderKind.ColoredUnlit:
-                        use_colored_unlit(game, render.Material, eye);
-                        break;
                     case RenderKind.TexturedDiffuse:
                         use_textured_diffuse(game, render.Material, eye);
                         break;
@@ -107,9 +102,6 @@ function render(game: Game, eye: CameraEye, phase: RenderPhase) {
             }
 
             switch (render.Kind) {
-                case RenderKind.ColoredUnlit:
-                    draw_colored_unlit(game, transform, render);
-                    break;
                 case RenderKind.TexturedDiffuse:
                     draw_textured_diffuse(game, transform, render);
                     break;
@@ -122,19 +114,6 @@ function render(game: Game, eye: CameraEye, phase: RenderPhase) {
             }
         }
     }
-}
-
-function use_colored_unlit(game: Game, material: Material<ColoredUnlitLayout>, eye: CameraEye) {
-    game.Gl.useProgram(material.Program);
-    game.Gl.uniformMatrix4fv(material.Locations.Pv, false, eye.Pv);
-}
-
-function draw_colored_unlit(game: Game, transform: Transform, render: RenderColoredUnlit) {
-    game.Gl.uniformMatrix4fv(render.Material.Locations.World, false, transform.World);
-    game.Gl.uniform4fv(render.Material.Locations.Color, render.Color);
-    game.Gl.bindVertexArray(render.Vao);
-    game.Gl.drawElements(render.Material.Mode, render.Mesh.IndexCount, GL_UNSIGNED_SHORT, 0);
-    game.Gl.bindVertexArray(null);
 }
 
 function use_textured_diffuse(
