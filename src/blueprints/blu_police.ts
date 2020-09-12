@@ -7,7 +7,6 @@ import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {find_first} from "../components/com_named.js";
-import {render_colored_unlit} from "../components/com_render_colored_unlit.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {toggle} from "../components/com_toggle.js";
 import {Blueprint} from "../core.js";
@@ -29,7 +28,12 @@ export function blueprint_police(game: Game): Blueprint {
             {
                 Translation: [-0.5, 2, 0],
                 Using: [
-                    render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [1, 1, 0, 1]),
+                    render_textured_diffuse(
+                        game.MaterialTexturedDiffuse,
+                        game.MeshCube,
+                        game.Textures["noise"],
+                        [99, 99, 0, 1]
+                    ),
                     light_point([1, 0, 0], 2),
                     toggle(Has.Render | Has.Light, 0.5, true),
                 ],
@@ -37,7 +41,12 @@ export function blueprint_police(game: Game): Blueprint {
             {
                 Translation: [0.5, 2, 0],
                 Using: [
-                    render_colored_unlit(game.MaterialColoredUnlit, game.MeshCube, [0, 1, 1, 1]),
+                    render_textured_diffuse(
+                        game.MaterialTexturedDiffuse,
+                        game.MeshCube,
+                        game.Textures["noise"],
+                        [0, 99, 99, 1]
+                    ),
                     light_point([0, 0, 1], 2),
                     toggle(Has.Render | Has.Light, 0.5, false),
                 ],
