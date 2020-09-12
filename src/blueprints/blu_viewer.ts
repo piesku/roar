@@ -5,7 +5,7 @@ import {camera_xr} from "../components/com_camera.js";
 import {collide} from "../components/com_collide.js";
 import {control_pose} from "../components/com_control_pose.js";
 import {control_spawn} from "../components/com_control_spawn.js";
-import {control_xr} from "../components/com_control_xr.js";
+import {ControlXrKind, control_xr} from "../components/com_control_xr.js";
 import {emit_particles} from "../components/com_emit_particles.js";
 import {move} from "../components/com_move.js";
 import {named} from "../components/com_named.js";
@@ -21,7 +21,7 @@ import {blueprint_paw} from "./blu_paw.js";
 export function blueprint_viewer(game: Game, scale: number): Blueprint {
     return {
         Scale: [scale, scale, scale],
-        Using: [control_xr("motion"), move(2, 0), named("base")],
+        Using: [control_xr(ControlXrKind.Motion), move(2, 0), named("base")],
         Children: [
             {
                 // An intermediate entity for walk bobbing.
@@ -48,7 +48,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                 Rotation: [0, 1, 0, 0],
                                 Using: [
                                     named("mouth"),
-                                    control_xr("breath"),
+                                    control_xr(ControlXrKind.Breath),
                                     audio_source(false),
                                     control_spawn(blueprint_flame_collider, 0.3),
                                 ],
@@ -96,7 +96,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Translation: [-0.5, 2, 0],
                         Using: [
                             control_pose("left"),
-                            control_xr("left"),
+                            control_xr(ControlXrKind.Left),
                             collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],
@@ -128,7 +128,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Translation: [0.5, 2, 0],
                         Using: [
                             control_pose("right"),
-                            control_xr("right"),
+                            control_xr(ControlXrKind.Right),
                             collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],

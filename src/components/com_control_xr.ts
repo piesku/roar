@@ -1,17 +1,22 @@
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
-type Controller = "motion" | "breath" | "left" | "right";
-
-export interface ControlXr {
-    Controller: Controller;
+export const enum ControlXrKind {
+    Motion,
+    Breath,
+    Left,
+    Right,
 }
 
-export function control_xr(hand: Controller) {
+export interface ControlXr {
+    Kind: ControlXrKind;
+}
+
+export function control_xr(kind: ControlXrKind) {
     return (game: Game, entity: Entity) => {
         game.World.Signature[entity] |= Has.ControlXr;
         game.World.ControlXr[entity] = {
-            Controller: hand,
+            Kind: kind,
         };
     };
 }

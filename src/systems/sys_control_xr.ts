@@ -3,6 +3,7 @@ import {Quat, Vec3} from "../../common/math.js";
 import {map_range} from "../../common/number.js";
 import {conjugate, from_axis, multiply} from "../../common/quat.js";
 import {copy, transform_direction, transform_point} from "../../common/vec3.js";
+import {ControlXrKind} from "../components/com_control_xr.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
 import {Entity, Game} from "../game.js";
@@ -35,7 +36,7 @@ function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlXr[entity];
 
-    if (control.Controller === "motion") {
+    if (control.Kind === ControlXrKind.Motion) {
         let move = game.World.Move[entity];
 
         let bob_entity = transform.Children[0];
@@ -92,7 +93,7 @@ function update(game: Game, entity: Entity) {
         }
     }
 
-    if (control.Controller === "breath") {
+    if (control.Kind === ControlXrKind.Breath) {
         game.World.Signature[entity] &= ~Has.ControlSpawn;
 
         for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
@@ -116,7 +117,7 @@ function update(game: Game, entity: Entity) {
         return;
     }
 
-    if (control.Controller === "left") {
+    if (control.Kind === ControlXrKind.Left) {
         let input = game.XrInputs["left"];
         if (input) {
             if (input.gamepad) {
@@ -235,7 +236,7 @@ function update(game: Game, entity: Entity) {
         return;
     }
 
-    if (control.Controller === "right") {
+    if (control.Kind === ControlXrKind.Right) {
         let input = game.XrInputs["right"];
         if (input) {
             if (input.gamepad) {
