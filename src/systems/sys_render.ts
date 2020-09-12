@@ -15,7 +15,6 @@ import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {TexturedDiffuseLayout} from "../../materials/layout_textured_diffuse.js";
 import {CameraEye, CameraKind, CameraPerspective, CameraXr} from "../components/com_camera.js";
 import {EmitParticles} from "../components/com_emit_particles.js";
-import {RenderKind, RenderPhase} from "../components/com_render.js";
 import {DATA_PER_PARTICLE, RenderParticles} from "../components/com_render_particles.js";
 import {RenderTexturedDiffuse} from "../components/com_render_textured_diffuse.js";
 import {Transform} from "../components/com_transform.js";
@@ -40,13 +39,15 @@ function render_screen(game: Game, camera: CameraPerspective) {
         game.Gl.viewport(0, 0, game.ViewportWidth, game.ViewportHeight);
     }
 
-    render(game, camera, RenderPhase.Opaque);
+    use_textured_diffuse(game, game.MaterialTexturedDiffuse, camera);
+    render(game, game.MaterialTexturedDiffuse);
 
     // For best results, we should sort translucent entities by their distance
     // to the camera first. For our use-case skipping sorting is good enough.
     game.Gl.disable(GL_DEPTH_TEST);
     game.Gl.enable(GL_BLEND);
-    render(game, camera, RenderPhase.Translucent);
+    use_particles(game, game.MaterialParticles, camera);
+    render(game, game.MaterialParticles);
     game.Gl.disable(GL_BLEND);
     game.Gl.enable(GL_DEPTH_TEST);
 }
@@ -60,19 +61,19 @@ function render_vr(game: Game, camera: CameraXr) {
         let eye = camera.Eyes[name];
         let viewport = layer.getViewport(eye.Viewpoint);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-        render(game, eye, RenderPhase.Opaque);
+        use_textured_diffuse(game, game.MaterialTexturedDiffuse, eye);
+        render(game, game.MaterialTexturedDiffuse);
 
         game.Gl.disable(GL_DEPTH_TEST);
         game.Gl.enable(GL_BLEND);
-        render(game, eye, RenderPhase.Translucent);
+        use_particles(game, game.MaterialParticles, eye);
+        render(game, game.MaterialParticles);
         game.Gl.disable(GL_BLEND);
         game.Gl.enable(GL_DEPTH_TEST);
     }
 }
 
-function render(game: Game, eye: CameraEye, phase: RenderPhase) {
-    // Keep track of the current material to minimize switching.
-    let current_material = null;
+function render(game: Game, current_material: Material<TexturedDiffuseLayout | ParticlesLayout>) {
     let current_front_face = null;
 
     for (let i = 0; i < game.World.Signature.length; i++) {
@@ -80,37 +81,23 @@ function render(game: Game, eye: CameraEye, phase: RenderPhase) {
             let transform = game.World.Transform[i];
             let render = game.World.Render[i];
 
-            if (render.Phase !== phase) {
-                continue;
-            }
-
-            if (render.Material !== current_material) {
-                current_material = render.Material;
-                switch (render.Kind) {
-                    case RenderKind.TexturedDiffuse:
-                        use_textured_diffuse(game, render.Material, eye);
-                        break;
-                    case RenderKind.Particles:
-                        use_particles(game, render.Material, eye);
-                        break;
-                }
-            }
-
             if (render.FrontFace !== current_front_face) {
                 current_front_face = render.FrontFace;
                 game.Gl.frontFace(render.FrontFace);
             }
 
-            switch (render.Kind) {
-                case RenderKind.TexturedDiffuse:
-                    draw_textured_diffuse(game, transform, render);
-                    break;
-                case RenderKind.Particles:
-                    let emitter = game.World.EmitParticles[i];
-                    if (emitter.Instances.length > 0) {
-                        draw_particles(game, render, emitter);
-                    }
-                    break;
+            if (render.Material === current_material) {
+                switch (render.Material) {
+                    case game.MaterialTexturedDiffuse:
+                        draw_textured_diffuse(game, transform, render as RenderTexturedDiffuse);
+                        break;
+                    case game.MaterialParticles:
+                        let emitter = game.World.EmitParticles[i];
+                        if (emitter.Instances.length > 0) {
+                            draw_particles(game, render as RenderParticles, emitter);
+                        }
+                        break;
+                }
             }
         }
     }

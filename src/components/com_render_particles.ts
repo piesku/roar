@@ -4,14 +4,11 @@ import {GL_ARRAY_BUFFER, GL_CW, GL_DYNAMIC_DRAW} from "../../common/webgl.js";
 import {ParticlesLayout} from "../../materials/layout_particles.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
-import {RenderKind, RenderPhase} from "./com_render.js";
 
 export const DATA_PER_PARTICLE = 8;
 export const MAX_PARTICLES = 200;
 
 export interface RenderParticles {
-    readonly Kind: RenderKind.Particles;
-    readonly Phase: RenderPhase;
     readonly Material: Material<ParticlesLayout>;
     readonly Buffer: WebGLBuffer;
     readonly Texture: WebGLTexture;
@@ -35,8 +32,6 @@ export function render_particles(
 
         game.World.Signature[entity] |= Has.Render;
         game.World.Render[entity] = {
-            Kind: RenderKind.Particles,
-            Phase: RenderPhase.Translucent,
             Material: game.MaterialParticles,
             Buffer: buffer,
             Texture: texture,
