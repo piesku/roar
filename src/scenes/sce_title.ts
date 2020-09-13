@@ -49,7 +49,7 @@ export function scene_title(game: Game) {
                 game.Textures["noise"],
                 [1, 1, 1, 1],
                 GL_CW,
-                -0.5
+                -0.3
             ),
         ],
     });
@@ -84,8 +84,9 @@ export function scene_title(game: Game) {
     });
 
     instantiate(game, {
-        Translation: [1, 0.25, 1.5],
-        Using: [control_move([0, 0.5, 1], null), move(0.3, 0)],
+        Translation: [0, 0.25, 2],
+        Using: [named(Name.IntroHelicopter), control_move([0, 0.5, 1], null), move(0.5, 0)],
+        Disable: Has.Move,
         Children: [
             {
                 ...blueprint_cage(game),
@@ -93,7 +94,7 @@ export function scene_title(game: Game) {
             },
             {
                 ...blueprint_helicopter(game),
-                Translation: [-1, 1, 0.2],
+                Translation: [-1, 0.5, 0.1],
                 Disable: Has.Move | Has.Lifespan,
             },
         ],

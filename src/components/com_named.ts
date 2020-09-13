@@ -9,6 +9,7 @@ export const enum Name {
     Ground,
     Shell,
     Block,
+    IntroHelicopter,
 }
 
 export interface Named {

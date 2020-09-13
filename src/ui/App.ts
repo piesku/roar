@@ -8,6 +8,10 @@ export function App(game: Game) {
         return EnterVr(game);
     }
 
+    if (game.CurrentStage === StageKind.Intro) {
+        return "";
+    }
+
     return html`
         <div
             style="

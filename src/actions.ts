@@ -16,6 +16,7 @@ import {xr_enter} from "./xr.js";
 
 export const enum StageKind {
     Title,
+    Intro,
     Playing,
     Clear,
     Failed,
@@ -37,9 +38,17 @@ export const enum Action {
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
         case Action.GoToStage: {
-            game.CurrentStage = StageKind.Playing;
-            setTimeout(() => scene_grid(game));
-            // Fall through to EnterVr.
+            game.CurrentStage = StageKind.Intro;
+            let helicopter = find_first(game.World, Name.IntroHelicopter);
+            game.World.Signature[helicopter] |= Has.Move;
+            setTimeout(() => {
+                game.CurrentStage = StageKind.Playing;
+                scene_grid(game);
+                if (game.XrSupported) {
+                    xr_enter(game);
+                }
+            }, 5000);
+            break;
         }
         case Action.EnterVr: {
             if (game.XrSupported) {
