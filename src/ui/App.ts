@@ -16,10 +16,21 @@ export function App(game: Game) {
                 left: 10vmin;
             "
         >
-            <div style="font-size: 20vmin">ROAR!</div>
-            ${game.CurrentStage === StageKind.Title && "Baby-zilla has been taken away!"}
-            ${game.CurrentStage === StageKind.Clear && "You've found it!"}
-            ${game.CurrentStage === StageKind.Failed && "A missile has killed you!"}
+            ${game.CurrentStage === StageKind.Title &&
+            `
+                <div style="font-size: 20vmin">ROAR!</div>
+                Baby-zilla has been taken away!
+            `}
+            ${game.CurrentStage === StageKind.Clear &&
+            `
+                <div style="font-size: 20vmin">YOU WIN!</div>
+                You've found it!
+            `}
+            ${game.CurrentStage === StageKind.Failed &&
+            `
+                <div style="font-size: 20vmin">YOU LOSE!</div>
+                A missile has killed you!
+            `}
         </div>
         <div
             style="
