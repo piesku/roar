@@ -35,22 +35,16 @@ function update(game: Game, entity: Entity, delta: number) {
     }
 
     if (audio_source.Trigger && can_exit) {
-        // Seconds per beat, corresponding to a quarter note.
-        let spb = 60 / (audio_source.Trigger.BPM || 120);
-        // Track timing is based on sixteenth notes.
-        let interval = spb / 4;
-        for (let track of audio_source.Trigger.Tracks) {
-            for (let i = 0; i < track.Notes.length; i++) {
-                let note = track.Notes[i];
-                if (note) {
-                    play_note(
-                        game.Audio,
-                        audio_source.Panner,
-                        track.Instrument,
-                        note,
-                        i * interval
-                    );
-                }
+        for (let i = 0; i < audio_source.Trigger.Notes.length; i++) {
+            let note = audio_source.Trigger.Notes[i];
+            if (note) {
+                play_note(
+                    game.Audio,
+                    audio_source.Panner,
+                    audio_source.Trigger.Instrument,
+                    note,
+                    0
+                );
             }
         }
         audio_source.Current = audio_source.Trigger;

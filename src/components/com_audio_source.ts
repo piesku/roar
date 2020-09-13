@@ -30,17 +30,13 @@ export function audio_source(spatial: boolean, idle?: AudioClip) {
     };
 }
 
-export interface AudioClip {
-    /** Audio tracks making up this clip. */
-    Tracks: Array<AudioTrack>;
+export interface AudioClip extends AudioTrack {
     /** How soon after starting this clip can we play another one (in seconds)? */
     Exit: number;
-    /** Beats per minute (default 120). */
-    BPM?: number;
     Next?: () => AudioClip;
 }
 
 export interface AudioTrack {
     Instrument: Instrument;
-    Notes: Array<number | undefined>;
+    Notes: Array<number>;
 }
