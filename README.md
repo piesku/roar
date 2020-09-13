@@ -11,3 +11,5 @@ A WebXR submission to js13kGames 2020, based on Goodluck.
 - Remove `LightDirectional`.
 
 - (Only on the `release` branch) Remove `RenderKind` and `RenderPhase` and use `Render.Material` to distinguish between rendering phases.
+
+- `AudioClip` can only play one track with one instrument and a single note.
