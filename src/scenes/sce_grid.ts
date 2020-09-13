@@ -59,6 +59,7 @@ export function scene_grid(game: Game) {
         Scale: [99, 1, 99],
         Using: [
             named(Name.Ground),
+            audio_source(false, snd_soundtrack()),
             collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
             render_textured_diffuse(
@@ -69,7 +70,6 @@ export function scene_grid(game: Game) {
                 GL_CW,
                 -0.5
             ),
-            audio_source(false, snd_soundtrack()),
         ],
     });
 
