@@ -27,7 +27,7 @@ export function blueprint_star(game: Game): Blueprint {
                 game.MeshCube,
                 game.Textures["building2"]
             ),
-            lifespan(BUILDING_LIFESPAN, Action.Collapse),
+            lifespan(BUILDING_LIFESPAN + Math.random(), Action.Collapse),
             cull(Has.Render),
         ],
         Disable: Has.Collide | Has.RigidBody | Has.Lifespan,
