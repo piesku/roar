@@ -55,12 +55,12 @@ void main() {
     vec4 tex_color = texture(sampler, vert_texcoord);
     if (tex_color.a == 0.0) {
         discard;
-    } else {
-        frag_color = vec4(rgb, color.a) * tex_color;
-        frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(2.0, 0.0, vert_pos.y - fog_level));
-
-        float eye_distance = length(eye_pos - vert_pos.xyz);
-        float fog_amount = clamp(0.0, 1.0, eye_distance / fog_distance);
-        frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(0.0, 1.0, fog_amount));
     }
+
+    frag_color = vec4(rgb, color.a) * tex_color;
+    frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(2.0, 0.0, vert_pos.y - fog_level));
+
+    float eye_distance = length(eye_pos - vert_pos.xyz);
+    float fog_amount = clamp(0.0, 1.0, eye_distance / fog_distance);
+    frag_color = mix(frag_color, vec4(0.0, 0.1, 0.2, 1.0), smoothstep(0.0, 1.0, fog_amount));
 }
