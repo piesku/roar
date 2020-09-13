@@ -2,7 +2,6 @@ import {GL_CCW, GL_CW} from "../../common/webgl.js";
 import {Action} from "../actions.js";
 import {audio_source} from "../components/com_audio_source.js";
 import {collide} from "../components/com_collide.js";
-import {lifespan} from "../components/com_lifespan.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {shake} from "../components/com_shake.js";
 import {toggle} from "../components/com_toggle.js";
@@ -20,8 +19,6 @@ export function blueprint_cage(game: Game): Blueprint {
             collide(false, Layer.Cage, Layer.PlayerGrip, [0.5, 0.5, 0.5]),
             trigger(Action.CageFound),
             audio_source(true, snd_growl(true)),
-            // Grabbable builds have lifespan, imitate them.
-            lifespan(Infinity),
         ],
         Children: [
             {

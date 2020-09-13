@@ -28,10 +28,9 @@ function update(game: Game, entity: Entity, delta: number) {
         emitter.Frequency = ease_in_quad(1.1 - t);
         control.Remaining -= delta;
 
-        // Damage the building.
+        // Damage the building if it's been awaken.
         let transform = game.World.Transform[entity];
-        if (transform.Parent) {
-            // Has.Lifespan might be disabled but the component data is still there.
+        if (transform.Parent && game.World.Signature[transform.Parent] & Has.Lifespan) {
             let parent_lifespan = game.World.Lifespan[transform.Parent];
             parent_lifespan.Remaining -= delta;
         }
