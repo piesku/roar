@@ -11,6 +11,7 @@ import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
+import {audio_source} from "../components/com_audio_source.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
@@ -21,6 +22,7 @@ import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {snd_soundtrack} from "../sounds/snd_soundtrack.js";
 import {World} from "../world.js";
 
 export function scene_grid(game: Game) {
@@ -67,6 +69,7 @@ export function scene_grid(game: Game) {
                 GL_CW,
                 -0.5
             ),
+            audio_source(false, snd_soundtrack()),
         ],
     });
 
