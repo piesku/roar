@@ -35,7 +35,7 @@ function update(game: Game, entity: Entity) {
                     // BuildingShells enable it when they wake up.
                     let lifespan = game.World.Lifespan[entity];
                     lifespan.Remaining -= damage;
-                    setTimeout(() => instantiate(game, blueprint_collapse(game)));
+                    setTimeout(() => instantiate(game, blueprint_collapse(game, true)));
                 }
             }
         }

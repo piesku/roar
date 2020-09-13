@@ -148,7 +148,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             get_translation(position, transform.World);
             instantiate(game, {
                 Translation: position,
-                ...blueprint_collapse(game),
+                ...blueprint_collapse(game, false),
             });
 
             break;

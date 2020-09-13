@@ -8,9 +8,9 @@ import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
 import {snd_explosion} from "../sounds/snd_explosion.js";
 
-export function blueprint_collapse(game: Game): Blueprint {
+export function blueprint_collapse(game: Game, with_sound: boolean): Blueprint {
     return {
-        Using: [lifespan(1), audio_source(true, snd_explosion())],
+        Using: [lifespan(1), audio_source(true, with_sound ? snd_explosion() : undefined)],
         Children: [
             {
                 Rotation: from_euler([0, 0, 0, 0], -90, 0, 0),
