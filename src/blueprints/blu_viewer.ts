@@ -33,7 +33,11 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                     {
                         // Head.
                         Translation: [0, 2, 0],
-                        Using: [control_pose(ControlPoseKind.Head), named(Name.Head)],
+                        Using: [
+                            control_pose(ControlPoseKind.Head),
+                            named(Name.Head),
+                            collide(true, Layer.PlayerBody, Layer.None, [0.1, 0.1, 0.1]),
+                        ],
                         Children: [
                             {
                                 // The head space has +Z towards the user, so we need to
@@ -97,7 +101,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Using: [
                             control_pose(ControlPoseKind.Left),
                             control_xr(ControlXrKind.Left),
-                            collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
+                            collide(true, Layer.PlayerBody, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],
                         Children: [
@@ -129,7 +133,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                         Using: [
                             control_pose(ControlPoseKind.Right),
                             control_xr(ControlXrKind.Right),
-                            collide(true, Layer.PlayerHand, Layer.None, [0.1, 0.1, 0.1]),
+                            collide(true, Layer.PlayerBody, Layer.None, [0.1, 0.1, 0.1]),
                             rigid_body(RigidKind.Kinematic),
                         ],
                         Children: [

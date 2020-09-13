@@ -126,7 +126,7 @@ export class Game {
 }
 export const enum Layer {
     None = 0,
-    PlayerHand = 1,
+    PlayerBody = 1,
     PlayerGrip = 2,
     Ground = 4,
     BuildingShell = 8,

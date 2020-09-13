@@ -22,7 +22,7 @@ export function blueprint_missile(game: Game): Blueprint {
     return {
         Using: [
             control_move([0, 0, 1], null),
-            collide(true, Layer.Missile, Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand),
+            collide(true, Layer.Missile, Layer.Ground | Layer.BuildingBlock | Layer.PlayerBody),
             trigger(Action.Damage),
             aim(find_first(game.World, Name.Head)),
             move(float(8, 12), 3),
@@ -47,7 +47,7 @@ export function blueprint_missile(game: Game): Blueprint {
             {
                 // Jet.
                 Translation: [0, 0, -1],
-                Using: [light_point([0.5, 0.5, 1], 1)],
+                Using: [light_point([1, 0.5, 0], 1)],
                 Children: [
                     {
                         // Jet exhaust.
@@ -57,9 +57,9 @@ export function blueprint_missile(game: Game): Blueprint {
                             emit_particles(1, 0.01, 10, true),
                             render_particles(
                                 game.Textures["fire"],
-                                [0.8, 0.8, 1, 0.3],
+                                [1, 0.5, 0, 0.3],
                                 50,
-                                [0, 0, 1, 0],
+                                [1, 1, 0, 0],
                                 10
                             ),
                         ],

@@ -100,20 +100,36 @@ function update(game: Game, entity: Entity) {
             game.World.EmitParticles[emitter].Trigger = false;
         }
 
-        let left = game.XrInputs["left"];
-        let right = game.XrInputs["right"];
-        if (left?.gamepad && right?.gamepad) {
-            let trigger_left = left.gamepad.buttons[0];
-            let trigger_right = right.gamepad.buttons[0];
-            if (trigger_left?.pressed && trigger_right?.pressed) {
-                game.World.Signature[entity] |= Has.ControlSpawn;
-                game.World.AudioSource[entity].Trigger = snd_breath;
+        {
+            let input = game.XrInputs["left"];
+            if (input?.gamepad) {
+                let trigger_left = input.gamepad.buttons[0];
+                if (trigger_left?.pressed) {
+                    game.World.Signature[entity] |= Has.ControlSpawn;
+                    game.World.AudioSource[entity].Trigger = snd_breath;
 
-                for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
-                    game.World.EmitParticles[emitter].Trigger = true;
+                    for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
+                        game.World.EmitParticles[emitter].Trigger = true;
+                    }
                 }
             }
         }
+
+        {
+            let input = game.XrInputs["right"];
+            if (input?.gamepad) {
+                let trigger_right = input.gamepad.buttons[0];
+                if (trigger_right?.pressed) {
+                    game.World.Signature[entity] |= Has.ControlSpawn;
+                    game.World.AudioSource[entity].Trigger = snd_breath;
+
+                    for (let emitter of query_all(game.World, entity, Has.EmitParticles)) {
+                        game.World.EmitParticles[emitter].Trigger = true;
+                    }
+                }
+            }
+        }
+
         return;
     }
 

@@ -1,5 +1,4 @@
 import {from_euler} from "../../common/quat.js";
-import {set_seed} from "../../common/random.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
 import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
@@ -15,8 +14,6 @@ export function scene_test3(game: Game) {
     game.Camera = undefined;
     game.ViewportResized = true;
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
-
-    set_seed(Date.now());
 
     // Camera.
     instantiate(game, {

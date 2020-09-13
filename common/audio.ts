@@ -62,10 +62,9 @@ export function play_note(
     audio: AudioContext,
     panner: PannerNode | undefined,
     instr: Instrument,
-    note: number,
-    offset: number
+    note: number
 ) {
-    let time = audio.currentTime + offset;
+    let time = audio.currentTime;
     let total_duration = 0;
 
     let master = audio.createGain();

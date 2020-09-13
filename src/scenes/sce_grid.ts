@@ -1,6 +1,6 @@
 import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {element, integer, set_seed} from "../../common/random.js";
+import {element, integer} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
@@ -11,6 +11,7 @@ import {blueprint_missile} from "../blueprints/blu_missile.js";
 import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_police} from "../blueprints/blu_police.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
+import {audio_source} from "../components/com_audio_source.js";
 import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
@@ -21,6 +22,7 @@ import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
 import {instantiate} from "../core.js";
 import {Game, Layer} from "../game.js";
+import {snd_soundtrack} from "../sounds/snd_soundtrack.js";
 import {World} from "../world.js";
 
 export function scene_grid(game: Game) {
@@ -28,8 +30,6 @@ export function scene_grid(game: Game) {
     game.Camera = undefined;
     game.ViewportResized = true;
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
-
-    set_seed(Date.now());
 
     // Camera rig.
     instantiate(game, {
@@ -59,6 +59,7 @@ export function scene_grid(game: Game) {
         Scale: [99, 1, 99],
         Using: [
             named(Name.Ground),
+            audio_source(false, snd_soundtrack()),
             collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
             render_textured_diffuse(
