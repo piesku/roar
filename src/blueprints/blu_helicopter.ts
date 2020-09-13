@@ -2,14 +2,16 @@ import {from_euler} from "../../common/quat.js";
 import {float} from "../../common/random.js";
 import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
+import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {find_first, Name} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
+import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {Blueprint} from "../core.js";
-import {Game} from "../game.js";
+import {Game, Layer} from "../game.js";
 import {snd_helicopter} from "../sounds/snd_helicopter.js";
 
 export function blueprint_helicopter(game: Game): Blueprint {
@@ -19,6 +21,8 @@ export function blueprint_helicopter(game: Game): Blueprint {
             control_move([0, 0, 1], null),
             aim(find_first(game.World, Name.Head)),
             move(float(2, 4), float(1, 3)),
+            collide(true, Layer.Vehicle, Layer.None, [0.5, 0.5, 0.5]),
+            rigid_body(RigidKind.Static),
             audio_source(true, snd_helicopter),
             lifespan(8),
         ],

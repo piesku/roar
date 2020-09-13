@@ -2,15 +2,17 @@ import {float} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {aim} from "../components/com_aim.js";
 import {audio_source} from "../components/com_audio_source.js";
+import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
 import {find_first, Name} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
+import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {toggle} from "../components/com_toggle.js";
 import {Blueprint} from "../core.js";
-import {Game} from "../game.js";
+import {Game, Layer} from "../game.js";
 import {snd_siren} from "../sounds/snd_siren.js";
 import {Has} from "../world.js";
 
@@ -21,6 +23,8 @@ export function blueprint_police(game: Game): Blueprint {
             control_move([0, 0, 1], null),
             aim(find_first(game.World, Name.Base)),
             move(float(1, 3), float(2, 4)),
+            collide(true, Layer.Vehicle, Layer.None, [0.5, 0.5, 0.5]),
+            rigid_body(RigidKind.Static),
             audio_source(true, snd_siren()),
             lifespan(8),
         ],

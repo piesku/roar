@@ -125,7 +125,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             let [flame_entity, other_entity] = payload as [Entity, Entity];
             let other_collider = game.World.Collide[other_entity];
 
-            if (other_collider.Layers & Layer.Missile) {
+            if (other_collider.Layers & (Layer.Missile | Layer.Vehicle)) {
                 dispatch(game, Action.Explode, [other_entity]);
             } else {
                 for (let fire_entity of query_all(game.World, other_entity, Has.ControlFire)) {
