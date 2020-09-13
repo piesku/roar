@@ -6,6 +6,7 @@ import {copy, transform_direction, transform_point} from "../../common/vec3.js";
 import {ControlXrKind} from "../components/com_control_xr.js";
 import {RigidKind} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
+import {BUILDING_LIFESPAN} from "../config.js";
 import {Entity, Game} from "../game.js";
 import {snd_breath} from "../sounds/snd_breath.js";
 import {Has} from "../world.js";
@@ -210,13 +211,18 @@ function update(game: Game, entity: Entity) {
 
                                 building_transform.Dirty = true;
 
-                                // Switch to a kinematic rigid body.
-                                let rigid_body = game.World.RigidBody[building_entity];
-                                rigid_body.Kind = RigidKind.Kinematic;
-                                get_translation(rigid_body.LastPosition, building_transform.World);
+                                if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                    // Switch to a kinematic rigid body.
+                                    let rigid_body = game.World.RigidBody[building_entity];
+                                    rigid_body.Kind = RigidKind.Kinematic;
+                                    get_translation(
+                                        rigid_body.LastPosition,
+                                        building_transform.World
+                                    );
 
-                                // Disable lifespan.
-                                game.World.Signature[building_entity] &= ~Has.Lifespan;
+                                    // Disable lifespan.
+                                    game.World.Signature[building_entity] &= ~Has.Lifespan;
+                                }
                             }
                         }
                     } else {
@@ -235,15 +241,19 @@ function update(game: Game, entity: Entity) {
                                 building_transform.World
                             );
                             get_rotation(building_transform.Rotation, building_transform.World);
+
                             building_transform.Dirty = true;
 
-                            // Switch back to a dynamic rigid body.
-                            let rigid_body = game.World.RigidBody[building_entity];
-                            rigid_body.Kind = RigidKind.Dynamic;
-                            copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
+                            if (game.World.Signature[building_entity] & Has.RigidBody) {
+                                // Switch back to a dynamic rigid body.
+                                let rigid_body = game.World.RigidBody[building_entity];
+                                rigid_body.Kind = RigidKind.Dynamic;
+                                copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
 
-                            // Enable lifespan.
-                            game.World.Signature[building_entity] |= Has.Lifespan;
+                                // Enable lifespan.
+                                game.World.Signature[building_entity] |= Has.Lifespan;
+                                game.World.Lifespan[building_entity].Remaining = BUILDING_LIFESPAN;
+                            }
                         }
                     }
                 }
@@ -337,10 +347,10 @@ function update(game: Game, entity: Entity) {
                                         rigid_body.LastPosition,
                                         building_transform.World
                                     );
-                                }
 
-                                // Disable lifespan.
-                                game.World.Signature[building_entity] &= ~Has.Lifespan;
+                                    // Disable lifespan.
+                                    game.World.Signature[building_entity] &= ~Has.Lifespan;
+                                }
                             }
                         }
                     } else {
@@ -359,6 +369,7 @@ function update(game: Game, entity: Entity) {
                                 building_transform.World
                             );
                             get_rotation(building_transform.Rotation, building_transform.World);
+
                             building_transform.Dirty = true;
 
                             if (game.World.Signature[building_entity] & Has.RigidBody) {
@@ -366,10 +377,11 @@ function update(game: Game, entity: Entity) {
                                 let rigid_body = game.World.RigidBody[building_entity];
                                 rigid_body.Kind = RigidKind.Dynamic;
                                 copy(rigid_body.VelocityResolved, rigid_body.VelocityIntegrated);
-                            }
 
-                            // Enable lifespan.
-                            game.World.Signature[building_entity] |= Has.Lifespan;
+                                // Enable lifespan.
+                                game.World.Signature[building_entity] |= Has.Lifespan;
+                                game.World.Lifespan[building_entity].Remaining = BUILDING_LIFESPAN;
+                            }
                         }
                     }
                 }
