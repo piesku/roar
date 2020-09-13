@@ -11,7 +11,7 @@ export function EnterVr(game: Game) {
                 right: 1vmin;
                 background: #000;
                 color: #fff;
-                font: 13px Arial;
+                font: 5vmin Arial;
             "
         >
             ${game.XrFrame
@@ -24,31 +24,9 @@ export function EnterVr(game: Game) {
 }
 
 function EnterButton() {
-    return html`
-        <div
-            onclick="$(${Action.EnterVr})"
-            style="
-                background: #000;
-                color: #fff;
-                font: 13px Arial;
-            "
-        >
-            Enter VR
-        </div>
-    `;
+    return html` <div onclick="$(${Action.EnterVr})">Enter VR</div> `;
 }
 
 function ExitButton() {
-    return html`
-        <div
-            onclick="$(${Action.ExitVr})"
-            style="
-                background: #000;
-                color: #fff;
-                font: 13px Arial;
-            "
-        >
-            Exit VR
-        </div>
-    `;
+    return html` <div onclick="$(${Action.ExitVr})">Exit VR</div> `;
 }
