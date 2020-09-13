@@ -14,7 +14,7 @@ export function snd_siren(): AudioClip {
             float(2.5, 3.5),
             [["square", 8, 5, 18, 10, 7, true, false, 0, 0, 0]],
         ],
-        Notes: [integer(65, 76)],
+        Note: integer(65, 76),
         Exit: 9,
     };
 }

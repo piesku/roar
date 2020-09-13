@@ -13,7 +13,7 @@ export function snd_growl(is_baby: boolean): AudioClip {
             7,
             [["sine", 8, 7, 8, 11, 7, true, false, 0, 0, 0]],
         ],
-        Notes: [is_baby ? 79 : 50],
+        Note: is_baby ? 79 : 50,
         Exit: 6,
     };
 }

@@ -14,7 +14,7 @@ export function snd_soundtrack(): AudioClip {
             13,
             [["triangle", 8, 4, 5, 8, 8, false, false, 8, 8, 8]],
         ],
-        Notes: [integer(48, 60)],
+        Note: integer(48, 60),
         Exit: float(1, 3),
         Next: snd_soundtrack,
     };

@@ -38,5 +38,5 @@ export interface AudioClip extends AudioTrack {
 
 export interface AudioTrack {
     Instrument: Instrument;
-    Notes: Array<number>;
+    Note: number;
 }

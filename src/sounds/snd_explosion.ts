@@ -14,7 +14,7 @@ export function snd_explosion(): AudioClip {
             0,
             [[false, 13, 0, 0, float(5, 8)]],
         ],
-        Notes: [77],
+        Note: 77,
         Exit: 9,
     };
 }

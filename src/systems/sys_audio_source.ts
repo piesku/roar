@@ -35,18 +35,12 @@ function update(game: Game, entity: Entity, delta: number) {
     }
 
     if (audio_source.Trigger && can_exit) {
-        for (let i = 0; i < audio_source.Trigger.Notes.length; i++) {
-            let note = audio_source.Trigger.Notes[i];
-            if (note) {
-                play_note(
-                    game.Audio,
-                    audio_source.Panner,
-                    audio_source.Trigger.Instrument,
-                    note,
-                    0
-                );
-            }
-        }
+        play_note(
+            game.Audio,
+            audio_source.Panner,
+            audio_source.Trigger.Instrument,
+            audio_source.Trigger.Note
+        );
         audio_source.Current = audio_source.Trigger;
         audio_source.Time = 0;
     } else {
