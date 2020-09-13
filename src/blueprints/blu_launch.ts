@@ -11,7 +11,7 @@ export function blueprint_launch(game: Game): Blueprint {
             control_move([0, 0, 1], null),
             move(30, 0),
             lifespan(8),
-            light_point([0.5, 0.5, 1], 100),
+            light_point([1, 0.5, 0], 100),
         ],
     };
 }
