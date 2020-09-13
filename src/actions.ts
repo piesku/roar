@@ -89,7 +89,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             if (other_collide.Layers & Layer.BuildingBlock) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
-            } else if (other_collide.Layers & Layer.PlayerHand) {
+            } else if (other_collide.Layers & Layer.PlayerBody) {
                 let ground = find_first(game.World, Name.Ground);
                 game.World.Signature[ground] &= ~Has.Collide;
 

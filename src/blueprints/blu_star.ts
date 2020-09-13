@@ -19,7 +19,7 @@ export function blueprint_star(game: Game): Blueprint {
             collide(
                 true,
                 Layer.BuildingBlock,
-                Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand | Layer.Missile
+                Layer.Ground | Layer.BuildingBlock | Layer.PlayerBody | Layer.Missile
             ),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(

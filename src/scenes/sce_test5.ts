@@ -3,6 +3,7 @@ import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
+import {blueprint_moon} from "../blueprints/blu_moon.js";
 import {blueprint_viewer} from "../blueprints/blu_viewer.js";
 import {collide} from "../components/com_collide.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
@@ -23,6 +24,8 @@ export function scene_test5(game: Game) {
         Translation: [0, 10, 10],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
     });
+
+    instantiate(game, blueprint_moon());
 
     // VR Camera.
     instantiate(game, blueprint_viewer(game, 3));

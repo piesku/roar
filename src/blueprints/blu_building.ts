@@ -40,7 +40,7 @@ export function blueprint_building(game: Game, height?: number): Blueprint {
             collide(
                 false,
                 Layer.BuildingShell,
-                Layer.BuildingBlock | Layer.PlayerHand | Layer.PlayerGrip | Layer.Missile,
+                Layer.BuildingBlock | Layer.PlayerBody | Layer.PlayerGrip | Layer.Missile,
                 [1, height * 2, 1]
             ),
             rigid_body(RigidKind.Static),

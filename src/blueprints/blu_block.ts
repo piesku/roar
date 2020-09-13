@@ -19,7 +19,7 @@ export function blueprint_block(game: Game, variant: number, has_roof: boolean):
             collide(
                 true,
                 Layer.BuildingBlock,
-                Layer.Ground | Layer.BuildingBlock | Layer.PlayerHand | Layer.Missile
+                Layer.Ground | Layer.BuildingBlock | Layer.PlayerBody | Layer.Missile
             ),
             rigid_body(RigidKind.Dynamic),
             render_textured_diffuse(
