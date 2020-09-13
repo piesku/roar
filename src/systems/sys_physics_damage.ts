@@ -1,4 +1,5 @@
 import {Vec3} from "../../common/math.js";
+import {clamp} from "../../common/number.js";
 import {dot} from "../../common/vec3.js";
 import {blueprint_collapse} from "../blueprints/blu_collapse.js";
 import {RigidKind} from "../components/com_rigid_body.js";
@@ -38,7 +39,7 @@ function update(game: Game, entity: Entity) {
                     // Buildings start with Has.Lifespan disabled but
                     // BuildingShells enable it when they wake up.
                     let lifespan = game.World.Lifespan[entity];
-                    lifespan.Remaining -= damage;
+                    lifespan.Remaining -= clamp(1, 10, damage);
                     setTimeout(() => instantiate(game, blueprint_collapse(game, true)));
                 }
             }
