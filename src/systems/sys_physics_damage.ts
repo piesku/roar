@@ -27,6 +27,10 @@ function update(game: Game, entity: Entity) {
             let collision = collide.Collisions[i];
             if (game.World.Signature[collision.Other] & Has.RigidBody) {
                 let other_body = game.World.RigidBody[collision.Other];
+                if (other_body.Kind === RigidKind.Kinematic) {
+                    continue;
+                }
+
                 let damage =
                     dot(one, rigid_body.VelocityIntegrated) +
                     dot(one, other_body.VelocityIntegrated);
