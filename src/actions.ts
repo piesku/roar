@@ -3,7 +3,7 @@ import {Vec3} from "../common/math.js";
 import {copy} from "../common/quat.js";
 import {blueprint_collapse} from "./blueprints/blu_collapse.js";
 import {blueprint_explosion} from "./blueprints/blu_explosion.js";
-import {find_all, find_first} from "./components/com_named.js";
+import {find_all, find_first, Name} from "./components/com_named.js";
 import {RigidKind} from "./components/com_rigid_body.js";
 import {query_all} from "./components/com_transform.js";
 import {destroy, instantiate} from "./core.js";
@@ -16,6 +16,7 @@ import {xr_enter} from "./xr.js";
 
 export const enum StageKind {
     Title,
+    Intro,
     Playing,
     Clear,
     Failed,
@@ -36,19 +37,28 @@ export const enum Action {
 
 export function dispatch(game: Game, action: Action, payload: unknown) {
     switch (action) {
-        case Action.GoToTitle: {
-            setTimeout(() => scene_title(game));
-            break;
-        }
         case Action.GoToStage: {
-            setTimeout(() => scene_grid(game));
-            // Fall through to EnterVr.
+            game.CurrentStage = StageKind.Intro;
+            let helicopter = find_first(game.World, Name.IntroHelicopter);
+            game.World.Signature[helicopter] |= Has.Move;
+            setTimeout(() => {
+                game.CurrentStage = StageKind.Playing;
+                scene_grid(game);
+                if (game.XrSupported) {
+                    xr_enter(game);
+                }
+            }, 5000);
+            break;
         }
         case Action.EnterVr: {
             if (game.XrSupported) {
                 xr_enter(game);
             }
             break;
+        }
+        case Action.GoToTitle: {
+            setTimeout(() => scene_title(game));
+            // Fall through to ExitVr.
         }
         case Action.ExitVr: {
             if (game.XrFrame) {
@@ -80,17 +90,17 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 // Destroy the building.
                 setTimeout(() => destroy(game.World, other));
             } else if (other_collide.Layers & Layer.PlayerHand) {
-                let ground = find_first(game.World, "ground");
+                let ground = find_first(game.World, Name.Ground);
                 game.World.Signature[ground] &= ~Has.Collide;
 
-                for (let shell of find_all(game.World, "shell")) {
+                for (let shell of find_all(game.World, Name.Shell)) {
                     game.World.RigidBody[shell].Kind = RigidKind.Dynamic;
                 }
 
                 if (game.CurrentStage === StageKind.Playing) {
                     game.CurrentStage = StageKind.Failed;
                     setTimeout(() => {
-                        dispatch(game, Action.ExitVr, undefined);
+                        dispatch(game, Action.GoToTitle, undefined);
                     }, 1000);
                 }
             }
@@ -138,7 +148,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             get_translation(position, transform.World);
             instantiate(game, {
                 Translation: position,
-                ...blueprint_collapse(game),
+                ...blueprint_collapse(game, false),
             });
 
             break;
@@ -151,11 +161,11 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 game.World.Signature[cage_entity] &= ~Has.Trigger;
                 game.World.Collide[cage_entity].Dynamic = true;
 
-                let mouth_entity = find_first(game.World, "mouth");
+                let mouth_entity = find_first(game.World, Name.Mouth);
                 let mouth_audio = game.World.AudioSource[mouth_entity];
                 mouth_audio.Trigger = snd_growl(false);
 
-                for (let block of find_all(game.World, "block")) {
+                for (let block of find_all(game.World, Name.Block)) {
                     game.World.Signature[block] |= Has.Lifespan;
                     game.World.Lifespan[block].Remaining = Math.random() * 2;
                 }
@@ -163,7 +173,7 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
                 if (game.CurrentStage === StageKind.Playing) {
                     game.CurrentStage = StageKind.Clear;
                     setTimeout(() => {
-                        dispatch(game, Action.ExitVr, undefined);
+                        dispatch(game, Action.GoToTitle, undefined);
                     }, 5000);
                 }
             }

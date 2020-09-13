@@ -14,7 +14,7 @@ import {Has} from "../world.js";
 export function blueprint_explosion(game: Game): Blueprint {
     return {
         Using: [
-            audio_source(true, snd_explosion),
+            audio_source(true, snd_explosion()),
             lifespan(1),
             light_point([1, 1, 1], 3),
             toggle(Has.Light, 0.1, true),

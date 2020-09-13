@@ -66,7 +66,7 @@ export class Game {
     LightPositions = new Float32Array(4 * 8);
     LightDetails = new Float32Array(4 * 8);
 
-    CurrentStage?: StageKind;
+    CurrentStage = StageKind.Title;
 
     constructor() {
         document.addEventListener("visibilitychange", () =>

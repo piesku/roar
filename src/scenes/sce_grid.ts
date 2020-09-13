@@ -2,7 +2,6 @@ import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
 import {element, integer, set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
-import {StageKind} from "../actions.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -16,7 +15,7 @@ import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
 import {move} from "../components/com_move.js";
-import {named} from "../components/com_named.js";
+import {Name, named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {MISSILE_SPAWN_FREQUENCY} from "../config.js";
@@ -25,7 +24,6 @@ import {Game, Layer} from "../game.js";
 import {World} from "../world.js";
 
 export function scene_grid(game: Game) {
-    game.CurrentStage = StageKind.Playing;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -60,7 +58,7 @@ export function scene_grid(game: Game) {
         Translation: [0, -0.5, 0],
         Scale: [99, 1, 99],
         Using: [
-            named("ground"),
+            named(Name.Ground),
             collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
             render_textured_diffuse(

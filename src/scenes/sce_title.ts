@@ -1,7 +1,6 @@
 import {from_euler} from "../../common/quat.js";
 import {set_seed} from "../../common/random.js";
 import {GL_CCW, GL_CW} from "../../common/webgl.js";
-import {StageKind} from "../actions.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -13,7 +12,7 @@ import {collide} from "../components/com_collide.js";
 import {control_move} from "../components/com_control_move.js";
 import {control_spawn} from "../components/com_control_spawn.js";
 import {move} from "../components/com_move.js";
-import {named} from "../components/com_named.js";
+import {Name, named} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {RigidKind, rigid_body} from "../components/com_rigid_body.js";
 import {query_all} from "../components/com_transform.js";
@@ -22,7 +21,6 @@ import {Game, Layer} from "../game.js";
 import {Has, World} from "../world.js";
 
 export function scene_title(game: Game) {
-    game.CurrentStage = StageKind.Title;
     game.World = new World();
     game.Camera = undefined;
     game.ViewportResized = true;
@@ -42,7 +40,7 @@ export function scene_title(game: Game) {
         Translation: [0, -0.5, 0],
         Scale: [99, 1, 99],
         Using: [
-            named("ground"),
+            named(Name.Ground),
             collide(false, Layer.Ground, Layer.None, [99, 1, 99]),
             rigid_body(RigidKind.Static),
             render_textured_diffuse(
@@ -51,7 +49,7 @@ export function scene_title(game: Game) {
                 game.Textures["noise"],
                 [1, 1, 1, 1],
                 GL_CW,
-                -0.5
+                -0.3
             ),
         ],
     });
@@ -79,15 +77,16 @@ export function scene_title(game: Game) {
         ...blueprint_paw(game, GL_CCW),
         // The helicopter needs an entity named head in the scene.
         // Has.Aim is disabled so it won't use it.
-        Using: [named("head")],
+        Using: [named(Name.Head)],
         Translation: [3, 2, 1],
         Rotation: from_euler([0, 0, 0, 0], 30, 180, 0),
         Scale: [-5, 5, 5],
     });
 
     instantiate(game, {
-        Translation: [1, 0.25, 1.5],
-        Using: [control_move([0, 0.5, 1], null), move(0.3, 0)],
+        Translation: [0, 0.25, 2],
+        Using: [named(Name.IntroHelicopter), control_move([0, 0.5, 1], null), move(0.5, 0)],
+        Disable: Has.Move,
         Children: [
             {
                 ...blueprint_cage(game),
@@ -95,7 +94,7 @@ export function scene_title(game: Game) {
             },
             {
                 ...blueprint_helicopter(game),
-                Translation: [-1, 1, 0.2],
+                Translation: [-1, 0.5, 0.1],
                 Disable: Has.Move | Has.Lifespan,
             },
         ],
@@ -107,7 +106,7 @@ export function scene_title(game: Game) {
         game,
         // Police car spawner.
         {
-            Using: [named("base"), control_move(null, [0, 1, 0, 0]), move(0, 1)],
+            Using: [named(Name.Base), control_move(null, [0, 1, 0, 0]), move(0, 1)],
             Children: [
                 {
                     Translation: [0, 0, -4],

@@ -6,7 +6,7 @@ import {control_move} from "../components/com_control_move.js";
 import {lifespan} from "../components/com_lifespan.js";
 import {light_point} from "../components/com_light.js";
 import {move} from "../components/com_move.js";
-import {find_first} from "../components/com_named.js";
+import {find_first, Name} from "../components/com_named.js";
 import {render_textured_diffuse} from "../components/com_render_textured_diffuse.js";
 import {Blueprint} from "../core.js";
 import {Game} from "../game.js";
@@ -17,7 +17,7 @@ export function blueprint_helicopter(game: Game): Blueprint {
         Scale: [0.03, 0.03, 0.03],
         Using: [
             control_move([0, 0, 1], null),
-            aim(find_first(game.World, "head")),
+            aim(find_first(game.World, Name.Head)),
             move(float(2, 4), float(1, 3)),
             audio_source(true, snd_helicopter),
             lifespan(8),

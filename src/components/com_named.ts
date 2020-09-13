@@ -2,7 +2,16 @@ import {Err} from "../errors.js";
 import {Entity, Game} from "../game.js";
 import {Has, World} from "../world.js";
 
-type Name = "base" | "head" | "front" | "mouth" | "ground" | "shell" | "block";
+export const enum Name {
+    Base,
+    Head,
+    Front,
+    Mouth,
+    Ground,
+    Shell,
+    Block,
+    IntroHelicopter,
+}
 
 export interface Named {
     Name: Name;

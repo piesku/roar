@@ -1,3 +1,4 @@
+import {ControlPoseKind} from "../components/com_control_pose.js";
 import {Entity, Game} from "../game.js";
 import {Has} from "../world.js";
 
@@ -19,14 +20,14 @@ function update(game: Game, entity: Entity) {
     let transform = game.World.Transform[entity];
     let control = game.World.ControlPose[entity];
 
-    if (control.Controller === "head") {
+    if (control.Kind === ControlPoseKind.Head) {
         let headset = game.XrFrame!.getViewerPose(game.XrSpace);
         transform.World = headset.transform.matrix;
         transform.Dirty = true;
         return;
     }
 
-    if (control.Controller === "left") {
+    if (control.Kind === ControlPoseKind.Left) {
         let input = game.XrInputs["left"];
         if (input) {
             let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);
@@ -38,7 +39,7 @@ function update(game: Game, entity: Entity) {
         return;
     }
 
-    if (control.Controller === "right") {
+    if (control.Kind === ControlPoseKind.Right) {
         let input = game.XrInputs["right"];
         if (input) {
             let pose = game.XrFrame!.getPose(input.gripSpace!, game.XrSpace!);

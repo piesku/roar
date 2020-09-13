@@ -9,9 +9,9 @@ let game = new Game();
 // @ts-ignore
 window.$ = dispatch.bind(null, game);
 
-let textures = document.querySelectorAll("img");
-for (let i = 0; i < textures.length; i++) {
-    game.Textures[textures[i].id] = create_texture_from(game.Gl, textures[i]);
+// @ts-ignore
+for (let texture of document.querySelectorAll("img")) {
+    game.Textures[texture.id] = create_texture_from(game.Gl, texture);
 }
 
 scene_title(game);

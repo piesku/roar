@@ -25,28 +25,30 @@ export function EnterVr(game: Game) {
 
 function EnterButton() {
     return html`
-        <button
+        <div
             onclick="$(${Action.EnterVr})"
             style="
                 background: #000;
                 color: #fff;
+                font: 13px Arial;
             "
         >
             Enter VR
-        </button>
+        </div>
     `;
 }
 
 function ExitButton() {
     return html`
-        <button
+        <div
             onclick="$(${Action.ExitVr})"
             style="
-                color: #fff;
                 background: #000;
+                color: #fff;
+                font: 13px Arial;
             "
         >
             Exit VR
-        </button>
+        </div>
     `;
 }
