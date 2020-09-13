@@ -1,5 +1,4 @@
 import {from_euler} from "../../common/quat.js";
-import {set_seed} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_block} from "../blueprints/blu_block.js";
 import {blueprint_camera} from "../blueprints/blu_camera.js";
@@ -16,8 +15,6 @@ export function scene_test1(game: Game) {
     game.Camera = undefined;
     game.ViewportResized = true;
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
-
-    set_seed(Date.now());
 
     // Camera.
     instantiate(game, {

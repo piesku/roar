@@ -1,6 +1,6 @@
 import {Vec3} from "../../common/math.js";
 import {from_euler} from "../../common/quat.js";
-import {element, integer, set_seed} from "../../common/random.js";
+import {element, integer} from "../../common/random.js";
 import {GL_CW} from "../../common/webgl.js";
 import {blueprint_building} from "../blueprints/blu_building.js";
 import {blueprint_cage} from "../blueprints/blu_cage.js";
@@ -28,8 +28,6 @@ export function scene_grid(game: Game) {
     game.Camera = undefined;
     game.ViewportResized = true;
     game.Gl.clearColor(0.0, 0.1, 0.2, 1);
-
-    set_seed(Date.now());
 
     // Camera rig.
     instantiate(game, {
