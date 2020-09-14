@@ -223,6 +223,10 @@ function update(game: Game, entity: Entity) {
                                     // Disable lifespan.
                                     game.World.Signature[building_entity] &= ~Has.Lifespan;
                                 }
+
+                                if (game.World.Signature[building_entity] & Has.Move) {
+                                    game.World.Signature[building_entity] &= ~Has.Move;
+                                }
                             }
                         }
                     } else {
@@ -350,6 +354,10 @@ function update(game: Game, entity: Entity) {
 
                                     // Disable lifespan.
                                     game.World.Signature[building_entity] &= ~Has.Lifespan;
+                                }
+
+                                if (game.World.Signature[building_entity] & Has.Move) {
+                                    game.World.Signature[building_entity] &= ~Has.Move;
                                 }
                             }
                         }

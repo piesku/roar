@@ -116,7 +116,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                     collide(
                                         true,
                                         Layer.PlayerGrip,
-                                        Layer.BuildingBlock | Layer.Cage,
+                                        Layer.BuildingBlock | Layer.Cage | Layer.Vehicle,
                                         [0.1, 0.1, 0.1]
                                     ),
                                 ],
@@ -148,7 +148,7 @@ export function blueprint_viewer(game: Game, scale: number): Blueprint {
                                     collide(
                                         true,
                                         Layer.PlayerGrip,
-                                        Layer.BuildingBlock | Layer.Cage,
+                                        Layer.BuildingBlock | Layer.Cage | Layer.Vehicle,
                                         [0.1, 0.1, 0.1]
                                     ),
                                 ],

@@ -133,4 +133,5 @@ export const enum Layer {
     BuildingBlock = 16,
     Missile = 32,
     Cage = 64,
+    Vehicle = 128,
 }

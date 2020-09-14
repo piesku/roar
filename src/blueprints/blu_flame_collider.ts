@@ -12,11 +12,12 @@ export function blueprint_flame_collider(game: Game): Blueprint {
         Using: [
             control_move([0, 0, 1], null),
             move(10, 0),
-            collide(true, Layer.None, Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile, [
-                0.1,
-                0.1,
-                0.1,
-            ]),
+            collide(
+                true,
+                Layer.None,
+                Layer.BuildingShell | Layer.BuildingBlock | Layer.Missile | Layer.Vehicle,
+                [0.1, 0.1, 0.1]
+            ),
             trigger(Action.Burn),
             lifespan(1),
         ],

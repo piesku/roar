@@ -7,10 +7,10 @@ export async function xr_init(game: Game) {
 
 export async function xr_enter(game: Game) {
     let session = await navigator.xr.requestSession("immersive-vr", {
-        optionalFeatures: ["local-floor"],
+        requiredFeatures: ["local-floor"],
     });
 
-    game.XrSpace = await session.requestReferenceSpace("local");
+    game.XrSpace = await session.requestReferenceSpace("local-floor");
 
     session.updateRenderState({
         baseLayer: new XRWebGLLayer(session, game.Gl),
