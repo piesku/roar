@@ -26,9 +26,9 @@ function update(game: Game, entity: Entity) {
 
     let camera = game.Camera!;
     if (camera.Kind === CameraKind.Xr) {
-        // Just check against the left eye.
-        transform_point(ndc_pos, world_pos, camera.Eyes["left"].Pv);
-        transform_point(view_pos, world_pos, camera.Eyes["left"].View);
+        // Just check against the first eye.
+        transform_point(ndc_pos, world_pos, camera.Eyes[0].Pv);
+        transform_point(view_pos, world_pos, camera.Eyes[0].View);
     } else {
         transform_point(ndc_pos, world_pos, camera.Pv);
         transform_point(view_pos, world_pos, camera.View);

@@ -49,7 +49,7 @@ export interface XrEye extends CameraEye {
 
 export interface CameraXr {
     Kind: CameraKind.Xr;
-    Eyes: Record<string, XrEye>;
+    Eyes: Array<XrEye>;
     FogDistance: number;
     CullDistance: number;
 }
@@ -59,7 +59,7 @@ export function camera_xr() {
         game.World.Signature[entity] |= Has.Camera;
         game.World.Camera[entity] = {
             Kind: CameraKind.Xr,
-            Eyes: {},
+            Eyes: [],
             FogDistance: 9,
             CullDistance: 3,
         };
