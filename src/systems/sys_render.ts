@@ -49,8 +49,7 @@ function render_vr(game: Game, camera: CameraXr) {
     game.Gl.bindFramebuffer(GL_FRAMEBUFFER, layer.framebuffer);
     game.Gl.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (let name in camera.Eyes) {
-        let eye = camera.Eyes[name];
+    for (let eye of camera.Eyes) {
         let viewport = layer.getViewport(eye.Viewpoint);
         game.Gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
         render_textured_diffuse(game, eye);

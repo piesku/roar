@@ -44,9 +44,6 @@ export function dispatch(game: Game, action: Action, payload: unknown) {
             setTimeout(() => {
                 game.CurrentStage = StageKind.Playing;
                 scene_grid(game);
-                if (game.XrSupported) {
-                    xr_enter(game);
-                }
             }, 5000);
             break;
         }

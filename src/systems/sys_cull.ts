@@ -26,9 +26,9 @@ function update(game: Game, entity: Entity) {
 
     let camera = game.Camera!;
     if (camera.Kind === CameraKind.Xr) {
-        // Just check against the left eye.
-        transform_point(ndc_pos, world_pos, camera.Eyes["left"].Pv);
-        transform_point(view_pos, world_pos, camera.Eyes["left"].View);
+        // Just check against the first eye.
+        transform_point(ndc_pos, world_pos, camera.Eyes[0].Pv);
+        transform_point(view_pos, world_pos, camera.Eyes[0].View);
     } else {
         transform_point(ndc_pos, world_pos, camera.Pv);
         transform_point(view_pos, world_pos, camera.View);
@@ -37,7 +37,12 @@ function update(game: Game, entity: Entity) {
     if (
         Math.abs(ndc_pos[0]) > 1.1 ||
         Math.abs(ndc_pos[1]) > 1.1 ||
-        Math.abs(view_pos[2]) > camera.CullDistance
+        // The entity is behind the far plane of the camera frustum, which is actually
+        // behind the camera entity (-Z) since the camera looks backwards.
+        view_pos[2] < -camera.CullDistance ||
+        // The entity is behind the near plane of the camera frustum, i.e. in front
+        // of the camera entity (+Z).
+        view_pos[2] > 0
     ) {
         game.World.Signature[entity] &= ~cull.Mask;
     } else {
