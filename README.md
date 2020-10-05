@@ -1,6 +1,15 @@
 # ROAR
 
-A WebXR submission to js13kGames 2020, based on Goodluck.
+A WebXR submission to [js13kGames 2020](http://2020.js13kgames.com/), based on [Goodluck](https://gdlck.com).
+
+## The Making Of
+
+Read [_The Making of ROAR_](https://piesku.com/roar), which includes:
+
+- game design insights,
+- architecture overview,
+- technical implementation details,
+- lessons learned.
 
 ## Changes compared to upstream Goodluck
 
